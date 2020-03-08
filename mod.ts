@@ -9,3 +9,7 @@ new Client({
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   event_handlers
 })
+
+export const bot_cache = {
+  guild_prefixes: new Map<string, string>()
+}
