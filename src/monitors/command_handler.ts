@@ -30,7 +30,7 @@ export const command_handler = async (message: Message) => {
     [...bot_cache.inhibitors.values()].map(inhibitor => inhibitor(message, command, guild))
   )
 
-  console.log(inhibitor_results)
+  if (inhibitor_results.includes(true)) return log_command(message, guild?.name() || 'DM', "Inhibibted")
 
   try {
     // Log that the command ran successfully.
