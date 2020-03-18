@@ -1,5 +1,5 @@
 import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts"
-import { logGreen } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/utils/logger.ts"
+import { logGreen, logRed } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/utils/logger.ts"
 import { configs } from "../../configs.ts"
 import { bot_cache } from "../../mod.ts"
 import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/utils/cache.ts"
@@ -15,7 +15,7 @@ export const command_handler = async (message: Message) => {
   if (!message.content().startsWith(prefix)) return
 
   // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
-  const [command_name] = message
+  const [command_name, ...args] = message
     .content()
     .substring(prefix.length)
     .split(" ")
@@ -30,13 +30,15 @@ export const command_handler = async (message: Message) => {
     [...bot_cache.inhibitors.values()].map(inhibitor => inhibitor(message, command, guild))
   )
 
-  if (inhibitor_results.includes(true)) return log_command(message, guild?.name() || 'DM', "Inhibibted")
+  if (inhibitor_results.includes(true)) return log_command(message, guild?.name() || "DM", "Inhibibted")
 
   try {
+    await command.callback(message, args)
     // Log that the command ran successfully.
     log_command(message, guild?.name() || "DM", "Success")
   } catch (error) {
     log_command(message, guild?.name() || "DM", "Failed")
+    logRed(error)
   }
 }
 

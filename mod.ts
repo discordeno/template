@@ -29,7 +29,6 @@ const import_directory = async (path: string) => {
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
 await Promise.all(['./src/commands', './src/inhibitors'].map(path => import_directory(path)))
 
-
 export const Bot = new Client({
   token: configs.token,
   // Replace this with your bot's ID.
