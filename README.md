@@ -10,7 +10,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 
 1. Create your own repo using the template button. This is a template repo.
 2. Clone your own repo that Github created for you. `git clone url-here-for-your-repo`
-3. Create your configs file.
+3. Create your `configs.ts` file in the main folder.
 ```ts
 export const configs = {
   token: 'YOUR_TOKEN_HERE',
