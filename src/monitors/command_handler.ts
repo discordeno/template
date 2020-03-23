@@ -33,7 +33,7 @@ export const command_handler = async (message: Message) => {
   if (inhibitor_results.includes(true)) return log_command(message, guild?.name() || "DM", "Inhibibted")
 
   try {
-    await command.callback(message, args)
+    await command.callback(message, args, guild)
     // Log that the command ran successfully.
     log_command(message, guild?.name() || "DM", "Success")
   } catch (error) {
