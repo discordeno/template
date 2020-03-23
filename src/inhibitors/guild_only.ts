@@ -14,4 +14,4 @@ export const guild_only_inhibitor = (message: Message, command: Command, guild: 
   return true
 }
 
-bot_cache.inhibitors.set('nsfw', nsfw_inhibitor)
+bot_cache.inhibitors.set('guild_only', guild_only_inhibitor)
