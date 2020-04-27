@@ -10,24 +10,27 @@ export const bot_cache = {
   commands: new Map<string, Command>(),
   command_aliases: new Map<string, string>(),
   guild_prefixes: new Map<string, string>(),
-  inhibitors: new Map<string, (message: Message, command: Command, guild: Guild | undefined) => boolean>()
+  inhibitors: new Map<string, (message: Message, command: Command, guild: Guild | undefined) => boolean>(),
 }
 
 const import_directory = async (path: string) => {
-  const files = Deno.readDirSync(Deno.realpathSync(path))
+  const files = Deno.readdirSync(Deno.realpathSync(path))
 
-  await Promise.all(files.map(async file => {
+  for (const file of Deno.readdirSync("/")) {
     if (!file.name) return
 
     const currentPath = `${path}/${file.name}`
-    if (file.isDirectory()) return import_directory(currentPath)
+    if (file.isDirectory) {
+      import_directory(currentPath)
+      return
+    }
 
     await import(currentPath)
-  }))
+  }
 }
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
-await Promise.all(['./src/commands', './src/inhibitors'].map(path => import_directory(path)))
+await Promise.all(["./src/commands", "./src/inhibitors"].map((path) => import_directory(path)))
 
 export const Bot_Options = {
   token: configs.token,
@@ -36,7 +39,7 @@ export const Bot_Options = {
   // Pick the intents you wish to have for your bot.
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   // These are all your event handler functions. Currently, being imported from a file called event_handlers from the events folder
-  event_handlers
+  event_handlers,
 }
 
 Client(Bot_Options)

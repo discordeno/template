@@ -15,10 +15,7 @@ export const command_handler = async (message: Message) => {
   if (!message.content().startsWith(prefix)) return
 
   // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
-  const [command_name, ...args] = message
-    .content()
-    .substring(prefix.length)
-    .split(" ")
+  const [command_name, ...args] = message.content().substring(prefix.length).split(" ")
 
   // Check if this is a valid command
   const command = check_command(command_name)
@@ -27,7 +24,7 @@ export const command_handler = async (message: Message) => {
   const guild = guild_id ? cache.guilds.get(guild_id) : undefined
   log_command(message, guild?.name() || "DM", "Ran")
   const inhibitor_results = await Promise.all(
-    [...bot_cache.inhibitors.values()].map(inhibitor => inhibitor(message, command, guild))
+    [...bot_cache.inhibitors.values()].map((inhibitor) => inhibitor(message, command, guild))
   )
 
   if (inhibitor_results.includes(true)) return log_command(message, guild?.name() || "DM", "Inhibibted")
