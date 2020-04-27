@@ -5,6 +5,7 @@ import { eventHandlers } from "./src/events/eventHandlers.ts"
 import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts"
 import { Command } from "./src/types/commands.ts"
 import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/guild.ts"
+
 export const botCache = {
   commands: new Map<string, Command>(),
   commandAliases: new Map<string, string>(),
@@ -12,7 +13,7 @@ export const botCache = {
   inhibitors: new Map<string, (message: Message, command: Command, guild?: Guild) => boolean>(),
 }
 
-const import_directory = async (path: string) => {
+const importDirectory = async (path: string) => {
   const files = Deno.readdirSync(Deno.realpathSync(path))
 
   for (const file of files) {
@@ -24,12 +25,12 @@ const import_directory = async (path: string) => {
       continue
     }
 
-    import_directory(currentPath)
+    importDirectory(currentPath)
   }
 }
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
-await Promise.all(["./src/commands", "./src/inhibitors"].map((path) => import_directory(path)))
+await Promise.all(["./src/commands", "./src/inhibitors"].map((path) => importDirectory(path)))
 
 export const BotOptions = {
   token: configs.token,
