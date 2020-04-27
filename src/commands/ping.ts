@@ -1,21 +1,23 @@
 // This file is meant to show how you can create multiple commands in the same file if you wish.
 import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts"
-import { bot_cache } from "../../mod.ts"
+import { botCache } from "../../mod.ts"
 import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/utils/cache.ts"
 
-const ping_command = (message: Message) => {
-  return message.channel().send_message(`Ping MS: ${Date.now() - message.timestamp()}ms`)
+const pingCommand = (message: Message) => {
+  return message.channel.sendMessage(`Ping MS: ${Date.now() - message.timestamp}ms`)
 }
 
-const dev_ping_command = (message: Message) => {
-  return message.channel().send_message(`Ping MS: ${Date.now() - message.timestamp()}ms | Guilds: ${cache.guilds.size} | Users: ${cache.users.size}`)
+const devPingCommand = (message: Message) => {
+  return message.channel.sendMessage(
+    `Ping MS: ${Date.now() - message.timestamp}ms | Guilds: ${cache.guilds.size} | Users: ${cache.users.size}`
+  )
 }
 
-bot_cache.commands.set(`ping`, {
-  callback: ping_command
+botCache.commands.set(`ping`, {
+  callback: pingCommand,
 })
 
-bot_cache.commands.set(`dev_ping`, {
-  guild_only: true,
-  callback: dev_ping_command
+botCache.commands.set(`dev_ping`, {
+  guildOnly: true,
+  callback: devPingCommand,
 })
