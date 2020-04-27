@@ -4,27 +4,27 @@ import { Intents } from "https://raw.githubusercontent.com/Skillz4Killz/Discorde
 import { eventHandlers } from "./src/events/eventHandlers.ts"
 import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts"
 import { Command } from "./src/types/commands.ts"
-
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/guild.ts"
 export const botCache = {
   commands: new Map<string, Command>(),
   commandAliases: new Map<string, string>(),
   guildPrefixes: new Map<string, string>(),
-  inhibitors: new Map<string, (message: Message, command: Command, guild: Guild | undefined) => boolean>(),
+  inhibitors: new Map<string, (message: Message, command: Command, guild?: Guild) => boolean>(),
 }
 
 const import_directory = async (path: string) => {
   const files = Deno.readdirSync(Deno.realpathSync(path))
 
-  for (const file of Deno.readdirSync("/")) {
-    if (!file.name) return
+  for (const file of files) {
+    if (!file.name) continue
 
     const currentPath = `${path}/${file.name}`
-    if (file.isDirectory) {
-      import_directory(currentPath)
-      return
+    if (file.isFile) {
+      await import(currentPath)
+      continue
     }
 
-    await import(currentPath)
+    import_directory(currentPath)
   }
 }
 

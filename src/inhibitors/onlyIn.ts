@@ -1,8 +1,9 @@
 import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts"
 import { Command } from "../types/commands.ts"
 import { botCache } from "../../mod.ts"
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/guild.ts"
 
-export const onlyInInhibitor = (message: Message, command: Command, guild: Guild | undefined) => {
+export const onlyInInhibitor = (message: Message, command: Command, guild?: Guild) => {
   // If the command is guildOnly and does not have a guild, inhibit the command
   if (command.guildOnly && !guild) return true
   // If the command is dmOnly and there is a guild, inhibit the command
