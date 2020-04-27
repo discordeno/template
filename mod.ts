@@ -35,7 +35,7 @@ await Promise.all(["./src/commands", "./src/inhibitors"].map((path) => importDir
 export const BotOptions = {
   token: configs.token,
   // Replace this with your bot's ID.
-  botID: "675412054529540107",
+  botID: "",
   // Pick the intents you wish to have for your bot.
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   // These are all your event handler functions. Currently, being imported from a file called eventHandlers from the events folder

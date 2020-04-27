@@ -3,7 +3,7 @@ import { Command } from "../types/commands.ts"
 import { botCache } from "../../mod.ts"
 import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/guild.ts"
 
-export const nsfwInhibitor = (message: Message, command: Command, guild: Guild) => {
+export const nsfwInhibitor = (message: Message, command: Command, guild?: Guild) => {
   // If this command does not need nsfw the inhibitor returns false so the command can run
   if (!command.nsfw) return false
 
