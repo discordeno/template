@@ -14,7 +14,7 @@ export const botCache = {
 }
 
 const importDirectory = async (path: string) => {
-  const files = Deno.readdirSync(Deno.realpathSync(path))
+  const files = Deno.readDirSync(Deno.realPathSync(path))
 
   for (const file of files) {
     if (!file.name) continue
