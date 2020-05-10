@@ -22,7 +22,7 @@ export const configs = {
 }
 ```
 
-4. Start the bot `deno --allow-net --allow-read --unstable mod.ts`
+4. Start the bot `deno run --allow-net --allow-read --unstable mod.ts`
 
 ## Features
 
