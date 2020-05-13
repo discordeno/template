@@ -1,36 +1,41 @@
-import Client from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/module/client.ts"
-import { configs } from "./configs.ts"
-import { Intents } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/types/options.ts"
-import { eventHandlers } from "./src/events/eventHandlers.ts"
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts"
-import { Command } from "./src/types/commands.ts"
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/guild.ts"
+import Client from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/module/client.ts";
+import { configs } from "./configs.ts";
+import { Intents } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/types/options.ts";
+import { eventHandlers } from "./src/events/eventHandlers.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/structures/message.ts";
+import { Command } from "./src/types/commands.ts";
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/structures/guild.ts";
 
 export const botCache = {
   commands: new Map<string, Command>(),
   commandAliases: new Map<string, string>(),
   guildPrefixes: new Map<string, string>(),
-  inhibitors: new Map<string, (message: Message, command: Command, guild?: Guild) => boolean>(),
-}
+  inhibitors: new Map<
+    string,
+    (message: Message, command: Command, guild?: Guild) => boolean
+  >(),
+};
 
 const importDirectory = async (path: string) => {
-  const files = Deno.readDirSync(Deno.realPathSync(path))
+  const files = Deno.readDirSync(Deno.realPathSync(path));
 
   for (const file of files) {
-    if (!file.name) continue
+    if (!file.name) continue;
 
-    const currentPath = `${path}/${file.name}`
+    const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
-      await import(currentPath)
-      continue
+      await import(currentPath);
+      continue;
     }
 
-    importDirectory(currentPath)
+    importDirectory(currentPath);
   }
-}
+};
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
-await Promise.all(["./src/commands", "./src/inhibitors"].map((path) => importDirectory(path)))
+await Promise.all(
+  ["./src/commands", "./src/inhibitors"].map((path) => importDirectory(path)),
+);
 
 export const BotOptions = {
   token: configs.token,
@@ -40,6 +45,6 @@ export const BotOptions = {
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   // These are all your event handler functions. Currently, being imported from a file called eventHandlers from the events folder
   eventHandlers,
-}
+};
 
-Client(BotOptions)
+Client(BotOptions);
