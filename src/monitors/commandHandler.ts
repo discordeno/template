@@ -28,7 +28,7 @@ export const commandHandler = async (message: Message) => {
   if (!command) return;
 
   const guild = guildID ? cache.guilds.get(guildID) : undefined;
-  logCommand(message, guild?.name || "DM", "Ran");
+  logCommand(message, guild?.name || "DM", "Ran", commandName);
   const inhibitor_results = await Promise.all(
     [...botCache.inhibitors.values()].map((inhibitor) =>
       inhibitor(message, command, guild)
@@ -36,15 +36,15 @@ export const commandHandler = async (message: Message) => {
   );
 
   if (inhibitor_results.includes(true)) {
-    return logCommand(message, guild?.name || "DM", "Inhibibted");
+    return logCommand(message, guild?.name || "DM", "Inhibibted", commandName);
   }
 
   try {
     await command.callback(message, args, guild);
     // Log that the command ran successfully.
-    logCommand(message, guild?.name || "DM", "Success");
+    logCommand(message, guild?.name || "DM", "Success", commandName);
   } catch (error) {
-    logCommand(message, guild?.name || "DM", "Failed");
+    logCommand(message, guild?.name || "DM", "Failed", commandName);
     logRed(error);
   }
 };
@@ -69,6 +69,7 @@ export const logCommand = (
   message: Message,
   guild_name: string,
   type: string,
+  commandName: string
 ) => {
-  logGreen(`[COMMAND - ${type}] by ${message.author.tag} in ${guild_name}`);
+  logGreen(`[COMMAND=${commandName} - ${type}] by ${message.author.tag} in ${guild_name}`);
 };
