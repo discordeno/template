@@ -1,0 +1,10 @@
+scripts:
+  start:
+    desc: Starts the bot.
+    cmd: deno run --allow-net --allow-read --unstable mod.ts
+  update:
+    desc: Updates to the latest(non-breaking) changes of CURRENT Discordeno version.
+    cmd: deno cache --reload mod.ts
+  dev:
+    desc: Updates Discordeno and starts the bot.
+    cmd: vr update && vr start
