@@ -7,7 +7,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 ## Pre-requisites
 
 - Deno
-- [Velociraptor](https://deno.land/x/velociraptor@v1.0.0-beta.5) (NOT_REQUIRED) - This can help make coding the bot a lot easier. Highly recommended.
+- [Velociraptor](https://deno.land/x/velociraptor@v1.0.0-beta.5) *(NOT REQUIRED)* - This can help make coding the bot a lot easier. *Highly recommended*.
 
 ## Step By Step
 
