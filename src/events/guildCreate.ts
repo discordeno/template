@@ -1,5 +1,5 @@
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/structures/guild.ts";
-import { logGreen } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/utils/logger.ts";
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/structures/guild.ts";
+import { logGreen } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/utils/logger.ts";
 
 export const guildCreate = (guild: Guild) => {
   logGreen(

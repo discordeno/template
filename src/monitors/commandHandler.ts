@@ -1,11 +1,11 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/structures/message.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/structures/message.ts";
 import {
   logGreen,
   logRed,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/utils/logger.ts";
+} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/utils/logger.ts";
 import { configs } from "../../configs.ts";
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v1/utils/cache.ts";
+import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/utils/cache.ts";
 
 export const commandHandler = async (message: Message) => {
   // If the message was sent by a bot we can just ignore it
@@ -69,7 +69,9 @@ export const logCommand = (
   message: Message,
   guild_name: string,
   type: string,
-  commandName: string
+  commandName: string,
 ) => {
-  logGreen(`[COMMAND=${commandName} - ${type}] by ${message.author.tag} in ${guild_name}`);
+  logGreen(
+    `[COMMAND=${commandName} - ${type}] by ${message.author.tag} in ${guild_name}`,
+  );
 };
