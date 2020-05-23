@@ -4,7 +4,9 @@ import { botCache } from "../../mod.ts";
 
 botCache.commands.set(`avatar`, {
   callback: (message, _args, guild) => {
-    const member = message.mentions.length ? message.mentions()[0] : message.member();
+    const member = message.mentions.length
+      ? message.mentions()[0]
+      : message.member();
 
     return message.channel.sendMessage({
       embed: {
