@@ -1,7 +1,7 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/structures/message.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/structures/message.ts";
 import { Command } from "../types/commands.ts";
 import { botCache } from "../../mod.ts";
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/structures/guild.ts";
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/structures/guild.ts";
 
 export const nsfwInhibitor = (
   message: Message,

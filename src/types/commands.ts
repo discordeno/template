@@ -1,5 +1,5 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/structures/message.ts";
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v2/structures/guild.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/structures/message.ts";
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/structures/guild.ts";
 
 export interface Command {
   dmOnly?: boolean;
