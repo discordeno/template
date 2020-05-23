@@ -72,6 +72,6 @@ export const logCommand = (
   commandName: string,
 ) => {
   logGreen(
-    `[COMMAND=${commandName} - ${type}] by ${message.author.tag} in ${guild_name}`,
+    `[COMMAND=${commandName} - ${type}] by ${message.member().tag} in ${guild_name}`,
   );
 };

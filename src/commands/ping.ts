@@ -10,10 +10,14 @@ const pingCommand = (message: Message) => {
 };
 
 const devPingCommand = (message: Message) => {
+  let memberCount = 0;
+  cache.guilds.forEach((guild) => {
+    memberCount += guild.members.size;
+  });
   return message.channel.sendMessage(
     `Ping MS: ${Date.now() -
       message
-        .timestamp}ms | Guilds: ${cache.guilds.size} | Users: ${cache.users.size}`,
+        .timestamp}ms | Guilds: ${cache.guilds.size} | Users: ${memberCount}`,
   );
 };
 

@@ -4,16 +4,16 @@ import { botCache } from "../../mod.ts";
 
 botCache.commands.set(`avatar`, {
   callback: (message, _args, guild) => {
-    const user = message.mentions.length ? message.mentions[0] : message.author;
+    const member = message.mentions.length ? message.mentions()[0] : message.member();
 
     return message.channel.sendMessage({
       embed: {
         author: {
-          name: user.tag,
-          icon_url: user.avatarURL(),
+          name: member.tag,
+          icon_url: member.avatarURL(),
         },
         image: {
-          url: user.avatarURL(2048),
+          url: member.avatarURL(2048),
         },
       },
     });
