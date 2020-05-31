@@ -1,17 +1,15 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/structures/message.ts";
-import {
-  logGreen,
-  logRed,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/utils/logger.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/structures/message.ts";
+import logger from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/utils/logger.ts";
 import { configs } from "../../configs.ts";
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v4/utils/cache.ts";
+import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/utils/cache.ts";
+import { handleError } from "../utils/errors.ts";
 
 export const commandHandler = async (message: Message) => {
   // If the message was sent by a bot we can just ignore it
   if (message.author.bot) return;
 
-  const guildID = message.guild_id;
+  const guildID = message.guildID;
 
   // Check what the valid prefix is supposed to be for the bot for this guild
   const prefix = checkPrefix(message, guildID);
@@ -45,7 +43,8 @@ export const commandHandler = async (message: Message) => {
     logCommand(message, guild?.name || "DM", "Success", commandName);
   } catch (error) {
     logCommand(message, guild?.name || "DM", "Failed", commandName);
-    logRed(error);
+    logger.error(error);
+    handleError(message, error);
   }
 };
 
@@ -71,7 +70,7 @@ export const logCommand = (
   type: string,
   commandName: string,
 ) => {
-  logGreen(
-    `[COMMAND=${commandName} - ${type}] by ${message.member().tag} in ${guild_name}`,
+  logger.success(
+    `[COMMAND=${commandName} - ${type}] by ${message.author.username}#${message.author.discriminator} in ${guild_name}`,
   );
 };
