@@ -11,7 +11,6 @@ botCache.commands.set(`avatar`, {
       ? message.mentions()[0]
       : message.member()!;
 
-
     return sendMessage(message.channel, {
       embed: {
         author: {
