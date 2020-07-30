@@ -1,0 +1,18 @@
+import { botCache } from "../../mod.ts";
+
+botCache.arguments.set("string", {
+  name: "string",
+  execute: function (argument, parameters) {
+    const [text] = parameters;
+
+    const valid =
+      // If the argument required literals and some string was provided by user
+      argument.literals?.length && text
+        ? argument.literals.includes(text.toLowerCase()) ? text : undefined
+        : undefined;
+
+    if (valid) {
+      return argument.lowercase ? valid.toLowerCase() : valid;
+    }
+  },
+});

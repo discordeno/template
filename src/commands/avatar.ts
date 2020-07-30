@@ -1,12 +1,13 @@
 // This command is intentionally different from other commands to show that they can also be done this way.
 // This is the ideal way because it will give you automated typings.
 import { botCache } from "../../mod.ts";
-import { avatarURL } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/handlers/member.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/handlers/channel.ts";
+import { avatarURL } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/member.ts";
+import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/channel.ts";
 
 botCache.commands.set(`avatar`, {
+  name: `avatar`,
   guildOnly: true,
-  callback: (message, _args, guild) => {
+  execute: (message, _args, guild) => {
     const member = message.mentions.length
       ? message.mentions()[0]
       : message.member()!;

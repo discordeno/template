@@ -1,6 +1,6 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/structures/message.ts";
 import { commandHandler } from "../monitors/commandHandler.ts";
+import { botCache } from "../../mod.ts";
 
-export const messageCreate = (message: Message) => {
+botCache.eventHandlers.messageCreate = function (message) {
   commandHandler(message);
 };
