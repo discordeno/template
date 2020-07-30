@@ -30,7 +30,10 @@ export const configs = {
 **Note:** To run the bot with `PM2`: `pm2 start ./app.sh --name YOUR_BOT_NAME`
 ## Features
 
-- [x] Events folder to keep all your events.
-- [x] Monitors to contain functions you want to run on all messages
+- [x] Arguments folder to parse and validate arguments for all your commands.
 - [x] Commands to contain all your bots amazing commands.
+- [x] Events folder to keep all your events.
 - [x] Inhibitors to contain pre-check requirements on commands before running a command
+- [x] Monitors to contain functions you want to run on all messages
+- [x] Utils to help make developing a Discord bot even easier and faster!
+- [x] Embed constructor with character limit checks to prevent errors.
