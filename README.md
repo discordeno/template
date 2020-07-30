@@ -23,7 +23,7 @@ export const configs = {
 }
 ```
 
-4. Start the bot `deno run --allow-net --allow-read --unstable mod.ts`
+4. Start the bot `deno run --allow-net --allow-read mod.ts`
 
 **Note:** Having to type all that can be quite annoying everytime you want to start a bot. To make it simpler, this template supports Velociraptor module. Once you install it(link above in pre-requisites) it is as simple as `vr start` or `vr update`(to update) or `vr dev` to both update and start the bot at once.
 
