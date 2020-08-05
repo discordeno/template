@@ -1,10 +1,11 @@
-import { MessageContent } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/types/channel.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/channel.ts";
-import { deleteMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/message.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts";
+import { MessageContent } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/channel.ts";
+import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
+import { deleteMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/message.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
 import { botCache } from "../../mod.ts";
-import { Channel } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/channel.ts";
+import { Channel } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/channel.ts";
 import { Embed } from "./Embed.ts";
+
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
 export async function sendAlertResponse(
   message: Message,

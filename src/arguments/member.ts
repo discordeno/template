@@ -1,5 +1,5 @@
 import { botCache } from "../../mod.ts";
-import { getMember } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/guild.ts";
+import { getMember } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/guild.ts";
 
 botCache.arguments.set("member", {
   name: "member",

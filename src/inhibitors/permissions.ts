@@ -1,13 +1,13 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
 import { Command } from "../types/commands.ts";
 import { botCache } from "../../mod.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/module/client.ts";
+import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import {
   Permission,
   Permissions,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/types/permission.ts";
+} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/permission.ts";
 import { sendResponse } from "../utils/helpers.ts";
-import { hasChannelPermission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/channel.ts";
+import { hasChannelPermission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(

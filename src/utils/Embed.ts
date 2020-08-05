@@ -3,7 +3,7 @@ import {
   EmbedField,
   EmbedAuthor,
   EmbedImage,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/types/message.ts";
+} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/message.ts";
 
 const embedLimits = {
   title: 256,

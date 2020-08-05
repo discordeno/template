@@ -1,6 +1,6 @@
-import { Errors } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/types/errors.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/handlers/channel.ts";
+import { Errors } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/errors.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
+import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
 
 function missingPermResponse(permission: string) {
   const perm = permission.split("_").slice(1).join(" ");

@@ -1,14 +1,12 @@
-import Client, {
-  updateEventHandlers,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/module/client.ts";
+import Client from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import { configs } from "./configs.ts";
 import {
   Intents,
   EventHandlers,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/types/options.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/message.ts";
+} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/options.ts";
+import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
 import { Command, Argument } from "./src/types/commands.ts";
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/structures/guild.ts";
+import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/guild.ts";
 
 export const botCache = {
   commands: new Map<string, Command>(),
@@ -30,7 +28,7 @@ const importDirectory = async (path: string) => {
 
     const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
-      await import(currentPath);
+      import(currentPath);
       continue;
     }
 
@@ -41,7 +39,7 @@ const importDirectory = async (path: string) => {
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
 await Promise.all(
   ["./src/commands", "./src/inhibitors", "./src/events", "./src/arguments"].map(
-    (path) => importDirectory(path)
+    (path) => importDirectory(path),
   ),
 );
 
