@@ -5,6 +5,7 @@ import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Disc
 
 botCache.commands.set(`ping`, {
   name: `ping`,
+  description: "commands/ping:DESCRIPTION",
   execute: function (message) {
     sendMessage(
       message.channel,

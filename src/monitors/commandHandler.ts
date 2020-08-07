@@ -50,31 +50,6 @@ async function parseArguments(
 
   // Loop over each argument and validate
   for (const argument of command.arguments) {
-    if (!argument.type || (argument.type === "string")) {
-      const [text] = params;
-
-      const valid =
-        // If the argument required literals and some string was provided by user
-        argument.literals?.length && text
-          ? argument.literals.includes(text.toLowerCase()) ? text : undefined
-          : undefined;
-
-      if (valid) {
-        args[argument.name] = argument.lowercase ? valid.toLowerCase() : valid;
-        params.shift();
-      } else {
-        if (argument.defaultValue) {
-          args[argument.name] = argument.defaultValue;
-        } else if (argument.required) {
-          missingRequiredArg = true;
-          argument.missing?.(message);
-          break;
-        }
-      }
-
-      continue;
-    }
-
     const resolver = botCache.arguments.get(argument.type || "string");
     if (!resolver) continue;
 
@@ -83,7 +58,7 @@ async function parseArguments(
       // Assign the valid argument
       args[argument.name] = result;
       // This will use up all args so immediately exist the loop.
-      if (["...string"].includes(argument.type)) {
+      if (argument.type && ["...string"].includes(argument.type)) {
         break;
       }
       // Remove a param for the next argument
