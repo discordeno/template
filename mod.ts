@@ -7,6 +7,9 @@ import {
 import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
 import { Command, Argument } from "./src/types/commands.ts";
 import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/guild.ts";
+import { importDirectory } from "./src/utils/helpers.ts";
+import { Monitor } from "./src/types/monitors.ts";
+import { Task } from "./src/types/tasks.ts";
 
 export const botCache = {
   commands: new Map<string, Command>(),
@@ -16,30 +19,23 @@ export const botCache = {
     string,
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
   >(),
+  monitors: new Map<string, Monitor>(),
   eventHandlers: {} as EventHandlers,
   arguments: new Map<string, Argument>(),
-};
-
-const importDirectory = async (path: string) => {
-  const files = Deno.readDirSync(Deno.realPathSync(path));
-
-  for (const file of files) {
-    if (!file.name) continue;
-
-    const currentPath = `${path}/${file.name}`;
-    if (file.isFile) {
-      import(currentPath);
-      continue;
-    }
-
-    importDirectory(currentPath);
-  }
+  tasks: new Map<string, Task>()
 };
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
 await Promise.all(
-  ["./src/commands", "./src/inhibitors", "./src/events", "./src/arguments"].map(
-    (path) => importDirectory(path),
+  [
+    "./src/commands",
+    "./src/inhibitors",
+    "./src/events",
+    "./src/arguments",
+    "./src/monitors",
+    "./src/tasks"
+  ].map(
+    (path) => importDirectory(Deno.realPathSync(path)),
   ),
 );
 

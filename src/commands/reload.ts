@@ -1,0 +1,63 @@
+import { botCache } from "../../mod.ts";
+import { updateEventHandlers } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
+import { importDirectory, sendResponse } from "../utils/helpers.ts";
+
+const folderPaths = new Map(
+  [
+    ["arguments", "./src/arguments"],
+    ["commands", "./src/commands"],
+    ["events", "./src/events"],
+    ["inhibitors", "./src/inhibitors"],
+    ["monitors", "./src/monitors"],
+    ["tasks", "./src/tasks"],
+  ],
+);
+
+botCache.commands.set(`reload`, {
+  name: `reload`,
+  arguments: [
+    {
+      name: "folder",
+      type: "string",
+      literals: [
+        "arguments",
+        "commands",
+        "events",
+        "inhibitors",
+        "monitors",
+        "tasks",
+      ],
+      required: false,
+    },
+  ],
+  execute: async function (message, args: ReloadArgs) {
+    // Reload a specific folder
+    if (args.folder) {
+      const path = folderPaths.get(args.folder);
+      if (!path) {
+        return sendResponse(
+          message,
+          "The folder you provided did not have a path available.",
+        );
+      }
+
+      await importDirectory(Deno.realPathSync(path));
+      return sendResponse(message, `The **${args.folder}** has been reloaded.`);
+    }
+
+    // Reloads the main folders:
+    await Promise.all(
+      [...folderPaths.values()].map((path) =>
+        importDirectory(Deno.realPathSync(path))
+      ),
+    );
+    // Updates the events in the library
+    updateEventHandlers(botCache.eventHandlers);
+
+    return sendResponse(message, "Reloaded everything.");
+  },
+});
+
+interface ReloadArgs {
+  folder?: "arguments" | "commands" | "events" | "inhibitors" | "monitors";
+}

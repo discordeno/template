@@ -8,6 +8,10 @@ import {
 } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/permission.ts";
 import { sendResponse } from "../utils/helpers.ts";
 import { hasChannelPermission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
+import {
+  botHasPermission,
+  memberHasPermission,
+} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/permissions.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
@@ -75,10 +79,11 @@ botCache.inhibitors.set(
     // Check if the message author has the necessary permissions to run this command
     if (command.userServerPermissions?.length) {
       const missingPermissions = command.userServerPermissions.filter((perm) =>
-        !hasChannelPermission(
-          message.channel,
+        !memberHasPermission(
           message.author.id,
-          [Permissions[perm]],
+          guild,
+          message.member()?.roles || [],
+          [perm],
         )
       );
       if (missingPermissions.length) {
@@ -97,7 +102,7 @@ botCache.inhibitors.set(
       const missingPermissions = command.botChannelPermissions.filter((perm) =>
         !hasChannelPermission(
           message.channel,
-          message.author.id,
+          botMember.user.id,
           [Permissions[perm]],
         )
       );
@@ -115,9 +120,8 @@ botCache.inhibitors.set(
     // Check if the bot has the necessary permissions to run this command
     if (command.botServerPermissions?.length) {
       const missingPermissions = command.botServerPermissions.filter((perm) =>
-        !hasChannelPermission(
-          message.channel,
-          message.author.id,
+        !botHasPermission(
+          guild.id,
           [Permissions[perm]],
         )
       );
