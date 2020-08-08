@@ -30,5 +30,14 @@ export const configs = {
   roleIDs: {
     // If you have a patreon set up you can add the patreon vip role id here.
     patreonVIPRoleID: "",
+  },
+  // These are the user ids that will enable some functionality.
+  userIDs: {
+    // The user ids for the support team
+    botSupporters: [],
+    // The user ids for the other devs on your team
+    botDevs: [],
+    // The user ids who have complete 100% access to your bot
+    botOwners: []
   }
 };
