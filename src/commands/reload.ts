@@ -16,7 +16,7 @@ const folderPaths = new Map(
 
 botCache.commands.set(`reload`, {
   name: `reload`,
-  permissionLevel: [PermissionLevels.BOT_OWNER],
+  permissionLevels: [PermissionLevels.BOT_OWNER],
   botChannelPermissions: ["SEND_MESSAGES"],
   arguments: [
     {

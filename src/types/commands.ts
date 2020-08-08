@@ -7,7 +7,7 @@ export interface Command {
   dmOnly?: boolean;
   guildOnly?: boolean;
   nsfw?: boolean;
-  permissionLevel?: PermissionLevels[] | (() => boolean | Promise<boolean>);
+  permissionLevels?: PermissionLevels[] | ((message: Message, command: Command, guild?: Guild) => boolean | Promise<boolean>);
   botServerPermissions?: Permission[];
   botChannelPermissions?: Permission[];
   userServerPermissions?: Permission[];
