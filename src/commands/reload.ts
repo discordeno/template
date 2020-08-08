@@ -1,6 +1,7 @@
 import { botCache } from "../../mod.ts";
 import { updateEventHandlers } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import { importDirectory, sendResponse } from "../utils/helpers.ts";
+import { PermissionLevels } from "../types/commands.ts";
 
 const folderPaths = new Map(
   [
@@ -15,6 +16,8 @@ const folderPaths = new Map(
 
 botCache.commands.set(`reload`, {
   name: `reload`,
+  permissionLevel: [PermissionLevels.BOT_OWNER],
+  botChannelPermissions: ["SEND_MESSAGES"],
   arguments: [
     {
       name: "folder",

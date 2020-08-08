@@ -15,7 +15,6 @@ botCache.commands.set(`help`, {
   ],
   execute: function (message, args: HelpArgs) {
     if (!args.command) {
-      // TODO: return list of commands.
       return sendMessage(message.channel, `No command provided.`);
     }
 

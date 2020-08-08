@@ -1,21 +1,10 @@
-import Client from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
+import Client, { Message, Guild, Intents, EventHandlers } from "./deps.ts"
 import { configs } from "./configs.ts";
-import {
-  Intents,
-  EventHandlers,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/options.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
 import { Command, Argument } from "./src/types/commands.ts";
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/guild.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
 import { Monitor } from "./src/types/monitors.ts";
 import { Task } from "./src/types/tasks.ts";
-import i18next from "https://deno.land/x/i18next@v19.6.3/index.js";
-import Backend from "https://deno.land/x/i18next_fs_backend/index.js";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
-import logger from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/logger.ts";
-import { determineNamespaces, loadLanguages } from "./src/utils/i18next.ts";
+import { loadLanguages } from "./src/utils/i18next.ts";
 
 export const botCache = {
   commands: new Map<string, Command>(),
@@ -46,10 +35,8 @@ await Promise.all(
   ),
 );
 
-
-
 // Loads languages
-await loadLanguages()
+await loadLanguages();
 
 Client({
   token: configs.token,

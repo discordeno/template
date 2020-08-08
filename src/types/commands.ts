@@ -7,7 +7,7 @@ export interface Command {
   dmOnly?: boolean;
   guildOnly?: boolean;
   nsfw?: boolean;
-  allowedRoles?: string[];
+  permissionLevel?: PermissionLevels[] | (() => boolean | Promise<boolean>);
   botServerPermissions?: Permission[];
   botChannelPermissions?: Permission[];
   userServerPermissions?: Permission[];
@@ -32,7 +32,8 @@ export interface CommandArgument {
     | "...string"
     | "boolean"
     | "subcommand"
-    | "member";
+    | "member"
+    | "role";
   /** The function that runs if this argument is required and is missing. */
   missing?: (message: Message) => unknown;
   /** Whether or not this argument is required. Defaults to true. */
@@ -56,4 +57,14 @@ export interface Argument {
 
 export interface Args {
   [key: string]: unknown;
+}
+
+export enum PermissionLevels {
+  MEMBER,
+  MODERATOR,
+  ADMIN,
+  SERVER_OWNER,
+  BOT_SUPPORT,
+  BOT_DEVS,
+  BOT_OWNER
 }
