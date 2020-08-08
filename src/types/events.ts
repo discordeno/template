@@ -2,5 +2,4 @@ import { EventHandlers } from "https://raw.githubusercontent.com/Skillz4Killz/Di
 
 // This interface is a placeholder that allows you to easily add on custom events for your need.
 export interface CustomEvents extends EventHandlers {
-	
 }

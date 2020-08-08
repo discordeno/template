@@ -9,5 +9,3 @@ botCache.arguments.set("number", {
     if (valid) return valid;
   },
 });
-
-

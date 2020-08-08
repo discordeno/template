@@ -1,4 +1,4 @@
-import Client, { Message, Guild, Intents, EventHandlers } from "./deps.ts"
+import Client, { Message, Guild, Intents, EventHandlers } from "./deps.ts";
 import { configs } from "./configs.ts";
 import { Command, Argument, PermissionLevels } from "./src/types/commands.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
@@ -19,7 +19,10 @@ export const botCache = {
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
   >(),
   monitors: new Map<string, Monitor>(),
-  permissionLevels: new Map<PermissionLevels, (message: Message, command: Command, guild?: Guild) => Promise<boolean>>(),
+  permissionLevels: new Map<
+    PermissionLevels,
+    (message: Message, command: Command, guild?: Guild) => Promise<boolean>
+  >(),
   tasks: new Map<string, Task>(),
 };
 
@@ -32,7 +35,7 @@ await Promise.all(
     "./src/arguments",
     "./src/monitors",
     "./src/tasks",
-    "./src/permissionLevels"
+    "./src/permissionLevels",
   ].map(
     (path) => importDirectory(Deno.realPathSync(path)),
   ),

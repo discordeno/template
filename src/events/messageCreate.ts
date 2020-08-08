@@ -37,10 +37,6 @@ botCache.eventHandlers.messageCreate = function (message) {
     // If some permissions is required it must be in a guild
     if (!guild) return;
 
-    // If the bot is not available then we can just cancel out.
-    const botMember = guild.members.get(botID);
-    if (!botMember) return;
-
     // Check if the message author has the necessary channel permissions to run this monitor
     if (
       monitor.userChannelPermissions &&

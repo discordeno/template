@@ -7,7 +7,13 @@ export interface Command {
   dmOnly?: boolean;
   guildOnly?: boolean;
   nsfw?: boolean;
-  permissionLevels?: PermissionLevels[] | ((message: Message, command: Command, guild?: Guild) => boolean | Promise<boolean>);
+  permissionLevels?:
+    | PermissionLevels[]
+    | ((
+      message: Message,
+      command: Command,
+      guild?: Guild,
+    ) => boolean | Promise<boolean>);
   botServerPermissions?: Permission[];
   botChannelPermissions?: Permission[];
   userServerPermissions?: Permission[];
@@ -66,5 +72,5 @@ export enum PermissionLevels {
   SERVER_OWNER,
   BOT_SUPPORT,
   BOT_DEVS,
-  BOT_OWNER
+  BOT_OWNER,
 }

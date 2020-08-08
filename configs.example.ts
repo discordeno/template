@@ -24,7 +24,7 @@ export const configs = {
     // When a translation is missing this is the channel you will be alerted in.
     missingTranslation: "",
     // When an error occurs, we will try and log it to this channel
-    errorChannelID: ""
+    errorChannelID: "",
   },
   // These are the role ids that will enable some functionality.
   roleIDs: {
@@ -39,6 +39,6 @@ export const configs = {
     // The user ids for the other devs on your team
     botDevs: [] as string[],
     // The user ids who have complete 100% access to your bot
-    botOwners: [] as string[]
-  }
+    botOwners: [] as string[],
+  },
 };

@@ -11,7 +11,7 @@ const folderPaths = new Map(
     ["inhibitors", "./src/inhibitors"],
     ["monitors", "./src/monitors"],
     ["tasks", "./src/tasks"],
-    ["perms", "./src/permissionLevels"]
+    ["perms", "./src/permissionLevels"],
   ],
 );
 
