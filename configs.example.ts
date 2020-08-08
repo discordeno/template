@@ -5,7 +5,6 @@
 export const configs = {
   token: "",
   prefix: "!",
-  botID: "",
   botListTokens: {
     DISCORD_BOT_ORG: "",
     BOTS_ON_DISCORD: "",
@@ -13,6 +12,9 @@ export const configs = {
     BOTS_FOR_DISCORD: "",
     DISCORD_BOATS: "",
     DISCORD_BOTS_GG: "",
-    DISCORD_BOTS_GROUP: ""
+    DISCORD_BOTS_GROUP: "",
+  },
+  channelIDs: {
+    missingTranslation: "",
   },
 };
