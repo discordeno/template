@@ -33,11 +33,12 @@ export const configs = {
   },
   // These are the user ids that will enable some functionality.
   userIDs: {
+    // You can delete the `as string[]` when you add atleast 1 id in them.
     // The user ids for the support team
-    botSupporters: [],
+    botSupporters: [] as string[],
     // The user ids for the other devs on your team
-    botDevs: [],
+    botDevs: [] as string[],
     // The user ids who have complete 100% access to your bot
-    botOwners: []
+    botOwners: [] as string[]
   }
 };
