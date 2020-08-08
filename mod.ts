@@ -6,7 +6,6 @@ import { Monitor } from "./src/types/monitors.ts";
 import { Task } from "./src/types/tasks.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 import { CustomEvents } from "./src/types/events.ts";
-import { loadPermissionLevels } from "./src/utils/permissions.ts";
 
 export const botCache = {
   arguments: new Map<string, Argument>(),
