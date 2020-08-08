@@ -154,7 +154,7 @@ botCache.monitors.set("commandHandler", {
       if (!argument || argument.type !== "subcommand") {
         // Check subcommand permissions and options
         if (!(await commandAllowed(message, command, guild))) return;
-        await command.execute(message, args);
+        await command.execute(message, args, guild);
         return logCommand(
           message,
           guild?.name || "DM",
@@ -166,7 +166,7 @@ botCache.monitors.set("commandHandler", {
       // A subcommand was asked for in this command
       const subcommand = parseSubcommand(command, args[argument.name]);
       if (!subcommand) {
-        await command.execute(message, args);
+        await command.execute(message, args, guild);
 
         // Log that the command ran successfully.
         return logCommand(
@@ -180,7 +180,7 @@ botCache.monitors.set("commandHandler", {
       // Check subcommand permissions and options
       if (!(await commandAllowed(message, subcommand, guild))) return;
       // Parse the args and then execute the subcommand
-      await subcommand.execute(message, args);
+      await subcommand.execute(message, args, guild);
       // Log that the command ran successfully.
       logCommand(message, guild?.name || "DM", "Success", commandName);
     } catch (error) {
