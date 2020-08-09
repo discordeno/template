@@ -1,3 +1,4 @@
+import { Embed } from "./../utils/Embed.ts";
 import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import { botCache } from "../../mod.ts";
 import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
@@ -8,50 +9,31 @@ botCache.commands.set(`stats`, {
   name: `stats`,
   guildOnly: true,
   execute: (message, _args, guild) => {
-    let botMember = guild?.members.get(botID);
+    const botMember = guild?.members.get(botID);
 
     if (!botMember) return;
 
-    let memberCount = 0;
+    let totalMemberCount = 0;
+    let cachedMemberCount = 0;
 
-    cache.guilds.forEach((guild) => {
-      memberCount += guild.members.size;
-    });
+    for (const guild of cache.guilds.values()) {
+      totalMemberCount += guild.memberCount;
+      cachedMemberCount += guild.members.size;
+    }
 
-    return sendMessage(message.channel, {
-      embed: {
-        author: {
-          name: `${botMember?.nick || botMember?.user.username} Stats`,
-          icon_url: avatarURL(botMember),
-        },
-        fields: [
-          {
-            name: "Guilds:",
-            value: cache.guilds.size.toString(),
-            inline: true,
-          },
-          {
-            name: "Members:",
-            value: memberCount.toString(),
-            inline: true,
-          },
-          {
-            name: "Channels:",
-            value: cache.channels.size.toString(),
-            inline: true,
-          },
-          {
-            name: "Messages:",
-            value: cache.messages.size.toString(),
-            inline: true,
-          },
-          {
-            name: "Deno version:",
-            value: `v${Deno.version.deno}`,
-            inline: true,
-          },
-        ],
-      },
-    });
+    const embed = new Embed()
+      .setAuthor(
+        `${botMember?.nick || botMember?.user.username} Stats`,
+        avatarURL(botMember),
+      )
+      .setColor("random")
+      .addField("Guilds:", cache.guilds.size.toLocaleString(), true)
+      .addField("Total Members:", totalMemberCount.toLocaleString(), true)
+      .addField("Cached Members:", cachedMemberCount.toLocaleString(), true)
+      .addField("Channels:", cache.channels.size.toLocaleString(), true)
+      .addField("Messages:", cache.messages.size.toLocaleString(), true)
+      .addField("Deno Version:", `v${Deno.version.deno}`, true);
+
+    return sendMessage(message.channel, { embed });
   },
 });
