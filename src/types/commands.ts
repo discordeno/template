@@ -39,7 +39,14 @@ export interface CommandArgument {
     | "boolean"
     | "subcommand"
     | "member"
-    | "role";
+    | "role"
+    | "categorychannel"
+    | "newschanne"
+    | "textchannel"
+    | "voicechannel"
+    | "command"
+    | "duration"
+    | "guild";
   /** The function that runs if this argument is required and is missing. */
   missing?: (message: Message) => unknown;
   /** Whether or not this argument is required. Defaults to true. */

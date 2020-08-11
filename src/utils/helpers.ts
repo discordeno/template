@@ -5,6 +5,7 @@ import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discorde
 import { botCache } from "../../mod.ts";
 import { Channel } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/channel.ts";
 import { Embed } from "./Embed.ts";
+import { Milliseconds } from "./constants/time.ts";
 
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
 export async function sendAlertResponse(
@@ -46,6 +47,49 @@ export function humanizeMilliseconds(milliseconds: number) {
   const secondString = seconds ? `${seconds}s ` : "";
 
   return `${dayString}${hourString}${minuteString}${secondString}`;
+}
+
+/** This function helps convert a string like 1d5h to milliseconds. */
+export function stringToMilliseconds(text: string) {
+  const matches = text.match(/(\d+[w|d|h|m]{1})/g);
+  if (!matches) return;
+
+  let total = 0;
+
+  for (const match of matches) {
+    // Finds the first of these letters
+    const validMatch = /(w|d|h|m|s)/.exec(match);
+    // if none of them were found cancel
+    if (!validMatch) return;
+    // Get the number which should be before the index of that match
+    const number = match.substring(0, validMatch.index);
+    // Get the letter that was found
+    const [letter] = validMatch;
+    if (!number || !letter) return;
+
+    let multiplier = Milliseconds.SECOND;
+    switch (letter.toLowerCase()) {
+      case `w`:
+        multiplier = Milliseconds.WEEK;
+        break;
+      case `d`:
+        multiplier = Milliseconds.DAY;
+        break;
+      case `h`:
+        multiplier = Milliseconds.HOUR;
+        break;
+      case `m`:
+        multiplier = Milliseconds.MINUTE;
+        break;
+    }
+
+    const amount = number ? parseInt(number, 10) : undefined;
+    if (!amount) return;
+
+    total += amount * multiplier;
+  }
+
+  return total;
 }
 
 /** This function should be used to create command aliases. */
