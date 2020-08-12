@@ -12,7 +12,6 @@ botCache.commands.set(`kick`, {
     {
       name: "member",
       type: "member",
-      required: true,
       missing: (message) => {
         return sendMessage(message.channel, "User not found!");
       },
@@ -29,13 +28,13 @@ botCache.commands.set(`kick`, {
   botServerPermissions: [
     "KICK_MEMBERS",
   ],
-  execute: (message, _args, guild) => {
-    const member: Member = _args["member"];
-    const reason: string = _args["reason"];
+  execute: async (message, args, guild) => {
+    const member: Member = args.member;
+    const reason: string = args.reason;
 
-    if (!guild || !member || !reason) return;
+    try {
+      await kick(guild!.id, member.user.id, reason);
 
-    return kick(guild.id, member.user.id, reason).then(() => {
       const embed = new Embed()
         .setColor("#FFA500")
         .setTitle(`Kicked User`)
@@ -45,9 +44,8 @@ botCache.commands.set(`kick`, {
         .setTimestamp(Date.now());
 
       return sendEmbed(message.channel, embed);
-    }).catch(() => {
-      // Should rarely ever happen, but this lets the user know something went wrong just in case
+    } catch (error) {
       return sendMessage(message.channel, "Attempt to kick user has failed");
-    });
+    }
   },
 });
