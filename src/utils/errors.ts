@@ -1,6 +1,4 @@
-import { Errors } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/errors.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
+import { Errors, Message, sendMessage } from "../../deps.ts";
 
 function missingPermResponse(permission: string) {
   const perm = permission.split("_").slice(1).join(" ");

@@ -1,5 +1,5 @@
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
+import { cache } from "../../deps.ts";
 
 botCache.arguments.set("guild", {
   name: "guild",

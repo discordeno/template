@@ -1,9 +1,6 @@
-import { Embed } from "./../utils/Embed.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
-import { avatarURL } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/member.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
+import { Embed } from "./../utils/Embed.ts";
+import { botID, cache, avatarURL, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`stats`, {
   name: `stats`,

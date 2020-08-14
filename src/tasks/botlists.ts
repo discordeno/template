@@ -1,8 +1,6 @@
 import { botCache } from "../../mod.ts";
 import { Milliseconds } from "../utils/constants/time.ts";
-import logger from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/logger.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
+import { botID, logger, cache } from "../../deps.ts";
 import { configs } from "../../configs.ts";
 
 botCache.tasks.set(`botlists`, {

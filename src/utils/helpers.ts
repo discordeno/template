@@ -1,9 +1,11 @@
-import { MessageContent } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/channel.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
-import { deleteMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/message.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
+import {
+  MessageContent,
+  sendMessage,
+  deleteMessage,
+  Message,
+  Channel,
+} from "../../deps.ts";
 import { botCache } from "../../mod.ts";
-import { Channel } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/channel.ts";
 import { Embed } from "./Embed.ts";
 import { Milliseconds } from "./constants/time.ts";
 

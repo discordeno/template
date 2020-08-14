@@ -1,6 +1,5 @@
 import { botCache } from "../../mod.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
+import { sendMessage, botID } from "../../deps.ts";
 
 botCache.commands.set(`invite`, {
   name: `invite`,
