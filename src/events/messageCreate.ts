@@ -6,22 +6,9 @@ import {
   hasChannelPermission,
   memberHasPermission,
   Permissions,
-  sendMessage,
 } from "../../deps.ts";
 
 botCache.eventHandlers.messageCreate = async function (message) {
-  if (message.content === "hi-hi") {
-    sendMessage(message.channel, "✌️");
-  } else if (message.content === "test_flood") {
-    if (message.author.id === "130136895395987456") {
-      for (let i = 1; i < 41; i++) {
-        console.log("try to send " + i);
-        await sendMessage(message.channel, ". " + i);
-        console.log("sent", i);
-      }
-    }
-  }
-
   botCache.monitors.forEach((monitor) => {
     // The !== false is important because when not provided we default to true
     if (monitor.ignoreBots !== false && message.author.bot) return;
