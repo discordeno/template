@@ -1,11 +1,8 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
-import logger from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/logger.ts";
+import { Message, logger, Guild, cache } from "../../deps.ts";
 import { configs } from "../../configs.ts";
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
 import { handleError } from "../utils/errors.ts";
 import { Command } from "../types/commands.ts";
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/guild.ts";
 
 export const parsePrefix = (guildID: string | undefined) => {
   const prefix = guildID ? botCache.guildPrefixes.get(guildID) : configs.prefix;
@@ -98,14 +95,14 @@ async function commandAllowed(
   command: Command,
   guild?: Guild,
 ) {
-  const inhibitor_results = await Promise.all(
+  const inhibitorResults = await Promise.all(
     [...botCache.inhibitors.values()].map((inhibitor) =>
       inhibitor(message, command, guild)
     ),
   );
 
-  if (inhibitor_results.includes(true)) {
-    logCommand(message, guild?.name || "DM", "Inhibibted", command.name);
+  if (inhibitorResults.includes(true)) {
+    logCommand(message, guild?.name || "DM", "Inhibited", command.name);
     return false;
   }
 
@@ -136,9 +133,7 @@ botCache.monitors.set("commandHandler", {
     const command = parseCommand(commandName);
     if (!command) return;
 
-    const guild = message.guildID
-      ? cache.guilds.get(message.guildID)
-      : undefined;
+    const guild = message.guild();
     logCommand(message, guild?.name || "DM", "Ran", commandName);
 
     // Parsed args and validated

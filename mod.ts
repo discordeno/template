@@ -1,4 +1,10 @@
-import Client, { Message, Guild, Intents, EventHandlers } from "./deps.ts";
+import Client, {
+  Message,
+  Guild,
+  Intents,
+  EventHandlers,
+  logger,
+} from "./deps.ts";
 import { configs } from "./configs.ts";
 import { Command, Argument, PermissionLevels } from "./src/types/commands.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
@@ -6,6 +12,11 @@ import { Monitor } from "./src/types/monitors.ts";
 import { Task } from "./src/types/tasks.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 import { CustomEvents } from "./src/types/events.ts";
+import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
+
+logger.info(
+  "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
+);
 
 export const botCache = {
   arguments: new Map<string, Argument>(),
@@ -14,6 +25,8 @@ export const botCache = {
   eventHandlers: {} as CustomEvents,
   guildPrefixes: new Map<string, string>(),
   guildLanguages: new Map<string, string>(),
+  messageCollectors: new Map<string, MessageCollector>(),
+  reactionCollectors: new Map<string, ReactionCollector>(),
   inhibitors: new Map<
     string,
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
@@ -27,18 +40,19 @@ export const botCache = {
 };
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
-await Promise.all(
-  [
-    "./src/commands",
-    "./src/inhibitors",
-    "./src/events",
-    "./src/arguments",
-    "./src/monitors",
-    "./src/tasks",
-    "./src/permissionLevels",
-  ].map(
-    (path) => importDirectory(Deno.realPathSync(path)),
-  ),
+await importDirectory(Deno.realPathSync("./src/events"));
+
+const paths = [
+  "./src/commands",
+  "./src/inhibitors",
+  "./src/events",
+  "./src/arguments",
+  "./src/monitors",
+  "./src/tasks",
+  "./src/permissionLevels",
+];
+paths.forEach(
+  (path) => importDirectory(Deno.realPathSync(path)),
 );
 
 // Loads languages
@@ -47,7 +61,11 @@ await loadLanguages();
 Client({
   token: configs.token,
   // Pick the intents you wish to have for your bot.
-  intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
+  intents: [
+    Intents.GUILDS,
+    Intents.GUILD_MESSAGES,
+    Intents.GUILD_MESSAGE_REACTIONS,
+  ],
   // These are all your event handler functions. Imported from the events folder
   eventHandlers: botCache.eventHandlers,
 });
