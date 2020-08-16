@@ -73,7 +73,7 @@ The `-r` is short for `--reload`, it reloads your deno cache whenever the bot re
 
 ## Beginner Developers
 
-Don't worry a lot of developers start out coding their first projects as a Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it in a way that solved all the headaches I had when first starting out coding bots. If you are a beginner developer, please use a boilerplate: The official one is at: [GitHub](https://github.com/Skillz4Killz/Discordeno-bot-template) but there will be more listed on the website. It is a beautiful website indeed! Check it out!
+Don't worry a lot of developers start out coding their first projects as a Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it in a way that solved all the headaches I had when first starting out coding bots. If you are a beginner developer, please use this boilerplate.
 
 **Modular commands, arguments, events, inhibitors, monitors, tasks.**
 
