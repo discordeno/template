@@ -61,11 +61,7 @@ await loadLanguages();
 Client({
   token: configs.token,
   // Pick the intents you wish to have for your bot.
-  intents: [
-    Intents.GUILDS,
-    Intents.GUILD_MESSAGES,
-    Intents.GUILD_MESSAGE_REACTIONS,
-  ],
+  intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   // These are all your event handler functions. Imported from the events folder
   eventHandlers: botCache.eventHandlers,
 });
