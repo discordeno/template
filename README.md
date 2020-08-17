@@ -63,9 +63,9 @@ export const configs = {
 };
 ```
 
-4. Start the bot `deno run --allow-net --allow-read mod.ts`
+4. Start the bot `deno run --allow-net --allow-read --quiet mod.ts`
 
-**Note:** To run the bot with `PM2`: `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-net --allow-read -r" `
+**Note:** To run the bot with `PM2`: `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-net --allow-read --quiet -r" `
 
 The `-r` is short for `--reload`, it reloads your deno cache whenever the bot restarts to get the latest and greatest changes to Discordeno. You don't have to include it.
 

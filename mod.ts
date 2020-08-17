@@ -2,8 +2,7 @@ import Client, {
   Message,
   Guild,
   Intents,
-  EventHandlers,
-  logger,
+  logger
 } from "./deps.ts";
 import { configs } from "./configs.ts";
 import { Command, Argument, PermissionLevels } from "./src/types/commands.ts";
@@ -13,6 +12,7 @@ import { Task } from "./src/types/tasks.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 import { CustomEvents } from "./src/types/events.ts";
 import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
+
 
 logger.info(
   "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
