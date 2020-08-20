@@ -64,8 +64,9 @@ async function parseArguments(
     }
 
     // Invalid arg provided.
-    if (argument.defaultValue) args[argument.name] = argument.defaultValue;
-    else if (argument.required) {
+    if (argument.hasOwnProperty("defaultValue")) {
+      args[argument.name] = argument.defaultValue;
+    } else if (argument.required) {
       missingRequiredArg = true;
       argument.missing?.(message);
       break;
