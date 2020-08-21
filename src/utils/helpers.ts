@@ -116,8 +116,8 @@ export function sendEmbed(channel: Channel, embed: Embed, content?: string) {
 }
 
 /** Use this function to edit an embed with ease. */
-export function editEmbed(channel: Channel, embed: Embed, content?: string) {
-  return editMessage(channel, { content, embed });
+export function editEmbed(message: Message, embed: Embed, content?: string) {
+  return editMessage(message, { content, embed });
 }
 
 // Very important to make sure files are reloaded properly
