@@ -29,7 +29,8 @@ botCache.commands.set(`stats`, {
       .addField("Cached Members:", cachedMemberCount.toLocaleString(), true)
       .addField("Channels:", cache.channels.size.toLocaleString(), true)
       .addField("Messages:", cache.messages.size.toLocaleString(), true)
-      .addField("Deno Version:", `v${Deno.version.deno}`, true);
+      .addField("Deno Version:", `v${Deno.version.deno}`, true)
+      .setTimestamp();
 
     return sendMessage(message.channel, { embed });
   },
