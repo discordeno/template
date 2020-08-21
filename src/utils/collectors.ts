@@ -78,7 +78,6 @@ export function processReactionCollectors(
   emoji: ReactionPayload,
   userID: string,
 ) {
-  console.log("im here", userID, emoji);
   // Ignore bot reactions
   if (userID === botID) return;
 
@@ -88,26 +87,22 @@ export function processReactionCollectors(
   const collector = botCache.reactionCollectors.get(userID);
   if (!collector) return;
 
-  console.log("here 2", message, collector);
   // This user has no collectors pending or the message is in a different channel
   if (!collector || (message.id !== collector.messageID)) return;
-  console.log("here 3");
   // This message is a response to a collector. Now running the filter function.
   if (!collector.filter(userID, emojiName, message)) return;
-  console.log("here 4");
+
   // If the necessary amount has been collected
   if (
     collector.amount === 1 ||
     collector.amount === collector.reactions.length + 1
   ) {
-    console.log("here 5");
     // Remove the collector
     botCache.reactionCollectors.delete(userID);
     // Resolve the collector
     return collector.resolve([...collector.reactions, emojiName]);
   }
 
-  console.log("here 6");
   // More reactions still need to be collected
   collector.reactions.push(emojiName);
 }
