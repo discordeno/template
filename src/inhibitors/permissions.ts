@@ -90,7 +90,7 @@ botCache.inhibitors.set(
           message,
           command,
           missingPermissions,
-          "framework/core:USER_CHANNEL_PERM",
+          "framework/core:USER_SERVER_PERM",
         );
         return false;
       }
@@ -110,7 +110,7 @@ botCache.inhibitors.set(
           message,
           command,
           missingPermissions,
-          "framework/core:USER_CHANNEL_PERM",
+          "framework/core:BOT_CHANNEL_PERM",
         );
         return false;
       }
@@ -129,7 +129,7 @@ botCache.inhibitors.set(
           message,
           command,
           missingPermissions,
-          "framework/core:USER_CHANNEL_PERM",
+          "framework/core:BOT_CHANNEL_PERM",
         );
         return false;
       }
