@@ -1,4 +1,4 @@
-import { Message, logger, Guild, cache } from "../../deps.ts";
+import { Message, logger, Guild, botID } from "../../deps.ts";
 import { configs } from "../../configs.ts";
 import { botCache } from "../../mod.ts";
 import { handleError } from "../utils/errors.ts";
@@ -118,9 +118,12 @@ botCache.monitors.set("commandHandler", {
     // If the message was sent by a bot we can just ignore it
     if (message.author.bot) return;
 
-    const prefix = parsePrefix(message.guildID);
-    // If the message is not using the valid prefix cancel the command
-    if (!message.content.startsWith(prefix)) return;
+    let prefix = parsePrefix(message.guildID);
+    const botMention = `<@!${botID}> `;
+
+    // If the message is not using the valid prefix or bot mention cancel the command
+    if (message.content.startsWith(botMention)) prefix = botMention;
+    else if (!message.content.startsWith(prefix)) return;
 
     // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
     const [commandName, ...parameters] = message.content.substring(
