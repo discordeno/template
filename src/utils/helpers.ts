@@ -102,9 +102,10 @@ export function createCommandAliases(
   if (typeof aliases === "string") aliases = [aliases];
 
   for (const alias of aliases) {
-    if (botCache.commandAliases.has(alias)) {
-      throw new Error(`The ${alias} already exists as a command alias.`);
-    }
+    const command = botCache.commandAliases.get(alias)
+    // Setting the alias again probably due to reloading.
+    if (command === commandName) continue;
+
     botCache.commandAliases.set(alias, commandName);
   }
 }
