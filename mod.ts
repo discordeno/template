@@ -2,7 +2,7 @@ import Client, {
   Message,
   Guild,
   Intents,
-  logger
+  logger,
 } from "./deps.ts";
 import { configs } from "./configs.ts";
 import { Command, Argument, PermissionLevels } from "./src/types/commands.ts";
@@ -12,7 +12,6 @@ import { Task } from "./src/types/tasks.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 import { CustomEvents } from "./src/types/events.ts";
 import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
-
 
 logger.info(
   "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
@@ -40,19 +39,19 @@ export const botCache = {
 };
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
-await importDirectory(Deno.realPathSync("./src/events"));
-
-const paths = [
-  "./src/commands",
-  "./src/inhibitors",
-  "./src/events",
-  "./src/arguments",
-  "./src/monitors",
-  "./src/tasks",
-  "./src/permissionLevels",
-];
-paths.forEach(
-  (path) => importDirectory(Deno.realPathSync(path)),
+await Promise.all(
+  [
+    "./src/commands",
+    "./src/inhibitors",
+    "./src/events",
+    "./src/arguments",
+    "./src/monitors",
+    "./src/tasks",
+    "./src/permissionLevels",
+    "./src/events",
+  ].map(
+    (path) => importDirectory(Deno.realPathSync(path)),
+  ),
 );
 
 // Loads languages
