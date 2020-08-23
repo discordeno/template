@@ -2,6 +2,7 @@ import {
   MessageContent,
   sendMessage,
   deleteMessage,
+  editMessage,
   Message,
   Channel,
 } from "../../deps.ts";
@@ -125,6 +126,11 @@ export function createSubcommand(commandName: string, subcommand: Command) {
 /** Use this function to send an embed with ease. */
 export function sendEmbed(channel: Channel, embed: Embed, content?: string) {
   return sendMessage(channel, { content, embed });
+}
+
+/** Use this function to edit an embed with ease. */
+export function editEmbed(message: Message, embed: Embed, content?: string) {
+  return editMessage(message, { content, embed });
 }
 
 // Very important to make sure files are reloaded properly
