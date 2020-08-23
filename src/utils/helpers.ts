@@ -8,6 +8,7 @@ import {
 import { botCache } from "../../mod.ts";
 import { Embed } from "./Embed.ts";
 import { Milliseconds } from "./constants/time.ts";
+import { Command } from "../types/commands.ts";
 
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
 export async function sendAlertResponse(
@@ -108,6 +109,17 @@ export function createCommandAliases(
 
     botCache.commandAliases.set(alias, commandName);
   }
+}
+
+export function createSubcommand(commandName: string, subcommand: Command) {
+  const command = botCache.commands.get(commandName);
+  if (!command) return;
+
+  if (!command.subcommands) {
+    command.subcommands = new Map()
+  }
+
+  command.subcommands.set(subcommand.name, subcommand);
 }
 
 /** Use this function to send an embed with ease. */
