@@ -1,10 +1,36 @@
 import { botCache } from "../../mod.ts";
-import { Command, PermissionLevels } from "../types/commands.ts";
-import { sendResponse, sendEmbed } from "../utils/helpers.ts";
+import { PermissionLevels } from "../types/commands.ts";
+import { sendResponse, sendEmbed, createSubcommand } from "../utils/helpers.ts";
 import { parsePrefix } from "../monitors/commandHandler.ts";
 import { Embed } from "../utils/Embed.ts";
 
-const set: Command = {
+// This command will only execute if there was no valid sub command: !prefix
+botCache.commands.set("prefix", {
+  name: "prefix",
+  arguments: [
+    {
+      name: "sub commmand",
+      type: "subcommand",
+      literals: ["set"],
+    },
+  ],
+  guildOnly: true,
+  permissionLevels: [PermissionLevels.MEMBER],
+  execute: (message, args) => {
+    const embed = new Embed()
+      .setTitle("Prefix Information")
+      .setDescription(`
+            **Guild**: \`${message.guild()?.name}\`
+            **Current Prefix**: \`${parsePrefix(message.guildID)}\`
+      `)
+      .setTimestamp();
+
+    sendEmbed(message.channel, embed);
+  },
+});
+
+// Create a subcommand for when users do !prefix set $
+createSubcommand("prefix", {
   name: "set",
   arguments: [
     {
@@ -30,35 +56,6 @@ const set: Command = {
       .setDescription(`
         **Old Prefix**: \`${oldPrefix}\`
         **New Prefix**: \`${args.prefix}\`
-      `)
-      .setTimestamp();
-
-    sendEmbed(message.channel, embed);
-  },
-};
-
-botCache.commands.set("prefix", {
-  name: "prefix",
-  arguments: [
-    {
-      name: "sub commmand",
-      type: "subcommand",
-      literals: ["set"],
-    },
-  ],
-  subcommands: new Map([
-    ["set", set],
-  ]),
-  guildOnly: true,
-  permissionLevels: [PermissionLevels.MEMBER],
-  execute: (message, args) => {
-    // this function will only execute if there was no valid sub command
-
-    const embed = new Embed()
-      .setTitle("Prefix Information")
-      .setDescription(`
-            **Guild**: \`${message.guild()?.name}\`
-            **Current Prefix**: \`${parsePrefix(message.guildID)}\`
       `)
       .setTimestamp();
 
