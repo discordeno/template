@@ -179,7 +179,11 @@ botCache.monitors.set("commandHandler", {
       // Check subcommand permissions and options
       if (!(await commandAllowed(message, subcommand, guild))) return;
       // Parse the args and then execute the subcommand
-      await subcommand.execute(message, args, guild);
+      const subParamters = parameters.slice(
+        (command.arguments?.indexOf(argument) as number) + 1,
+      );
+      const subArgs = await parseArguments(message, subcommand, subParamters);
+      await subcommand.execute(message, subArgs, guild);
       // Log that the command ran successfully.
       logCommand(message, guild?.name || "DM", "Success", commandName);
     } catch (error) {
