@@ -1,4 +1,5 @@
 import {
+  Collection,
   MessageContent,
   sendMessage,
   deleteMessage,
@@ -103,21 +104,38 @@ export function createCommandAliases(
 ) {
   if (typeof aliases === "string") aliases = [aliases];
 
-  for (const alias of aliases) {
-    const command = botCache.commandAliases.get(alias)
-    // Setting the alias again probably due to reloading.
-    if (command === commandName) continue;
+  const command = botCache.commands.get(commandName);
+  if (!command) return;
 
-    botCache.commandAliases.set(alias, commandName);
+  if (!command.aliases) {
+    command.aliases = aliases;
+    return;
+  }
+
+  for (const alias of aliases) {
+    if (command.aliases.includes(alias)) continue;
+    command.aliases.push(alias);
   }
 }
 
 export function createSubcommand(commandName: string, subcommand: Command) {
-  const command = botCache.commands.get(commandName);
-  if (!command) return;
+  const names = commandName.split("-");
+
+  let command: Command = botCache.commands.get(commandName)!;
+
+  if (names.length > 1) {
+    for (const name of names) {
+      const validCommand = command
+        ? command.subcommands?.get(name)
+        : botCache.commands.get(name);
+      if (!validCommand) break;
+
+      command = validCommand;
+    }
+  }
 
   if (!command.subcommands) {
-    command.subcommands = new Map()
+    command.subcommands = new Collection();
   }
 
   command.subcommands.set(subcommand.name, subcommand);

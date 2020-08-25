@@ -1,6 +1,7 @@
 import {
   Message,
   botID,
+  botHasChannelPermissions,
   Permission,
   Permissions,
   hasChannelPermission,
@@ -32,7 +33,9 @@ function missingCommandPermission(
     ? `You are missing the following permissions in this channel: **${perms}**`
     : `You are missing the following permissions in this server from your roles: **${perms}**`;
 
-  sendResponse(message, response);
+  if (!missingPermissions.includes("SEND_MESSAGES")) {
+    sendResponse(message, response);
+  }
 }
 
 botCache.inhibitors.set(
@@ -49,7 +52,7 @@ botCache.inhibitors.set(
     }
 
     // If some permissions is required it must be in a guild
-    if (!guild) return true;
+    if (!guild) return false;
 
     // If the bot is not available then we can just cancel out.
     const botMember = guild.members.get(botID);
@@ -71,7 +74,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:USER_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
@@ -92,16 +95,15 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:USER_SERVER_PERM",
         );
-        return false;
+        return true;
       }
     }
 
     // Check if the bot has the necessary channel permissions to run this command in this channel.
     if (command.botChannelPermissions?.length) {
       const missingPermissions = command.botChannelPermissions.filter((perm) =>
-        !hasChannelPermission(
-          message.channel,
-          botMember.user.id,
+        !botHasChannelPermissions(
+          message.channel.id,
           [Permissions[perm]],
         )
       );
@@ -112,7 +114,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:BOT_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
@@ -131,7 +133,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:BOT_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 

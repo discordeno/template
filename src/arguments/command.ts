@@ -11,9 +11,8 @@ botCache.arguments.set("command", {
     if (command) return command;
 
     // Check if its an alias
-    const alias = botCache.commandAliases.get(commandName);
-    if (!alias) return;
-
-    return botCache.commands.get(alias);
+    return botCache.commands.find((cmd) =>
+      Boolean(cmd.aliases?.includes(commandName))
+    );
   },
 });

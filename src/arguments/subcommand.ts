@@ -2,11 +2,12 @@ import { botCache } from "../../mod.ts";
 
 botCache.arguments.set("subcommand", {
   name: "subcommand",
-  execute: function (argument, parameters) {
-    const [subcommand] = parameters;
+  execute: function (argument, parameters, message, command) {
+    const [subcommandName] = parameters;
 
-    return argument.literals?.find((literal) =>
-      literal.toLowerCase() === subcommand?.toLowerCase()
+    return command.subcommands?.find((sub) =>
+      sub.name === subcommandName ||
+      Boolean(sub.aliases?.includes(subcommandName))
     );
   },
 });
