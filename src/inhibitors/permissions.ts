@@ -10,7 +10,6 @@ import {
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 import { botCache } from "../../mod.ts";
-import {} from "../../deps.ts";
 import { sendResponse } from "../utils/helpers.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
