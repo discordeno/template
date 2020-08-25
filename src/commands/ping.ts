@@ -5,6 +5,7 @@ import { cache, sendMessage } from "../../deps.ts";
 botCache.commands.set(`ping`, {
   name: `ping`,
   description: "commands/ping:DESCRIPTION",
+  botChannelPermissions: ["SEND_MESSAGES"],
   execute: function (message) {
     sendMessage(
       message.channel,

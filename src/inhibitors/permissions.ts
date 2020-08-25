@@ -11,6 +11,7 @@ import { Command } from "../types/commands.ts";
 import { botCache } from "../../mod.ts";
 import {} from "../../deps.ts";
 import { sendResponse } from "../utils/helpers.ts";
+import { botHasChannelPermissions } from "https://zjos4sdwo5dxr26i3sy5cst4vxnyqddoevpm6cwzck4ps555kuia.arweave.net/yl0uSHZ3R3jryNyx0Up8rduIDG4lXs8K2RK4-Xe9VRA/src/utils/permissions.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
@@ -32,7 +33,9 @@ function missingCommandPermission(
     ? `You are missing the following permissions in this channel: **${perms}**`
     : `You are missing the following permissions in this server from your roles: **${perms}**`;
 
-  sendResponse(message, response);
+  if (!missingPermissions.includes("SEND_MESSAGES")) {
+    sendResponse(message, response);
+  }
 }
 
 botCache.inhibitors.set(
@@ -49,7 +52,7 @@ botCache.inhibitors.set(
     }
 
     // If some permissions is required it must be in a guild
-    if (!guild) return true;
+    if (!guild) return false;
 
     // If the bot is not available then we can just cancel out.
     const botMember = guild.members.get(botID);
@@ -71,7 +74,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:USER_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
@@ -92,16 +95,15 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:USER_SERVER_PERM",
         );
-        return false;
+        return true;
       }
     }
 
     // Check if the bot has the necessary channel permissions to run this command in this channel.
     if (command.botChannelPermissions?.length) {
       const missingPermissions = command.botChannelPermissions.filter((perm) =>
-        !hasChannelPermission(
-          message.channel,
-          botMember.user.id,
+        !botHasChannelPermissions(
+          message.channel.id,
           [Permissions[perm]],
         )
       );
@@ -112,7 +114,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:BOT_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
@@ -131,7 +133,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:BOT_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
