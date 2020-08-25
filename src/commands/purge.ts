@@ -1,11 +1,9 @@
+import { createCommandAliases, sendEmbed } from "../utils/helpers.ts";
 import {
-  avatarURL,
-  botID,
   deleteMessage,
   getMessage,
   sendMessage,
 } from "../../deps.ts";
-import { createCommandAliases, sendEmbed } from "../utils/helpers.ts";
 
 import { Embed } from "../utils/Embed.ts";
 import { botCache } from "../../mod.ts";
@@ -60,6 +58,8 @@ botCache.commands.set("purge", {
 
       return sendEmbed(message.channel, embed);
     } catch (error) {
+      console.error(error);
+
       return sendMessage(
         message.channel,
         "Attempt to delete messages has failed!",
