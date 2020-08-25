@@ -1,4 +1,4 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
+import { Message } from "../../deps.ts";
 import { botCache } from "../../mod.ts";
 
 botCache.monitors.set("messageCollector", {
