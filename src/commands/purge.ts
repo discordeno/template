@@ -1,7 +1,7 @@
 import { createCommandAliases, sendEmbed } from "../utils/helpers.ts";
 import {
-  deleteMessage,
-  getMessage,
+  deleteMessages,
+  getMessages,
   sendMessage,
 } from "../../deps.ts";
 
@@ -19,7 +19,7 @@ botCache.commands.set("purge", {
     {
       name: "reason",
       type: "...string",
-      defaultValue: "No reason givin",
+      defaultValue: "No reason given",
     },
   ],
   userChannelPermissions: [
@@ -31,28 +31,23 @@ botCache.commands.set("purge", {
   guildOnly: true,
   execute: async function (message, args: PurgeArgs, guild) {
     try {
-      let deletedCount = 0;
+      const messagesToDelete = await getMessages(
+        message.channel,
+        { limit: 100 },
+      );
+      if (!messagesToDelete) return;
 
-      while (deletedCount <= args.count) {
-        if (!message.channel.lastMessageID) continue;
-
-        let toDelete = await getMessage(
-          message.channel,
-          message.channel.lastMessageID,
-        );
-
-        await deleteMessage(toDelete, args.reason);
-
-        deletedCount++;
-      }
-
-      deletedCount--;
+      await deleteMessages(
+        message.channel,
+        // + 1 to include the message that triggered the command
+        messagesToDelete.slice(0, args.count + 1).map((m) => m.id),
+      );
 
       const embed = new Embed()
         .setColor("#FFA500")
         .setTitle("Purged messages")
         .addField("Channel:", `<#${message.channelID}>`, true)
-        .addField("Total:", deletedCount.toString(), true)
+        .addField("Total:", args.count.toString(), true)
         .addField("Reason:", args.reason)
         .setTimestamp();
 
