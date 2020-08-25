@@ -1,6 +1,7 @@
 import {
   Message,
   botID,
+  botHasChannelPermissions,
   Permission,
   Permissions,
   hasChannelPermission,
@@ -11,7 +12,6 @@ import { Command } from "../types/commands.ts";
 import { botCache } from "../../mod.ts";
 import {} from "../../deps.ts";
 import { sendResponse } from "../utils/helpers.ts";
-import { botHasChannelPermissions } from "https://zjos4sdwo5dxr26i3sy5cst4vxnyqddoevpm6cwzck4ps555kuia.arweave.net/yl0uSHZ3R3jryNyx0Up8rduIDG4lXs8K2RK4-Xe9VRA/src/utils/permissions.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
