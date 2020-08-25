@@ -20,7 +20,7 @@ botCache.inhibitors.set("cooldown", async function (message, command, guild) {
         sendResponse(
           message,
           `You must wait **${
-            humanizeMilliseconds(now - cooldown.timestamp)
+            humanizeMilliseconds(cooldown.timestamp - now)
           }** before using this command again.`,
         );
         return true;
