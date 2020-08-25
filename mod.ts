@@ -21,7 +21,6 @@ logger.info(
 export const botCache = {
   arguments: new Collection<string, Argument>(),
   commands: new Collection<string, Command>(),
-  commandAliases: new Collection<string, string>(),
   eventHandlers: {} as CustomEvents,
   guildPrefixes: new Collection<string, string>(),
   guildLanguages: new Collection<string, string>(),

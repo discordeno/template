@@ -2,6 +2,7 @@ import { Collection, Message, Guild, Permission } from "../../deps.ts";
 
 export interface Command {
   name: string;
+  aliases?: string[];
   dmOnly?: boolean;
   guildOnly?: boolean;
   nsfw?: boolean;
@@ -23,7 +24,7 @@ export interface Command {
   };
   arguments?: CommandArgument[];
   subcommands?: Collection<string, Command>;
-  execute: (message: Message, args: any, guild?: Guild) => unknown;
+  execute?: (message: Message, args: any, guild?: Guild) => unknown;
 }
 
 export interface CommandArgument {
@@ -63,7 +64,7 @@ export interface Argument {
     arg: CommandArgument,
     parameter: string[],
     message: Message,
-    command: Command
+    command: Command,
   ) => unknown;
 }
 
