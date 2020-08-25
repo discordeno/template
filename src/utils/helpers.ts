@@ -1,4 +1,5 @@
 import {
+  Collection,
   MessageContent,
   sendMessage,
   deleteMessage,
@@ -117,7 +118,7 @@ export function createSubcommand(commandName: string, subcommand: Command) {
   if (!command) return;
 
   if (!command.subcommands) {
-    command.subcommands = new Map()
+    command.subcommands = new Collection()
   }
 
   command.subcommands.set(subcommand.name, subcommand);
