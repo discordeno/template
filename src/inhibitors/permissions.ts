@@ -1,17 +1,16 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
-import { Command } from "../types/commands.ts";
-import { botCache } from "../../mod.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import {
+  Message,
+  botID,
+  botHasChannelPermissions,
   Permission,
   Permissions,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/permission.ts";
-import { sendResponse } from "../utils/helpers.ts";
-import { hasChannelPermission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
-import {
+  hasChannelPermission,
   botHasPermission,
   memberHasPermission,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/permissions.ts";
+} from "../../deps.ts";
+import { Command } from "../types/commands.ts";
+import { botCache } from "../../mod.ts";
+import { sendResponse } from "../utils/helpers.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
@@ -33,7 +32,9 @@ function missingCommandPermission(
     ? `You are missing the following permissions in this channel: **${perms}**`
     : `You are missing the following permissions in this server from your roles: **${perms}**`;
 
-  sendResponse(message, response);
+  if (!missingPermissions.includes("SEND_MESSAGES")) {
+    sendResponse(message, response);
+  }
 }
 
 botCache.inhibitors.set(
@@ -50,7 +51,7 @@ botCache.inhibitors.set(
     }
 
     // If some permissions is required it must be in a guild
-    if (!guild) return true;
+    if (!guild) return false;
 
     // If the bot is not available then we can just cancel out.
     const botMember = guild.members.get(botID);
@@ -72,7 +73,7 @@ botCache.inhibitors.set(
           missingPermissions,
           "framework/core:USER_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
@@ -91,18 +92,17 @@ botCache.inhibitors.set(
           message,
           command,
           missingPermissions,
-          "framework/core:USER_CHANNEL_PERM",
+          "framework/core:USER_SERVER_PERM",
         );
-        return false;
+        return true;
       }
     }
 
     // Check if the bot has the necessary channel permissions to run this command in this channel.
     if (command.botChannelPermissions?.length) {
       const missingPermissions = command.botChannelPermissions.filter((perm) =>
-        !hasChannelPermission(
-          message.channel,
-          botMember.user.id,
+        !botHasChannelPermissions(
+          message.channel.id,
           [Permissions[perm]],
         )
       );
@@ -111,9 +111,9 @@ botCache.inhibitors.set(
           message,
           command,
           missingPermissions,
-          "framework/core:USER_CHANNEL_PERM",
+          "framework/core:BOT_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 
@@ -130,9 +130,9 @@ botCache.inhibitors.set(
           message,
           command,
           missingPermissions,
-          "framework/core:USER_CHANNEL_PERM",
+          "framework/core:BOT_CHANNEL_PERM",
         );
-        return false;
+        return true;
       }
     }
 

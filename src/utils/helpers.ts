@@ -1,11 +1,16 @@
-import { MessageContent } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/channel.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
-import { deleteMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/message.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
+import {
+  Collection,
+  MessageContent,
+  sendMessage,
+  deleteMessage,
+  editMessage,
+  Message,
+  Channel,
+} from "../../deps.ts";
 import { botCache } from "../../mod.ts";
-import { Channel } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/channel.ts";
 import { Embed } from "./Embed.ts";
 import { Milliseconds } from "./constants/time.ts";
+import { Command } from "../types/commands.ts";
 
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
 export async function sendAlertResponse(
@@ -99,17 +104,51 @@ export function createCommandAliases(
 ) {
   if (typeof aliases === "string") aliases = [aliases];
 
-  for (const alias of aliases) {
-    if (botCache.commandAliases.has(alias)) {
-      throw new Error(`The ${alias} already exists as a command alias.`);
-    }
-    botCache.commandAliases.set(alias, commandName);
+  const command = botCache.commands.get(commandName);
+  if (!command) return;
+
+  if (!command.aliases) {
+    command.aliases = aliases;
+    return;
   }
+
+  for (const alias of aliases) {
+    if (command.aliases.includes(alias)) continue;
+    command.aliases.push(alias);
+  }
+}
+
+export function createSubcommand(commandName: string, subcommand: Command) {
+  const names = commandName.split("-");
+
+  let command: Command = botCache.commands.get(commandName)!;
+
+  if (names.length > 1) {
+    for (const name of names) {
+      const validCommand = command
+        ? command.subcommands?.get(name)
+        : botCache.commands.get(name);
+      if (!validCommand) break;
+
+      command = validCommand;
+    }
+  }
+
+  if (!command.subcommands) {
+    command.subcommands = new Collection();
+  }
+
+  command.subcommands.set(subcommand.name, subcommand);
 }
 
 /** Use this function to send an embed with ease. */
 export function sendEmbed(channel: Channel, embed: Embed, content?: string) {
   return sendMessage(channel, { content, embed });
+}
+
+/** Use this function to edit an embed with ease. */
+export function editEmbed(message: Message, embed: Embed, content?: string) {
+  return editMessage(message, { content, embed });
 }
 
 // Very important to make sure files are reloaded properly
@@ -123,7 +162,7 @@ export async function importDirectory(path: string) {
 
     const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
-      await import(`${currentPath}#${uniqueFilePathCounter}`);
+      await import(`file:///${currentPath}#${uniqueFilePathCounter}`);
       continue;
     }
 

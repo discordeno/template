@@ -1,5 +1,4 @@
-import { Permission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/permission.ts";
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
+import { Permission, Message } from "../../deps.ts";
 
 export interface Monitor {
   /** The name of the monitor */

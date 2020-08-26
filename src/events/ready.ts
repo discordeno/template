@@ -1,8 +1,19 @@
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
-import logger from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/logger.ts";
+import {
+  cache,
+  logger,
+  editBotsStatus,
+  StatusTypes,
+  ActivityType,
+} from "../../deps.ts";
 
 botCache.eventHandlers.ready = function () {
+  editBotsStatus(
+    StatusTypes.DoNotDisturb,
+    "Discordeno Best Lib",
+    ActivityType.Game,
+  );
+
   logger.info(`Loaded ${botCache.arguments.size} Argument(s)`);
   logger.info(`Loaded ${botCache.commands.size} Command(s)`);
   logger.info(`Loaded ${Object.keys(botCache.eventHandlers).length} Event(s)`);

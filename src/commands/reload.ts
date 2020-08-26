@@ -1,5 +1,5 @@
 import { botCache } from "../../mod.ts";
-import { updateEventHandlers } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
+import { updateEventHandlers } from "../../deps.ts";
 import { importDirectory, sendResponse } from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
 

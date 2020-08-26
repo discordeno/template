@@ -1,9 +1,8 @@
-import { Message } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/message.ts";
-import { Guild } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/guild.ts";
-import { Permission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/permission.ts";
+import { Collection, Message, Guild, Permission } from "../../deps.ts";
 
 export interface Command {
   name: string;
+  aliases?: string[];
   dmOnly?: boolean;
   guildOnly?: boolean;
   nsfw?: boolean;
@@ -24,8 +23,8 @@ export interface Command {
     allowedUses?: number;
   };
   arguments?: CommandArgument[];
-  subcommands?: Map<string, Command>;
-  execute: (message: Message, args: any, guild?: Guild) => unknown;
+  subcommands?: Collection<string, Command>;
+  execute?: (message: Message, args: any, guild?: Guild) => unknown;
 }
 
 export interface CommandArgument {
@@ -65,6 +64,7 @@ export interface Argument {
     arg: CommandArgument,
     parameter: string[],
     message: Message,
+    command: Command,
   ) => unknown;
 }
 

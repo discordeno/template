@@ -1,14 +1,14 @@
 import { botCache } from "../../mod.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
-import { ChannelTypes } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/channel.ts";
-import { hasChannelPermission } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
-import { Permissions } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/types/permission.ts";
 import {
-  memberHasPermission,
   botHasPermission,
-} from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/permissions.ts";
+  botID,
+  ChannelTypes,
+  hasChannelPermission,
+  memberHasPermission,
+  Permissions,
+} from "../../deps.ts";
 
-botCache.eventHandlers.messageCreate = function (message) {
+botCache.eventHandlers.messageCreate = async function (message) {
   botCache.monitors.forEach((monitor) => {
     // The !== false is important because when not provided we default to true
     if (monitor.ignoreBots !== false && message.author.bot) return;

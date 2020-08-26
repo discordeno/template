@@ -1,5 +1,5 @@
-export * from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/mod.ts";
+export * from "https://x.nest.land/Discordeno@8.2.2/mod.ts";
 
-import Client from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
+import Client from "https://x.nest.land/Discordeno@8.2.2/src/module/client.ts";
 
 export default Client;

@@ -1,4 +1,10 @@
-import Client, { Message, Guild, Intents, EventHandlers } from "./deps.ts";
+import Client, {
+  Collection,
+  Message,
+  Guild,
+  Intents,
+  logger,
+} from "./deps.ts";
 import { configs } from "./configs.ts";
 import { Command, Argument, PermissionLevels } from "./src/types/commands.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
@@ -6,24 +12,30 @@ import { Monitor } from "./src/types/monitors.ts";
 import { Task } from "./src/types/tasks.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 import { CustomEvents } from "./src/types/events.ts";
+import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
+
+logger.info(
+  "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
+);
 
 export const botCache = {
-  arguments: new Map<string, Argument>(),
-  commands: new Map<string, Command>(),
-  commandAliases: new Map<string, string>(),
+  arguments: new Collection<string, Argument>(),
+  commands: new Collection<string, Command>(),
   eventHandlers: {} as CustomEvents,
-  guildPrefixes: new Map<string, string>(),
-  guildLanguages: new Map<string, string>(),
-  inhibitors: new Map<
+  guildPrefixes: new Collection<string, string>(),
+  guildLanguages: new Collection<string, string>(),
+  messageCollectors: new Collection<string, MessageCollector>(),
+  reactionCollectors: new Collection<string, ReactionCollector>(),
+  inhibitors: new Collection<
     string,
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
   >(),
-  monitors: new Map<string, Monitor>(),
-  permissionLevels: new Map<
+  monitors: new Collection<string, Monitor>(),
+  permissionLevels: new Collection<
     PermissionLevels,
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
   >(),
-  tasks: new Map<string, Task>(),
+  tasks: new Collection<string, Task>(),
 };
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
@@ -36,6 +48,7 @@ await Promise.all(
     "./src/monitors",
     "./src/tasks",
     "./src/permissionLevels",
+    "./src/events",
   ].map(
     (path) => importDirectory(Deno.realPathSync(path)),
   ),

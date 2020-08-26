@@ -1,11 +1,11 @@
 // This file is meant to show how you can create multiple commands in the same file if you wish.
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
+import { cache, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`ping`, {
   name: `ping`,
   description: "commands/ping:DESCRIPTION",
+  botChannelPermissions: ["SEND_MESSAGES"],
   execute: function (message) {
     sendMessage(
       message.channel,

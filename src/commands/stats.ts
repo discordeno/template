@@ -1,9 +1,6 @@
-import { Embed } from "./../utils/Embed.ts";
-import { botID } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/module/client.ts";
 import { botCache } from "../../mod.ts";
-import { cache } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/utils/cache.ts";
-import { avatarURL } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/member.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
+import { Embed } from "./../utils/Embed.ts";
+import { botID, cache, avatarURL, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`stats`, {
   name: `stats`,
@@ -32,7 +29,8 @@ botCache.commands.set(`stats`, {
       .addField("Cached Members:", cachedMemberCount.toLocaleString(), true)
       .addField("Channels:", cache.channels.size.toLocaleString(), true)
       .addField("Messages:", cache.messages.size.toLocaleString(), true)
-      .addField("Deno Version:", `v${Deno.version.deno}`, true);
+      .addField("Deno Version:", `v${Deno.version.deno}`, true)
+      .setTimestamp();
 
     return sendMessage(message.channel, { embed });
   },
