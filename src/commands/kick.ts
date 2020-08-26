@@ -1,9 +1,8 @@
+import { Member, kick, sendMessage } from "../../deps.ts";
+
 import { Embed } from "./../utils/Embed.ts";
-import { Member } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/structures/member.ts";
 import { botCache } from "../../mod.ts";
-import { kick } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/member.ts";
 import { sendEmbed } from "../utils/helpers.ts";
-import { sendMessage } from "https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v7/src/handlers/channel.ts";
 
 botCache.commands.set(`kick`, {
   name: `kick`,
@@ -28,17 +27,17 @@ botCache.commands.set(`kick`, {
   botServerPermissions: [
     "KICK_MEMBERS",
   ],
-  execute: async (message, args: KickArgs, guild) => {
+  execute: async (message, args: KickArgs) => {
     try {
-      await kick(guild!.id, args.member.user.id, args.reason);
+      await kick(message.guildID, args.member.user.id, args.reason);
 
       const embed = new Embed()
         .setColor("#FFA500")
         .setTitle(`Kicked User`)
-        .addField("User:", `<@${args.member.user.id}>`, true)
+        .addField("User:", args.member.mention, true)
         .addField("Kicked By:", `<@${message.author.id}>`, true)
         .addField("Reason:", args.reason)
-        .setTimestamp(Date.now());
+        .setTimestamp();
 
       return sendEmbed(message.channel, embed);
     } catch (error) {
