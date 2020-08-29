@@ -21,6 +21,10 @@ botCache.eventHandlers.ready = function () {
   logger.info(`Loaded ${botCache.monitors.size} Monitor(s)`);
   logger.info(`Loaded ${botCache.tasks.size} Task(s)`);
 
+  for (const task of botCache.tasks.values()) {
+    setInterval(() => task.execute(), task.interval);
+  }
+
   logger.success(
     `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`,
   );
