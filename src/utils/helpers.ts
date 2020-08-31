@@ -118,10 +118,10 @@ export function createCommandAliases(
   }
 }
 
-export function createSubcommand(commandName: string, subcommand: Command) {
+export function createSubcommand(commandName: string, subcommand: Command, retries = 0) {
   const names = commandName.split("-");
 
-  let command: Command = botCache.commands.get(commandName)!;
+  let command = botCache.commands.get(commandName);
 
   if (names.length > 1) {
     for (const name of names) {
@@ -132,6 +132,22 @@ export function createSubcommand(commandName: string, subcommand: Command) {
 
       command = validCommand;
     }
+  }
+
+  if (!command) {
+    // If 10 minutes have passed something must have been wrong
+    if (retries === 20) {
+      return console.error(
+        `Subcommand ${subcommand} unable to be created for ${commandName}`,
+      );
+    }
+
+    // Try again in 30 seconds in case this command file just has not been loaded yet.
+    setTimeout(
+      () => createSubcommand(commandName, subcommand, retries++),
+      30000,
+    );
+    return;
   }
 
   if (!command.subcommands) {
