@@ -20,6 +20,12 @@ botCache.tasks.set(`botlists`, {
     // Make the variable here to get the guild count accurately
     const botLists = [
       {
+        name: "discordbots.co",
+        url: `https://api.discordbots.co/v1/public/bot/${botID}/stats`,
+        token: configs.botListTokens.DISCORD_BOTS_CO,
+        data: { serverCount: totalGuilds },
+      },
+      {
         name: "discordbots.gg",
         url: `https://discordbots.org/api/bots/${botID}/stats`,
         token: configs.botListTokens.DISCORD_BOT_ORG,

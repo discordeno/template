@@ -9,6 +9,7 @@ export const configs = {
   prefix: "!",
   // This isn't required but you can add bot list api keys here.
   botListTokens: {
+    DISCORD_BOTS_CO: "",
     DISCORD_BOT_ORG: "",
     BOTS_ON_DISCORD: "",
     DISCORD_BOT_LIST: "",
