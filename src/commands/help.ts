@@ -22,6 +22,11 @@ botCache.commands.set(`help`, {
       return sendMessage(message.channel, `Command ${args.command} not found.`);
     }
 
+    const description = translate(
+      message.guildID!,
+      `commands/${args.command}:DESCRIPTION`,
+    );
+
     const embed = new Embed()
       .setAuthor(
         translate(
@@ -31,7 +36,7 @@ botCache.commands.set(`help`, {
         ),
       )
       .setDescription(
-        translate(message.guildID!, `commands/${args.command}:DESCRIPTION`),
+        description === "DESCRIPTION" ? command.description : description,
       );
 
     sendMessage(
