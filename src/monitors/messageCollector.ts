@@ -1,4 +1,4 @@
-import { Message } from "../../deps.ts";
+import type { Message } from "../../deps.ts";
 import { botCache } from "../../mod.ts";
 
 botCache.monitors.set("messageCollector", {
@@ -7,7 +7,7 @@ botCache.monitors.set("messageCollector", {
   execute: async function (message: Message) {
     const collector = botCache.messageCollectors.get(message.author.id);
     // This user has no collectors pending or the message is in a different channel
-    if (!collector || message.channel.id !== collector.channelID) return;
+    if (!collector || message.channelID !== collector.channelID) return;
     // This message is a response to a collector. Now running the filter function.
     if (!collector.filter(message)) return;
 

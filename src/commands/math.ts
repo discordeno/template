@@ -1,7 +1,6 @@
 import { botCache } from "../../mod.ts";
 import { createSubcommand, sendEmbed } from "../utils/helpers.ts";
 import { Embed } from "../utils/Embed.ts";
-import { avatarURL } from "../../deps.ts";
 
 botCache.commands.set(`math`, {
   name: `math`,
@@ -25,15 +24,16 @@ createSubcommand("math", {
     { name: "secondNumber", type: "number" },
   ],
   execute: (message, args: MathAddArgs) => {
-    const member = message.member()!;
+    const member = message.member;
+    if (!member) return;
     const total = args.firstNumber + args.secondNumber;
 
     const embed = new Embed()
-      .setAuthor(member.tag, avatarURL(member))
+      .setAuthor(member.tag, member.avatarURL)
       .setDescription(
         `The total of ${args.firstNumber} + ${args.secondNumber} is = **${total}**`,
       );
-    sendEmbed(message.channel, embed);
+    sendEmbed(message.channelID, embed);
   },
 });
 
@@ -59,15 +59,17 @@ createSubcommand("math-remove", {
     { name: "secondNumber", type: "number" },
   ],
   execute: (message, args: MathAddArgs) => {
-    const member = message.member()!;
+    const member = message.member;
+    if (!member) return;
+
     const total = args.firstNumber - args.secondNumber;
 
     const embed = new Embed()
-      .setAuthor(member.tag, avatarURL(member))
+      .setAuthor(member.tag, member.avatarURL)
       .setDescription(
         `The total of ${args.firstNumber} - ${args.secondNumber} is = **${total}**`,
       );
-    sendEmbed(message.channel, embed);
+    sendEmbed(message.channelID, embed);
   },
 });
 
@@ -79,15 +81,17 @@ createSubcommand("math-remove", {
     { name: "secondNumber", type: "number" },
   ],
   execute: (message, args: MathAddArgs) => {
-    const member = message.member()!;
+    const member = message.member;
+    if (!member) return;
+    
     const total = (args.firstNumber - args.secondNumber) * 2;
 
     const embed = new Embed()
-      .setAuthor(member.tag, avatarURL(member))
+      .setAuthor(member.tag, member.avatarURL)
       .setDescription(
         `The total of (${args.firstNumber} - ${args.secondNumber}) * 2 is = **${total}**`,
       );
-    sendEmbed(message.channel, embed);
+    sendEmbed(message.channelID, embed);
   },
 });
 

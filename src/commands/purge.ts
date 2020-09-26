@@ -1,15 +1,15 @@
-import { createCommandAliases, sendEmbed } from "../utils/helpers.ts";
+import { sendEmbed } from "../utils/helpers.ts";
 import {
   deleteMessages,
   getMessages,
   sendMessage,
 } from "../../deps.ts";
-
 import { Embed } from "../utils/Embed.ts";
 import { botCache } from "../../mod.ts";
 
 botCache.commands.set("purge", {
   name: "purge",
+  aliases: ["delete"],
   arguments: [
     {
       name: "count",
@@ -29,16 +29,16 @@ botCache.commands.set("purge", {
     "MANAGE_MESSAGES",
   ],
   guildOnly: true,
-  execute: async function (message, args: PurgeArgs, guild) {
+  execute: async function (message, args: PurgeArgs) {
     try {
       const messagesToDelete = await getMessages(
-        message.channel,
+        message.channelID,
         { limit: 100 },
       );
       if (!messagesToDelete) return;
 
       await deleteMessages(
-        message.channel,
+        message.channelID,
         // + 1 to include the message that triggered the command
         messagesToDelete.slice(0, args.count + 1).map((m) => m.id),
       );
@@ -51,19 +51,17 @@ botCache.commands.set("purge", {
         .addField("Reason:", args.reason)
         .setTimestamp();
 
-      return sendEmbed(message.channel, embed);
+      return sendEmbed(message.channelID, embed);
     } catch (error) {
       console.error(error);
 
       return sendMessage(
-        message.channel,
+        message.channelID,
         "Attempt to delete messages has failed!",
       );
     }
   },
 });
-
-createCommandAliases("purge", ["delete"]);
 
 interface PurgeArgs {
   count: number;

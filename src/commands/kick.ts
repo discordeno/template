@@ -12,7 +12,7 @@ botCache.commands.set(`kick`, {
       name: "member",
       type: "member",
       missing: (message) => {
-        return sendMessage(message.channel, "User not found!");
+        return sendMessage(message.channelID, "User not found!");
       },
     },
     {
@@ -39,9 +39,9 @@ botCache.commands.set(`kick`, {
         .addField("Reason:", args.reason)
         .setTimestamp();
 
-      return sendEmbed(message.channel, embed);
+      return sendEmbed(message.channelID, embed);
     } catch (error) {
-      return sendMessage(message.channel, "Attempt to kick user has failed!");
+      return sendMessage(message.channelID, "Attempt to kick user has failed!");
     }
   },
 });

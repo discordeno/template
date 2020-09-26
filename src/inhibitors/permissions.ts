@@ -1,21 +1,19 @@
+import type { Message, Permission } from "../../deps.ts";
+
 import {
-  Message,
   botID,
   botHasChannelPermissions,
-  Permission,
   Permissions,
-  hasChannelPermission,
+  hasChannelPermissions,
   botHasPermission,
   memberHasPermission,
 } from "../../deps.ts";
-import { Command } from "../types/commands.ts";
 import { botCache } from "../../mod.ts";
 import { sendResponse } from "../utils/helpers.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
   message: Message,
-  command: Command,
   missingPermissions: Permission[],
   type:
     | "framework/core:USER_SERVER_PERM"
@@ -60,8 +58,8 @@ botCache.inhibitors.set(
     // Check if the message author has the necessary channel permissions to run this command
     if (command.userChannelPermissions?.length) {
       const missingPermissions = command.userChannelPermissions.filter((perm) =>
-        !hasChannelPermission(
-          message.channel,
+        !hasChannelPermissions(
+          message.channelID,
           message.author.id,
           [Permissions[perm]],
         )
@@ -69,7 +67,6 @@ botCache.inhibitors.set(
       if (missingPermissions.length) {
         missingCommandPermission(
           message,
-          command,
           missingPermissions,
           "framework/core:USER_CHANNEL_PERM",
         );
@@ -83,14 +80,13 @@ botCache.inhibitors.set(
         !memberHasPermission(
           message.author.id,
           guild,
-          message.member()?.roles || [],
+          message.member?.roles || [],
           [perm],
         )
       );
       if (missingPermissions.length) {
         missingCommandPermission(
           message,
-          command,
           missingPermissions,
           "framework/core:USER_SERVER_PERM",
         );
@@ -102,14 +98,13 @@ botCache.inhibitors.set(
     if (command.botChannelPermissions?.length) {
       const missingPermissions = command.botChannelPermissions.filter((perm) =>
         !botHasChannelPermissions(
-          message.channel.id,
+          message.channelID,
           [Permissions[perm]],
         )
       );
       if (missingPermissions.length) {
         missingCommandPermission(
           message,
-          command,
           missingPermissions,
           "framework/core:BOT_CHANNEL_PERM",
         );
@@ -128,7 +123,6 @@ botCache.inhibitors.set(
       if (missingPermissions.length) {
         missingCommandPermission(
           message,
-          command,
           missingPermissions,
           "framework/core:BOT_CHANNEL_PERM",
         );

@@ -1,4 +1,4 @@
-import { Permission, Message } from "../../deps.ts";
+import type { Permission, Message } from "../../deps.ts";
 
 export interface Monitor {
   /** The name of the monitor */

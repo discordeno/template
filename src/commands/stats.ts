@@ -1,6 +1,6 @@
 import { botCache } from "../../mod.ts";
 import { Embed } from "./../utils/Embed.ts";
-import { botID, cache, avatarURL, sendMessage } from "../../deps.ts";
+import { botID, cache, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`stats`, {
   name: `stats`,
@@ -21,7 +21,7 @@ botCache.commands.set(`stats`, {
     const embed = new Embed()
       .setAuthor(
         `${botMember?.nick || botMember?.user.username} Stats`,
-        avatarURL(botMember),
+        botMember.avatarURL,
       )
       .setColor("random")
       .addField("Guilds:", cache.guilds.size.toLocaleString(), true)
@@ -32,6 +32,6 @@ botCache.commands.set(`stats`, {
       .addField("Deno Version:", `v${Deno.version.deno}`, true)
       .setTimestamp();
 
-    return sendMessage(message.channel, { embed });
+    return sendMessage(message.channelID, { embed });
   },
 });

@@ -1,5 +1,5 @@
 import { botCache } from "../../mod.ts";
-import { cache, logger, sendMessage } from "../../deps.ts";
+import { cache, sendMessage } from "../../deps.ts";
 import i18next from "https://deno.land/x/i18next@v19.6.3/index.js";
 import Backend from "https://deno.land/x/i18next_fs_backend@v1.0.7/index.js";
 import { configs } from "../../configs.ts";
@@ -69,7 +69,7 @@ export async function loadLanguages() {
       ) {
         const response =
           `Missing translation key: ${lng}/${ns}/${key}. Instead using: ${fallbackValue}`;
-        logger.warn(response);
+        console.warn(response);
 
         if (!configs.channelIDs.missingTranslation) return;
 
@@ -79,7 +79,7 @@ export async function loadLanguages() {
         if (!channel) return;
 
         sendMessage(
-          channel,
+          channel.id,
           response,
         );
       },

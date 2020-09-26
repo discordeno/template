@@ -1,6 +1,10 @@
 import { botCache } from "../../mod.ts";
 import { PermissionLevels } from "../types/commands.ts";
-import { sendResponse, sendEmbed, createSubcommand } from "../utils/helpers.ts";
+import {
+  sendResponse,
+  sendEmbed,
+  createSubcommand,
+} from "../utils/helpers.ts";
 import { parsePrefix } from "../monitors/commandHandler.ts";
 import { Embed } from "../utils/Embed.ts";
 
@@ -11,21 +15,19 @@ botCache.commands.set("prefix", {
     {
       name: "sub commmand",
       type: "subcommand",
-      literals: ["set"],
     },
   ],
   guildOnly: true,
   permissionLevels: [PermissionLevels.MEMBER],
-  execute: (message, args) => {
+  execute: (message) => {
     const embed = new Embed()
       .setTitle("Prefix Information")
       .setDescription(`
-            **Guild**: \`${message.guild()?.name}\`
             **Current Prefix**: \`${parsePrefix(message.guildID)}\`
       `)
       .setTimestamp();
 
-    sendEmbed(message.channel, embed);
+    sendEmbed(message.channelID, embed);
   },
 });
 
@@ -38,7 +40,7 @@ createSubcommand("prefix", {
       type: "string",
       required: true,
       missing: (message) => {
-        sendResponse(message, `${message.member()} please provid a prefix`);
+        sendResponse(message, `please provide a prefix`);
       },
     },
   ],
@@ -59,6 +61,6 @@ createSubcommand("prefix", {
       `)
       .setTimestamp();
 
-    sendEmbed(message.channel, embed);
+    return sendEmbed(message.channelID, embed);
   },
 });

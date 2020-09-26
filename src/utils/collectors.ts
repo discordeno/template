@@ -1,17 +1,18 @@
-import {
-  botID,
+import type {
   Message,
   MessageReactionUncachedPayload,
   ReactionPayload,
 } from "../../deps.ts";
-import { botCache } from "../../mod.ts";
-import {
+import type {
   MessageCollectorOptions,
   ReactionCollectorOptions,
   CollectMessagesOptions,
   CollectReactionsOptions,
 } from "../types/collectors.ts";
+
+import { botID } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
+import { botCache } from "../../mod.ts";
 
 export async function needMessage(
   memberID: string,

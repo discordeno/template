@@ -1,8 +1,23 @@
-import { Message, logger, Guild, botID } from "../../deps.ts";
-import { configs } from "../../configs.ts";
+import type { Message, Guild } from "../../deps.ts";
+import type { Command } from "../types/commands.ts";
+
 import { botCache } from "../../mod.ts";
+import { configs } from "../../configs.ts";
+import { sendResponse, getTime } from "../utils/helpers.ts";
 import { handleError } from "../utils/errors.ts";
-import { Command } from "../types/commands.ts";
+import {
+  bgBlack,
+  bgBlue,
+  bgGreen,
+  bgMagenta,
+  bgYellow,
+  black,
+  botID,
+  cache,
+  green,
+  red,
+  white,
+} from "../../deps.ts";
 
 export const parsePrefix = (guildID: string | undefined) => {
   const prefix = guildID ? botCache.guildPrefixes.get(guildID) : configs.prefix;
@@ -22,11 +37,30 @@ export const parseCommand = (commandName: string) => {
 export const logCommand = (
   message: Message,
   guildName: string,
-  type: string,
+  type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing",
   commandName: string,
 ) => {
-  logger.success(
-    `[COMMAND:${commandName} - ${type}] by ${message.author.username}#${message.author.discriminator} in ${guildName}`,
+  const command = `[COMMAND: ${bgYellow(black(commandName))} - ${
+    bgBlack(
+      ["Failure", "Slowmode", "Missing"].includes(type)
+        ? red(type)
+        : type === "Success"
+        ? green(type)
+        : white(type),
+    )
+  }]`;
+
+  const user = bgGreen(
+    black(
+      `${message.author.username}#${message.author.discriminator}(${message.author.id})`,
+    ),
+  );
+  const guild = bgMagenta(
+    black(`${guildName}${message.guildID ? `(${message.guildID})` : ""}`),
+  );
+
+  console.log(
+    `${bgBlue(`[${getTime()}]`)} => ${command} by ${user} in ${guild}`,
   );
 };
 
@@ -54,9 +88,7 @@ async function parseArguments(
       // Assign the valid argument
       args[argument.name] = result;
       // This will use up all args so immediately exist the loop.
-      if (
-        argument.type && ["...string", "subcommand"].includes(argument.type)
-      ) {
+      if (argument.type && ["...string", "...roles"].includes(argument.type)) {
         break;
       }
       // Remove a param for the next argument
@@ -65,16 +97,9 @@ async function parseArguments(
     }
 
     // Invalid arg provided.
-    if (argument.hasOwnProperty("defaultValue")) {
-      if (argument.type === "subcommand") {
-        args[argument.name] = command.subcommands?.get(
-          argument.defaultValue as string,
-        );
-        break;
-      } else {
-        args[argument.name] = argument.defaultValue;
-      }
-    } else if (!argument.hasOwnProperty("required") || argument.required) {
+    if (Object.prototype.hasOwnProperty.call(argument, "defaultValue")) {
+      args[argument.name] = argument.defaultValue;
+    } else if (argument.required !== false) {
       missingRequiredArg = true;
       argument.missing?.(message);
       break;
@@ -98,7 +123,7 @@ async function commandAllowed(
   );
 
   if (inhibitorResults.includes(true)) {
-    logCommand(message, guild?.name || "DM", "Inhibited", command.name);
+    logCommand(message, guild?.name || "DM", "Failure", command.name);
     return false;
   }
 
@@ -114,14 +139,18 @@ async function executeCommand(
   try {
     // Parsed args and validated
     const args = await parseArguments(message, command, parameters) as {
-      [key: string]: any;
+      [key: string]: unknown;
     } | false;
     // Some arg that was required was missing and handled already
-    if (!args) return;
+    if (!args) {
+      return logCommand(message, guild?.name || "DM", "Missing", command.name);
+    }
 
     // If no subcommand execute the command
     const [argument] = command.arguments || [];
-    if (!argument || argument.type !== "subcommand") {
+    const subcommand = argument ? args[argument.name] as Command : undefined;
+
+    if (!argument || argument.type !== "subcommand" || !subcommand) {
       // Check subcommand permissions and options
       if (!(await commandAllowed(message, command, guild))) return;
 
@@ -135,7 +164,6 @@ async function executeCommand(
     }
 
     // A subcommand was asked for in this command
-    const subcommand = args[argument.name];
     if (
       ![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])
     ) {
@@ -145,7 +173,7 @@ async function executeCommand(
       executeCommand(message, subcommand, subParameters, guild);
     }
   } catch (error) {
-    logCommand(message, guild?.name || "DM", "Failed", command.name);
+    logCommand(message, guild?.name || "DM", "Failure", command.name);
     console.error(error);
     handleError(message, error);
   }
@@ -154,16 +182,19 @@ async function executeCommand(
 // The monitor itself for this file. Above is helper functions for this monitor.
 botCache.monitors.set("commandHandler", {
   name: "commandHandler",
+  ignoreDM: false,
   /** The main code that will be run when this monitor is triggered. */
-  execute: function (message: Message) {
+  execute: async function (message: Message) {
     // If the message was sent by a bot we can just ignore it
     if (message.author.bot) return;
 
     let prefix = parsePrefix(message.guildID);
-    const botMention = `<@!${botID}> `;
+    const botMention = `<@!${botID}>`;
 
     // If the message is not using the valid prefix or bot mention cancel the command
-    if (message.content.startsWith(botMention)) prefix = botMention;
+    if (message.content === botMention) {
+      return sendResponse(message, parsePrefix(message.guildID));
+    } else if (message.content.startsWith(botMention)) prefix = botMention;
     else if (!message.content.startsWith(prefix)) return;
 
     // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
@@ -178,9 +209,9 @@ botCache.monitors.set("commandHandler", {
     const command = parseCommand(commandName);
     if (!command) return;
 
-    const guild = message.guild();
-    logCommand(message, guild?.name || "DM", "Ran", commandName);
+    const guild = cache.guilds.get(message.guildID);
+    logCommand(message, guild?.name || "DM", "Trigger", commandName);
 
-    executeCommand(message, command, parameters, guild);
+    return executeCommand(message, command, parameters, guild);
   },
 });

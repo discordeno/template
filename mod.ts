@@ -1,20 +1,24 @@
-import Client, {
-  Collection,
-  Message,
-  Guild,
-  Intents,
-  logger,
-} from "./deps.ts";
-import { configs } from "./configs.ts";
-import { Command, Argument, PermissionLevels } from "./src/types/commands.ts";
-import { importDirectory } from "./src/utils/helpers.ts";
-import { Monitor } from "./src/types/monitors.ts";
-import { Task } from "./src/types/tasks.ts";
-import { loadLanguages } from "./src/utils/i18next.ts";
-import { CustomEvents } from "./src/types/events.ts";
-import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
+import type { Message, Guild } from "./deps.ts";
 
-logger.info(
+import type {
+  Command,
+  Argument,
+  PermissionLevels,
+} from "./src/types/commands.ts";
+import type { Monitor } from "./src/types/monitors.ts";
+import type { Task } from "./src/types/tasks.ts";
+import type { CustomEvents } from "./src/types/events.ts";
+import type {
+  MessageCollector,
+  ReactionCollector,
+} from "./src/types/collectors.ts";
+
+import StartBot, { Collection, Intents } from "./deps.ts";
+import { configs } from "./configs.ts";
+import { importDirectory } from "./src/utils/helpers.ts";
+import { loadLanguages } from "./src/utils/i18next.ts";
+
+console.info(
   "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
 );
 
@@ -36,6 +40,7 @@ export const botCache = {
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
   >(),
   tasks: new Collection<string, Task>(),
+  memberLastActive: new Collection<string, number>(),
 };
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
@@ -57,7 +62,7 @@ await Promise.all(
 // Loads languages
 await loadLanguages();
 
-Client({
+StartBot({
   token: configs.token,
   // Pick the intents you wish to have for your bot.
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],

@@ -1,7 +1,7 @@
-import { Guild, logger } from "../../deps.ts";
+import type { Guild } from "../../deps.ts";
 
 export const guildCreate = (guild: Guild) => {
-  logger.info(
+  console.info(
     `[EVENT=GuildCreate]: ${guild.name} with ${guild.memberCount} members.`,
   );
 };

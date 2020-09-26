@@ -1,16 +1,15 @@
+import type { Command } from "../types/commands.ts";
+import type { MessageContent, Message } from "../../deps.ts";
+
 import {
   Collection,
-  MessageContent,
   sendMessage,
-  deleteMessage,
+  deleteMessageByID,
   editMessage,
-  Message,
-  Channel,
 } from "../../deps.ts";
 import { botCache } from "../../mod.ts";
 import { Embed } from "./Embed.ts";
 import { Milliseconds } from "./constants/time.ts";
-import { Command } from "../types/commands.ts";
 
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
 export async function sendAlertResponse(
@@ -20,7 +19,7 @@ export async function sendAlertResponse(
   reason = "",
 ) {
   const response = await sendResponse(message, content);
-  deleteMessage(response, reason, timeout * 1000);
+  deleteMessageByID(response.channelID, response.id, reason, timeout * 1000);
 }
 
 /** This function should be used when you want to send a response that will @mention the user. */
@@ -33,7 +32,7 @@ export function sendResponse(
     ? `${mention}, ${content}`
     : { ...content, content: `${mention}, ${content.content}` };
 
-  return sendMessage(message.channel, contentWithMention);
+  return sendMessage(message.channelID, contentWithMention);
 }
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
@@ -118,7 +117,11 @@ export function createCommandAliases(
   }
 }
 
-export function createSubcommand(commandName: string, subcommand: Command, retries = 0) {
+export function createSubcommand(
+  commandName: string,
+  subcommand: Command,
+  retries = 0,
+) {
   const names = commandName.split("-");
 
   let command = botCache.commands.get(commandName);
@@ -158,8 +161,8 @@ export function createSubcommand(commandName: string, subcommand: Command, retri
 }
 
 /** Use this function to send an embed with ease. */
-export function sendEmbed(channel: Channel, embed: Embed, content?: string) {
-  return sendMessage(channel, { content, embed });
+export function sendEmbed(channelID: string, embed: Embed, content?: string) {
+  return sendMessage(channelID, { content, embed });
 }
 
 /** Use this function to edit an embed with ease. */
@@ -185,4 +188,21 @@ export async function importDirectory(path: string) {
     importDirectory(currentPath);
   }
   uniqueFilePathCounter++;
+}
+
+export function getTime() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minute = now.getMinutes();
+
+  let hour = hours;
+  let amOrPm = `AM`;
+  if (hour > 12) {
+    amOrPm = `PM`;
+    hour = hour - 12;
+  }
+
+  return `${hour >= 10 ? hour : `0${hour}`}:${
+    minute >= 10 ? minute : `0${minute}`
+  } ${amOrPm}`;
 }

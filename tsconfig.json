@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"declaration": false,
+		"incremental": true,
+		"noEmitOnError": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"pretty": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"strict": true,
+		"target": "es2019",
+		"esModuleInterop": true
+	},
+	"compileOnSave": true,
+	"include": [
+		"./src/**/*.ts",
+		"configs.ts",
+		"mod.ts",
+		"deps.ts"
+	]
+}

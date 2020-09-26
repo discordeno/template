@@ -2,18 +2,25 @@ import { botCache } from "../../mod.ts";
 import {
   botHasPermission,
   botID,
+  cache,
   ChannelTypes,
-  hasChannelPermission,
+  hasChannelPermissions,
   memberHasPermission,
   Permissions,
 } from "../../deps.ts";
 
 botCache.eventHandlers.messageCreate = async function (message) {
+  botCache.memberLastActive.set(message.author.id, message.timestamp);
+
   botCache.monitors.forEach((monitor) => {
     // The !== false is important because when not provided we default to true
     if (monitor.ignoreBots !== false && message.author.bot) return;
+
+    const channel = cache.channels.get(message.channelID);
+    if (!channel) return;
+
     if (
-      monitor.ignoreDM !== false && message.channel.type === ChannelTypes.DM
+      monitor.ignoreDM !== false && channel.type === ChannelTypes.DM
     ) {
       return;
     }
@@ -33,7 +40,7 @@ botCache.eventHandlers.messageCreate = async function (message) {
       return monitor.execute(message);
     }
 
-    const guild = message.guild();
+    const guild = cache.guilds.get(message.guildID);
     // If some permissions is required it must be in a guild
     if (!guild) return;
 
@@ -41,8 +48,8 @@ botCache.eventHandlers.messageCreate = async function (message) {
     if (
       monitor.userChannelPermissions &&
       monitor.userChannelPermissions.some((perm) =>
-        !hasChannelPermission(
-          message.channel,
+        !hasChannelPermissions(
+          message.channelID,
           message.author.id,
           [Permissions[perm]],
         )
@@ -57,7 +64,7 @@ botCache.eventHandlers.messageCreate = async function (message) {
       !memberHasPermission(
         message.author.id,
         guild,
-        message.member()?.roles || [],
+        message.member?.roles || [],
         monitor.userServerPermissions,
       )
     ) {
@@ -68,8 +75,8 @@ botCache.eventHandlers.messageCreate = async function (message) {
     if (
       monitor.botChannelPermissions &&
       monitor.botChannelPermissions.some((perm) =>
-        !hasChannelPermission(
-          message.channel,
+        !hasChannelPermissions(
+          message.channelID,
           message.author.id,
           [Permissions[perm]],
         )
