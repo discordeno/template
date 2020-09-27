@@ -1,5 +1,6 @@
 import type { Command } from "../types/commands.ts";
 import type { MessageContent, Message } from "../../deps.ts";
+import type { Embed } from "./Embed.ts";
 
 import {
   Collection,
@@ -8,7 +9,6 @@ import {
   editMessage,
 } from "../../deps.ts";
 import { botCache } from "../../mod.ts";
-import { Embed } from "./Embed.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */

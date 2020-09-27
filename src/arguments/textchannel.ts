@@ -1,5 +1,5 @@
 import { botCache } from "../../mod.ts";
-import { ChannelTypes } from "../../deps.ts";
+import { cache, ChannelTypes } from "../../deps.ts";
 
 botCache.arguments.set("textchannel", {
   name: "textchannel",
@@ -7,7 +7,7 @@ botCache.arguments.set("textchannel", {
     const [id] = parameters;
     if (!id) return;
 
-    const guild = message.guild();
+    const guild = cache.guilds.get(message.guildID);
     if (!guild) return;
 
     const channelIDOrName = id.startsWith("<#")
