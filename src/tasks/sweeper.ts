@@ -19,12 +19,12 @@ botCache.tasks.set(`sweeper`, {
       // Delete any member who has not been active in the last 30 minutes and is not currently in a voice channel
       guild.members.forEach((member) => {
         // The user is currently active in a voice channel
-        if (guild.voiceStates.has(member.user.id)) return;
-        const lastActive = botCache.memberLastActive.get(member.user.id);
+        if (guild.voiceStates.has(member.id)) return;
+        const lastActive = botCache.memberLastActive.get(member.id);
         // If the user is active recently
         if (lastActive && now - lastActive < MEMBER_LIFETIME) return;
-        guild.members.delete(member.user.id);
-        botCache.memberLastActive.delete(member.user.id);
+        guild.members.delete(member.id);
+        botCache.memberLastActive.delete(member.id);
       });
     });
 

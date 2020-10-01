@@ -1,6 +1,6 @@
 import type { Guild, MemberCreatePayload } from "../../../deps.ts";
 
-import { cacheHandlers, rawAvatarURL } from "../../../deps.ts";
+import { cacheHandlers, rawAvatarURL, structures } from "../../../deps.ts";
 
 async function createMember(data: MemberCreatePayload, guildID: string) {
   const {
@@ -29,6 +29,7 @@ structures.createMember = createMember;
 
 declare module "../../../deps.ts" {
   interface Member {
+    id: string;
     bot: boolean;
     tag: string;
     avatarURL: string;

@@ -42,6 +42,14 @@ export const botCache = {
   memberLastActive: new Collection<string, number>(),
 };
 
+// Always require these files be processed before anything else
+await Promise.all([
+  "./src/customizations/structures",
+  "./src/customizations/controllers",
+].map(
+  (path) => importDirectory(Deno.realPathSync(path)),
+));
+
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
 await Promise.all(
   [
