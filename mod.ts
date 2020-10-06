@@ -45,7 +45,6 @@ export const botCache = {
 // Always require these files be processed before anything else
 await Promise.all([
   "./src/customizations/structures",
-  "./src/customizations/controllers",
 ].map(
   (path) => importDirectory(Deno.realPathSync(path)),
 ));
