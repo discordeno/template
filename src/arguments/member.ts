@@ -1,5 +1,8 @@
 import { botCache } from "../../mod.ts";
-import { getMember } from "../../deps.ts";
+import {
+  getMember,
+  cache,
+} from "../../deps.ts";
 
 botCache.arguments.set("member", {
   name: "member",
