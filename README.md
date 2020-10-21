@@ -1,6 +1,6 @@
 # Discordeno Bot Template
 
-This repo is meant as a template which you can use to create a Discord bot very easily using the Discordeno library.
+This repo is meant as a template which you can use to create a Discord bot very easily using the [Discordeno library](https://github.com/Skillz4Killz/Discordeno).
 
 [Website/Guide:](https://discordeno.netlify.app/)
 
@@ -8,7 +8,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 
 ## Pre-requisites
 
-- Deno
+- [Deno](https://deno.land)
 
 ## Step By Step
 
@@ -65,7 +65,7 @@ export const configs = {
 
 4. Start the bot `deno run --allow-net --allow-read --quiet mod.ts`
 
-**Note:** To run the bot with `PM2`: `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-net --allow-read --quiet -r" `
+**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-net --allow-read --no-check --config tsconfig.json --quiet -r" `
 
 The `-r` is short for `--reload`, it reloads your deno cache whenever the bot restarts to get the latest and greatest changes to Discordeno. You don't have to include it.
 
