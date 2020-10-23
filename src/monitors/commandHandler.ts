@@ -84,7 +84,7 @@ async function parseArguments(
     if (!resolver) continue;
 
     const result = await resolver.execute(argument, params, message, command);
-    if (result) {
+    if (result !== undefined) {
       // Assign the valid argument
       args[argument.name] = result;
       // This will use up all args so immediately exist the loop.
