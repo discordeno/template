@@ -3,12 +3,12 @@ import type { MessageContent, Message } from "../../deps.ts";
 import type { Embed } from "./Embed.ts";
 
 import {
+  botCache,
   Collection,
   sendMessage,
   deleteMessageByID,
   editMessage,
 } from "../../deps.ts";
-import { botCache } from "../../mod.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 /** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
@@ -174,6 +174,7 @@ export function editEmbed(message: Message, embed: Embed, content?: string) {
 let uniqueFilePathCounter = 0;
 /** This function allows reading all files in a folder. Useful for loading/reloading commands, monitors etc */
 export async function importDirectory(path: string) {
+  console.log(path);
   const files = Deno.readDirSync(Deno.realPathSync(path));
 
   for (const file of files) {
@@ -181,7 +182,9 @@ export async function importDirectory(path: string) {
 
     const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
+      console.log(`file start: file:///${currentPath}#${uniqueFilePathCounter}`);
       await import(`file:///${currentPath}#${uniqueFilePathCounter}`);
+      console.log(`file done: file:///${currentPath}#${uniqueFilePathCounter}`);
       continue;
     }
 

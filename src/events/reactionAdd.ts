@@ -1,4 +1,4 @@
-import { botCache } from "../../mod.ts";
+import { botCache } from "../../deps.ts";
 import { processReactionCollectors } from "../utils/collectors.ts";
 
 botCache.eventHandlers.reactionAdd = function (message, emoji, userID) {

@@ -1,7 +1,5 @@
-import { Member, kick, sendMessage } from "../../deps.ts";
-
+import { botCache, Member, kick, sendMessage } from "../../deps.ts";
 import { Embed } from "./../utils/Embed.ts";
-import { botCache } from "../../mod.ts";
 import { sendEmbed } from "../utils/helpers.ts";
 
 botCache.commands.set(`kick`, {

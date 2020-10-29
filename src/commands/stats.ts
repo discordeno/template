@@ -1,6 +1,5 @@
-import { botCache } from "../../mod.ts";
 import { Embed } from "./../utils/Embed.ts";
-import { botID, cache, sendMessage } from "../../deps.ts";
+import { botID, botCache, cache, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`stats`, {
   name: `stats`,

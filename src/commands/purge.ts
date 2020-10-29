@@ -1,11 +1,11 @@
 import { sendEmbed } from "../utils/helpers.ts";
 import {
+  botCache,
   deleteMessages,
   getMessages,
   sendMessage,
 } from "../../deps.ts";
 import { Embed } from "../utils/Embed.ts";
-import { botCache } from "../../mod.ts";
 
 botCache.commands.set("purge", {
   name: "purge",

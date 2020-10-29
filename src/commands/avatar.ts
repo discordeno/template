@@ -1,7 +1,4 @@
-// This command is intentionally different from other commands to show that they can also be done this way.
-// This is the ideal way because it will give you automated typings.
-import { botCache } from "../../mod.ts";
-import { sendMessage } from "../../deps.ts";
+import { botCache, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`avatar`, {
   name: `avatar`,

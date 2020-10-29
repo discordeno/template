@@ -1,4 +1,4 @@
-import { botCache } from "../../mod.ts";
+import { botCache } from "../../deps.ts";
 
 botCache.inhibitors.set("onlyIn", async function (_message, command, guild) {
   // If the command is guildOnly and does not have a guild, inhibit the command

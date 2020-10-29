@@ -1,5 +1,4 @@
-import { botCache } from "../../mod.ts";
-import { sendMessage, botID } from "../../deps.ts";
+import { botCache, botID, sendMessage } from "../../deps.ts";
 
 botCache.commands.set(`invite`, {
   name: `invite`,

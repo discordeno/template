@@ -1,7 +1,7 @@
 import type { Command } from "../types/commands.ts";
 import type { Message, Permission } from "../../deps.ts";
-
 import {
+  botCache,
   botHasChannelPermissions,
   botHasPermission,
   botID,
@@ -9,7 +9,6 @@ import {
   memberIDHasPermission,
   Permissions,
 } from "../../deps.ts";
-import { botCache } from "../../mod.ts";
 import { sendResponse } from "../utils/helpers.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */

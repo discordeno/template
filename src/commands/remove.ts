@@ -1,6 +1,5 @@
 // This command is intentionally done in an un-optimized way. This command is only to show you how to await a users response.
-import { botCache } from "../../mod.ts";
-import { addReactions } from "../../deps.ts";
+import { addReactions, botCache } from "../../deps.ts";
 import { needReaction } from "../utils/collectors.ts";
 import { Embed } from "../utils/Embed.ts";
 import { sendEmbed, sendAlertResponse } from "../utils/helpers.ts";

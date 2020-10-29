@@ -1,5 +1,4 @@
-import { botCache } from "../../mod.ts";
-import { updateEventHandlers } from "../../deps.ts";
+import { botCache, updateEventHandlers } from "../../deps.ts";
 import { importDirectory, sendResponse } from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
 

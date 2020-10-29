@@ -1,4 +1,4 @@
-import { botCache } from "../../mod.ts";
+import { botCache } from "../../deps.ts";
 
 botCache.arguments.set("boolean", {
   name: "boolean",

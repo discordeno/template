@@ -1,11 +1,8 @@
-import type { Message, Guild } from "../../deps.ts";
-import type { Command } from "../types/commands.ts";
-
-import { botCache } from "../../mod.ts";
 import { configs } from "../../configs.ts";
 import { sendResponse, getTime } from "../utils/helpers.ts";
 import { handleError } from "../utils/errors.ts";
 import {
+  botCache,
   bgBlack,
   bgBlue,
   bgGreen,
@@ -15,9 +12,12 @@ import {
   botID,
   cache,
   green,
+  Guild,
+  Message,
   red,
   white,
 } from "../../deps.ts";
+import { Command } from "../types/commands.ts";
 
 export const parsePrefix = (guildID: string | undefined) => {
   const prefix = guildID ? botCache.guildPrefixes.get(guildID) : configs.prefix;

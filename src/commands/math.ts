@@ -1,4 +1,4 @@
-import { botCache } from "../../mod.ts";
+import { botCache } from "../../deps.ts";
 import { createSubcommand, sendEmbed } from "../utils/helpers.ts";
 import { Embed } from "../utils/Embed.ts";
 
@@ -83,7 +83,7 @@ createSubcommand("math-remove", {
   execute: (message, args: MathAddArgs) => {
     const member = message.member;
     if (!member) return;
-    
+
     const total = (args.firstNumber - args.secondNumber) * 2;
 
     const embed = new Embed()
