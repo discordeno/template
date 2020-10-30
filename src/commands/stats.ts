@@ -19,7 +19,7 @@ botCache.commands.set(`stats`, {
 
     const embed = new Embed()
       .setAuthor(
-        `${botMember?.nick || botMember?.user.username} Stats`,
+        `${botMember?.nick || botMember?.tag} Stats`,
         botMember.avatarURL,
       )
       .setColor("random")
