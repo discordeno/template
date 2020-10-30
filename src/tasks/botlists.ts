@@ -76,7 +76,7 @@ botCache.tasks.set(`botlists`, {
       if (!list.token) continue;
       // Send update request to this bot list
       fetch(list.url, {
-        method: "post",
+        method: "POST",
         headers: {
           Authorization: list.token,
           "Content-Type": "application/json",
