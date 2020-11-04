@@ -63,7 +63,7 @@ export const configs = {
 };
 ```
 
-4. Start the bot `deno run --allow-net --allow-read --quiet mod.ts`
+4. Start the bot `deno run --allow-net --allow-read --quiet --no-check mod.ts`
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-net --allow-read --no-check --config tsconfig.json --quiet -r" `
 
