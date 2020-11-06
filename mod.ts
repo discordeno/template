@@ -1,4 +1,5 @@
-import StartBot, { botCache, Intents } from "./deps.ts";
+import StartBot, { Intents } from "./deps.ts";
+import { botCache } from "./cache.ts";
 import { configs } from "./configs.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
