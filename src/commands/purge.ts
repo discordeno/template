@@ -1,4 +1,4 @@
-import { sendEmbed } from "../utils/helpers.ts";
+import { createCommand, sendEmbed } from "../utils/helpers.ts";
 import {
   botCache,
   deleteMessages,
@@ -7,7 +7,7 @@ import {
 } from "../../deps.ts";
 import { Embed } from "../utils/Embed.ts";
 
-botCache.commands.set("purge", {
+createCommand({
   name: "purge",
   aliases: ["delete"],
   arguments: [

@@ -4,12 +4,13 @@ import {
   sendResponse,
   sendEmbed,
   createSubcommand,
+  createCommand,
 } from "../utils/helpers.ts";
 import { parsePrefix } from "../monitors/commandHandler.ts";
 import { Embed } from "../utils/Embed.ts";
 
 // This command will only execute if there was no valid sub command: !prefix
-botCache.commands.set("prefix", {
+createCommand({
   name: "prefix",
   arguments: [
     {

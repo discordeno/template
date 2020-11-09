@@ -1,10 +1,10 @@
-// This command is intentionally done in an un-optimized way. This command is only to show you how to await a users response.
-import { addReactions, botCache } from "../../deps.ts";
+// This command is intentionally done in an un-optimized way. This command is only to show you how to await a users response using reactions.
+import { addReactions } from "../../deps.ts";
 import { needReaction } from "../utils/collectors.ts";
 import { Embed } from "../utils/Embed.ts";
-import { sendEmbed, sendAlertResponse } from "../utils/helpers.ts";
+import { sendEmbed, sendAlertResponse, createCommand } from "../utils/helpers.ts";
 
-botCache.commands.set(`remove`, {
+createCommand({
   name: `remove`,
   guildOnly: true,
   execute: async (message) => {

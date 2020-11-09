@@ -1,8 +1,8 @@
-import { botCache, Member, kick, sendMessage } from "../../deps.ts";
+import { Member, kick, sendMessage } from "../../deps.ts";
 import { Embed } from "./../utils/Embed.ts";
-import { sendEmbed } from "../utils/helpers.ts";
+import { createCommand, sendEmbed } from "../utils/helpers.ts";
 
-botCache.commands.set(`kick`, {
+createCommand({
   name: `kick`,
   guildOnly: true,
   arguments: [

@@ -1,7 +1,8 @@
 // This file is meant to show how you can create multiple commands in the same file if you wish.
 import { botCache, cache, sendMessage } from "../../deps.ts";
+import { createCommand } from "../utils/helpers.ts";
 
-botCache.commands.set(`ping`, {
+createCommand({
   name: `ping`,
   description: "commands/ping:DESCRIPTION",
   botChannelPermissions: ["SEND_MESSAGES"],
@@ -13,7 +14,7 @@ botCache.commands.set(`ping`, {
   },
 });
 
-botCache.commands.set(`devping`, {
+createCommand({
   name: `devping`,
   guildOnly: true,
   execute: function (message) {

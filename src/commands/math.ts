@@ -1,8 +1,7 @@
-import { botCache } from "../../deps.ts";
-import { createSubcommand, sendEmbed } from "../utils/helpers.ts";
+import { createCommand, createSubcommand, sendEmbed } from "../utils/helpers.ts";
 import { Embed } from "../utils/Embed.ts";
 
-botCache.commands.set(`math`, {
+createCommand({
   name: `math`,
   guildOnly: true,
   arguments: [

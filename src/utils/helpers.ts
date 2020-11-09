@@ -117,6 +117,12 @@ export function createCommandAliases(
   }
 }
 
+export function createCommand(
+  command: Command,
+) {
+  botCache.commands.set(command.name, command);
+}
+
 export function createSubcommand(
   commandName: string,
   subcommand: Command,
@@ -174,7 +180,6 @@ export function editEmbed(message: Message, embed: Embed, content?: string) {
 let uniqueFilePathCounter = 0;
 /** This function allows reading all files in a folder. Useful for loading/reloading commands, monitors etc */
 export async function importDirectory(path: string) {
-  console.log(path);
   const files = Deno.readDirSync(Deno.realPathSync(path));
 
   for (const file of files) {
@@ -182,9 +187,7 @@ export async function importDirectory(path: string) {
 
     const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
-      console.log(`file start: file:///${currentPath}#${uniqueFilePathCounter}`);
       await import(`file:///${currentPath}#${uniqueFilePathCounter}`);
-      console.log(`file done: file:///${currentPath}#${uniqueFilePathCounter}`);
       continue;
     }
 

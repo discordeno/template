@@ -1,7 +1,8 @@
 import { Embed } from "./../utils/Embed.ts";
-import { botID, botCache, cache, sendMessage } from "../../deps.ts";
+import { botID, cache, sendMessage } from "../../deps.ts";
+import { createCommand } from "../utils/helpers.ts";
 
-botCache.commands.set(`stats`, {
+createCommand({
   name: `stats`,
   guildOnly: true,
   execute: (message, _args, guild) => {

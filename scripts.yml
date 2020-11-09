@@ -1,10 +1,10 @@
 scripts:
   start:
     desc: Starts the bot.
-    cmd: deno run --allow-net --allow-read --no-check --config tsconfig.json mod.ts
+    cmd: deno run --allow-net --allow-read --allow-write mod.ts
   reload:
     desc: Starts the bot.
-    cmd: deno run --allow-net --allow-read -r --no-check --config tsconfig.json mod.ts
+    cmd: deno run --allow-net --allow-read --allow-write -r --no-check mod.ts
   update:
     desc: Updates to the latest(non-breaking) changes of CURRENT Discordeno version.
     cmd: deno cache --reload mod.ts

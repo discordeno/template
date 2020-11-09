@@ -1,6 +1,7 @@
-import { botCache, sendMessage } from "../../deps.ts";
+import { sendMessage } from "../../deps.ts";
+import { createCommand } from "../utils/helpers.ts";
 
-botCache.commands.set(`avatar`, {
+createCommand({
   name: `avatar`,
   guildOnly: true,
   execute: (message, _args, guild) => {

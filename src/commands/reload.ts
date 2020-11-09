@@ -1,5 +1,5 @@
 import { botCache, updateEventHandlers } from "../../deps.ts";
-import { importDirectory, sendResponse } from "../utils/helpers.ts";
+import { createCommand, importDirectory, sendResponse } from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
 
 const folderPaths = new Map(
@@ -14,7 +14,7 @@ const folderPaths = new Map(
   ],
 );
 
-botCache.commands.set(`reload`, {
+createCommand({
   name: `reload`,
   permissionLevels: [PermissionLevels.BOT_OWNER],
   botChannelPermissions: ["SEND_MESSAGES"],

@@ -1,8 +1,9 @@
 import { botCache, sendMessage } from "../../deps.ts";
 import { translate } from "../utils/i18next.ts";
 import { Embed } from "../utils/Embed.ts";
+import { createCommand } from "../utils/helpers.ts";
 
-botCache.commands.set(`help`, {
+createCommand({
   name: `help`,
   arguments: [
     {
