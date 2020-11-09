@@ -1,7 +1,7 @@
 scripts:
   start:
     desc: Starts the bot.
-    cmd: deno run --allow-net --allow-read --allow-write mod.ts
+    cmd: deno run --allow-net --allow-read --allow-write --no-check mod.ts
   reload:
     desc: Starts the bot.
     cmd: deno run --allow-net --allow-read --allow-write -r --no-check mod.ts
