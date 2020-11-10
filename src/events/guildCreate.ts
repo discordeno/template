@@ -1,6 +1,6 @@
-import type { Guild } from "../../deps.ts";
+import { botCache } from "../../deps.ts";
 
-export const guildCreate = (guild: Guild) => {
+botCache.eventHandlers.guildCreate = function (guild) {
   console.info(
     `[EVENT=GuildCreate]: ${guild.name} with ${guild.memberCount} members.`,
   );

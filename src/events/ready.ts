@@ -13,12 +13,12 @@ botCache.eventHandlers.ready = function () {
     ActivityType.Game,
   );
 
-  console.info(`Loaded ${botCache.arguments.size} Argument(s)`);
-  console.info(`Loaded ${botCache.commands.size} Command(s)`);
-  console.info(`Loaded ${Object.keys(botCache.eventHandlers).length} Event(s)`);
-  console.info(`Loaded ${botCache.inhibitors.size} Inhibitor(s)`);
-  console.info(`Loaded ${botCache.monitors.size} Monitor(s)`);
-  console.info(`Loaded ${botCache.tasks.size} Task(s)`);
+  console.log(`Loaded ${botCache.arguments.size} Argument(s)`);
+  console.log(`Loaded ${botCache.commands.size} Command(s)`);
+  console.log(`Loaded ${Object.keys(botCache.eventHandlers).length} Event(s)`);
+  console.log(`Loaded ${botCache.inhibitors.size} Inhibitor(s)`);
+  console.log(`Loaded ${botCache.monitors.size} Monitor(s)`);
+  console.log(`Loaded ${botCache.tasks.size} Task(s)`);
 
   for (const task of botCache.tasks.values()) {
     setInterval(() => task.execute(), task.interval);
