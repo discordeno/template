@@ -1,6 +1,4 @@
-import type { MessageCreateOptions } from "../../../deps.ts";
-
-import { cache, structures } from "../../../deps.ts";
+import { cache, structures, MessageCreateOptions, Member } from "../../../deps.ts";
 
 async function createMessage(data: MessageCreateOptions) {
   const {
