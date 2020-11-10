@@ -1,5 +1,5 @@
-import { botCache } from "../../deps.ts";
 import {
+  botCache,
   botHasPermission,
   botID,
   cache,
