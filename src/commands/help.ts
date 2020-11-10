@@ -10,6 +10,7 @@ createCommand({
       name: "command",
       type: "string",
       lowercase: true,
+      required: true
     },
   ],
   execute: function (message, args: HelpArgs) {
