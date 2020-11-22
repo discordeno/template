@@ -1,8 +1,8 @@
-import { botCache, Member, ban, sendMessage } from "./../../../deps.ts";
+import { sendMessage, ban, highestRole, sendDirectMessage, Member, botID } from "./../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
-import { sendEmbed } from "./../../utils/helpers.ts";
+import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
-botCache.commands.set(`ban`, {
+createCommand({
   name: `ban`,
   guildOnly: true,
   arguments: [
@@ -26,16 +26,40 @@ botCache.commands.set(`ban`, {
   ],
   userServerPermissions: ["BAN_MEMBERS"],
   botServerPermissions: ["BAN_MEMBERS"],
+  botChannelPermissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
   execute: async (message, args: BanArgs) => {
     try {
+      const botHighestRolePosition = (await highestRole(message.guildID, botID))!.position;
+      const memberHighestRolePositon = (await highestRole(message.guildID, args.member.id))!.position;
+      const authorHighestRolePosition = (await highestRole(message.guildID, message.author.id))!.position;
+
+      if (memberHighestRolePositon >= botHighestRolePosition || memberHighestRolePositon >= authorHighestRolePosition) {
+        throw new Error("Cannot ban member with same or higher Roleposition");
+      }
+
+      try {
+        const embed = new Embed()
+        .setColor("#F04747")
+        .setTitle(`Banned from ${message.member?.guild.name}`)
+        .addField("Banned By:", `<@${message.author.id}>`)
+        .addField("Reason:", args.reason)
+        .setTimestamp();
+        await sendDirectMessage(args.member.id, { embed: embed });
+      } catch {}
+
+
       await ban(message.guildID, args.member.id, {
         reason: args.reason,
         days: args.days,
       });
 
+      const member = message.member;
+      if (!member) return;
+
       const embed = new Embed()
-        .setColor("#F04747;")
+        .setColor("#F04747")
         .setTitle(`Banned User`)
+        .setThumbnail(member.avatarURL)
         .addField("User:", args.member.mention, true)
         .addField("Banned By:", `<@${message.author.id}>`, true)
         .addField("Reason:", args.reason)
