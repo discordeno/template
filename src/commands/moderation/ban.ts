@@ -28,7 +28,6 @@ botCache.commands.set(`ban`, {
   botServerPermissions: ["BAN_MEMBERS"],
   execute: async (message, args: BanArgs) => {
     try {
-      console.log(args.member.id);
       await ban(message.guildID, args.member.id, {
         reason: args.reason,
         days: args.days,
