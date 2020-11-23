@@ -14,7 +14,7 @@ const clearTasks = () => {
     clearInterval(task);
   }
   botCache.tasks = new Collection<string, Task>();
-  botCache.runningTasks = Array<number>();
+  botCache.runningTasks = [];
 };
 
 export { registerTasks, clearTasks };
