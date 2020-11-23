@@ -16,6 +16,7 @@ createCommand({
     {
       name: "sub commmand",
       type: "subcommand",
+      required: false,
     },
   ],
   guildOnly: true,
