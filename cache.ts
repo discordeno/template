@@ -23,5 +23,6 @@ export const botCache = {
     (message: Message, command: Command, guild?: Guild) => Promise<boolean>
   >(),
   tasks: new Collection<string, Task>(),
+  runningTasks: [] as number[],
   memberLastActive: new Collection<string, number>(),
 };
