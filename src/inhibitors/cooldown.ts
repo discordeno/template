@@ -19,9 +19,9 @@ botCache.inhibitors.set("cooldown", async function (message, command) {
       if (cooldown.timestamp > now) {
         sendResponse(
           message,
-          `You must wait **${
-            humanizeMilliseconds(cooldown.timestamp - now) || 0
-          }** before using this command again.`
+          `You must wait **${humanizeMilliseconds(
+            cooldown.timestamp - now
+          )}** before using this command again.`
         );
         return true;
       } else {
