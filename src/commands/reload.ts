@@ -62,11 +62,13 @@ createCommand({
     }
 
     // Reloads the main folders:
+    clearTasks();
     await Promise.all(
       [...folderPaths.values()].map((path) =>
         importDirectory(Deno.realPathSync(path))
       )
     );
+    registerTasks();
     // Updates the events in the library
     updateEventHandlers(botCache.eventHandlers);
 
