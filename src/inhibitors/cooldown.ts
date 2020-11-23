@@ -14,30 +14,32 @@ botCache.inhibitors.set("cooldown", async function (message, command) {
   const key = `${message.author.id}-${command.name}`;
   const cooldown = membersInCooldown.get(key);
   if (cooldown) {
-    if (cooldown.used + 1 >= (command.cooldown.allowedUses || 1)) {
+    if (cooldown.used >= (command.cooldown.allowedUses || 1)) {
       const now = Date.now();
       if (cooldown.timestamp > now) {
         sendResponse(
           message,
           `You must wait **${
-            humanizeMilliseconds(cooldown.timestamp - now)
-          }** before using this command again.`,
+            humanizeMilliseconds(cooldown.timestamp - now) || `1s`
+          }** before using this command again.`
         );
         return true;
+      } else {
+        cooldown.used = 0;
       }
     }
 
-    membersInCooldown.set(
-      key,
-      { used: cooldown.used + 1, timestamp: cooldown.timestamp },
-    );
+    membersInCooldown.set(key, {
+      used: cooldown.used + 1,
+      timestamp: Date.now() + command.cooldown.seconds * 1000,
+    });
     return false;
   }
 
-  membersInCooldown.set(
-    key,
-    { used: 1, timestamp: Date.now() + (command.cooldown.seconds * 1000) },
-  );
+  membersInCooldown.set(key, {
+    used: 1,
+    timestamp: Date.now() + command.cooldown.seconds * 1000,
+  });
   return false;
 });
 
