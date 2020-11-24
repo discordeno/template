@@ -27,12 +27,10 @@ export function sendResponse(
   message: Message,
   content: string | MessageContent,
 ) {
-  const mention = `<@!${message.author.id}>`;
-  const contentWithMention = typeof content === "string"
-    ? `${mention}, ${content}`
-    : { ...content, content: `${mention}, ${content.content}` };
-
-  return sendMessage(message.channelID, contentWithMention);
+  return sendMessage(message.channelID, typeof content === "string" ? {
+    content,
+    replyMessageID: message.id,
+  } : { ...content, replyMessageID: message.id, mentions: { ...content.mentions, repliedUser: true } });
 }
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
