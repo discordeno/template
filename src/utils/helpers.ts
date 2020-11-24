@@ -30,7 +30,7 @@ export function sendResponse(
   return sendMessage(message.channelID, typeof content === "string" ? {
     content,
     replyMessageID: message.id,
-  } : content);
+  } : { ...content, replyMessageID: message.id, mentions: { ...content.mentions, repliedUser: true } });
 }
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
