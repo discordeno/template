@@ -99,6 +99,8 @@ async function parseArguments(
     // Invalid arg provided.
     if (Object.prototype.hasOwnProperty.call(argument, "defaultValue")) {
       args[argument.name] = argument.defaultValue;
+    } else if (command.subcommands?.has(parameters[0])) {
+      continue;
     } else if (argument.required !== false) {
       missingRequiredArg = true;
       argument.missing?.(message);
