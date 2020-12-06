@@ -99,6 +99,8 @@ async function parseArguments(
     // Invalid arg provided.
     if (Object.prototype.hasOwnProperty.call(argument, "defaultValue")) {
       args[argument.name] = argument.defaultValue;
+    } else if (command.subcommands?.has(parameters[0])) {
+      continue;
     } else if (argument.required !== false) {
       missingRequiredArg = true;
       argument.missing?.(message);
@@ -148,7 +150,7 @@ async function executeCommand(
 
     // If no subcommand execute the command
     const [argument] = command.arguments || [];
-    const subcommand = argument ? args[argument.name] as Command : undefined;
+    let subcommand = argument ? args[argument.name] as Command : undefined;
 
     if (!argument || argument.type !== "subcommand" || !subcommand) {
       // Check subcommand permissions and options
@@ -163,6 +165,9 @@ async function executeCommand(
       );
     }
 
+    if (!subcommand?.name) {
+      subcommand = command?.subcommands?.get(subcommand as unknown as string) as Command;
+    }
     // A subcommand was asked for in this command
     if (
       ![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])
