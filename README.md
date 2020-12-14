@@ -4,7 +4,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 
 [Website/Guide:](https://discordeno.mod.land/)
 
-[Discord Server](https://discord.gg/J4NqJ72)
+[Discord Server](https://discord.com/invite/5vBgXk3UcZ)
 
 ## Pre-requisites
 
