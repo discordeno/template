@@ -108,4 +108,4 @@ Don't worry a lot of developers start out coding their first projects as a Disco
   - Easily update your code without having to restart the bot everytime.
 
 **Step By Step Guide**
-  - There is a step by step walkthrough to learn how to create Discord bots with Discordeno on our website! https://discordeno.netlify.app/stepbystep
+  - There is a step by step walkthrough to learn how to create Discord bots with Discordeno on our website! https://discordeno.mod.land/stepbystep
