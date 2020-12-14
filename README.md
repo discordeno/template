@@ -1,8 +1,8 @@
 # Discordeno Bot Template
 
-This repo is meant as a template which you can use to create a Discord bot very easily using the [Discordeno library](https://github.com/Skillz4Killz/Discordeno).
+This repo is meant as a template which you can use to create a Discord bot very easily using the [Discordeno library](https://github.com/discordeno/discordeno).
 
-[Website/Guide:](https://discordeno.netlify.app/)
+[Website/Guide:](https://discordeno.mod.land/)
 
 [Discord Server](https://discord.gg/J4NqJ72)
 
