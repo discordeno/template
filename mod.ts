@@ -1,4 +1,4 @@
-import StartBot, { botCache, Intents } from "./deps.ts";
+import { botCache, Intents } from "./deps.ts";
 import { configs } from "./configs.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
@@ -34,7 +34,7 @@ await Promise.all(
 await loadLanguages();
 await import("./src/database/database.ts");
 
-StartBot({
+startBot({
   token: configs.token,
   // Pick the intents you wish to have for your bot.
   // For instance, to work with guild message reactions, you will have to pass the Intents.GUILD_MESSAGE_REACTIONS intent to the array.
