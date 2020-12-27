@@ -63,11 +63,9 @@ export const configs = {
 };
 ```
 
-4. Start the bot `deno run --allow-net --allow-read --allow-write --quiet --no-check mod.ts`
+4. Start the bot `deno run -A --quiet mod.ts`
 
-**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-net --allow-write --allow-read --no-check --config tsconfig.json --quiet -r" `
-
-The `-r` is short for `--reload`, it reloads your deno cache whenever the bot restarts to get the latest and greatest changes to Discordeno. You don't have to include it.
+**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run -A --quiet -r" `
 
 ## Features
 
@@ -105,7 +103,9 @@ Don't worry a lot of developers start out coding their first projects as a Disco
   - Supports nested folders to keep cleaner translation files
 
 **Hot Reloadable**
-  - Easily update your code without having to restart the bot everytime.
+
+- Easily update your code without having to restart the bot everytime.
 
 **Step By Step Guide**
-  - There is a step by step walkthrough to learn how to create Discord bots with Discordeno on our website! https://discordeno.mod.land/stepbystep
+
+- There is a step by step walkthrough to learn how to create Discord bots with Discordeno on our website! https://discordeno.mod.land/stepbystep

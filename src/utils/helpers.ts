@@ -1,37 +1,15 @@
-import type { Command } from "../types/commands.ts";
-import type { MessageContent, Message } from "../../deps.ts";
-import type { Embed } from "./Embed.ts";
-
+import { Command } from "../types/commands.ts";
+import { Embed } from "./Embed.ts";
 import {
   botCache,
   Collection,
+  MessageContent,
+  Message,
   sendMessage,
   deleteMessageByID,
   editMessage,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
-
-/** This function should be used when you want to send a response that will @mention the user and delete it after a certain amount of seconds. By default, it will be deleted after 10 seconds. */
-export async function sendAlertResponse(
-  message: Message,
-  content: string | MessageContent,
-  timeout = 10,
-  reason = "",
-) {
-  const response = await sendResponse(message, content);
-  deleteMessageByID(response.channelID, response.id, reason, timeout * 1000);
-}
-
-/** This function should be used when you want to send a response that will @mention the user. */
-export function sendResponse(
-  message: Message,
-  content: string | MessageContent,
-) {
-  return sendMessage(message.channelID, typeof content === "string" ? {
-    content,
-    replyMessageID: message.id,
-  } : { ...content, replyMessageID: message.id, mentions: { ...content.mentions, repliedUser: true } });
-}
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -95,47 +73,18 @@ export function stringToMilliseconds(text: string) {
   return total;
 }
 
-/** This function should be used to create command aliases. */
-export function createCommandAliases(
-  commandName: string,
-  aliases: string | string[],
-) {
-  if (typeof aliases === "string") aliases = [aliases];
-
-  const command = botCache.commands.get(commandName);
-  if (!command) return;
-
-  if (!command.aliases) {
-    command.aliases = aliases;
-    return;
-  }
-
-  for (const alias of aliases) {
-    if (command.aliases.includes(alias)) continue;
-    command.aliases.push(alias);
-  }
-}
-
-export function createCommand(
-  command: Command,
-) {
+export function createCommand(command: Command) {
   botCache.commands.set(command.name, command);
 }
 
-export function createSubcommand(
-  commandName: string,
-  subcommand: Command,
-  retries = 0,
-) {
+export function createSubcommand(commandName: string, subcommand: Command, retries = 0) {
   const names = commandName.split("-");
 
   let command = botCache.commands.get(commandName);
 
   if (names.length > 1) {
     for (const name of names) {
-      const validCommand = command
-        ? command.subcommands?.get(name)
-        : botCache.commands.get(name);
+      const validCommand = command ? command.subcommands?.get(name) : botCache.commands.get(name);
       if (!validCommand) break;
 
       command = validCommand;
@@ -145,16 +94,11 @@ export function createSubcommand(
   if (!command) {
     // If 10 minutes have passed something must have been wrong
     if (retries === 20) {
-      return console.error(
-        `Subcommand ${subcommand} unable to be created for ${commandName}`,
-      );
+      return console.error(`Subcommand ${subcommand} unable to be created for ${commandName}`);
     }
 
     // Try again in 30 seconds in case this command file just has not been loaded yet.
-    setTimeout(
-      () => createSubcommand(commandName, subcommand, retries++),
-      30000,
-    );
+    setTimeout(() => createSubcommand(commandName, subcommand, retries++), 30000);
     return;
   }
 
@@ -186,7 +130,7 @@ export async function importDirectory(path: string) {
 
     const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
-      await import(`file:///${currentPath}#${uniqueFilePathCounter}`);
+      import(`file:///${currentPath}#${uniqueFilePathCounter}`);
       continue;
     }
 
@@ -207,7 +151,5 @@ export function getTime() {
     hour = hour - 12;
   }
 
-  return `${hour >= 10 ? hour : `0${hour}`}:${
-    minute >= 10 ? minute : `0${minute}`
-  } ${amOrPm}`;
+  return `${hour >= 10 ? hour : `0${hour}`}:${minute >= 10 ? minute : `0${minute}`} ${amOrPm}`;
 }

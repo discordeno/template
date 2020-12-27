@@ -1,4 +1,4 @@
-import StartBot, { botCache, Intents } from "./deps.ts";
+import { botCache, Intents, startBot } from "./deps.ts";
 import { configs } from "./configs.ts";
 import { importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
@@ -6,13 +6,6 @@ import { loadLanguages } from "./src/utils/i18next.ts";
 console.info(
   "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
 );
-
-// Always require these files be processed before anything else
-await Promise.all([
-  "./src/customizations/structures",
-].map(
-  (path) => importDirectory(Deno.realPathSync(path)),
-));
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
 await Promise.all(

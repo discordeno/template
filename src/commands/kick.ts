@@ -1,4 +1,4 @@
-import { Member, kick, sendMessage } from "../../deps.ts";
+import { Member } from "../../deps.ts";
 import { Embed } from "./../utils/Embed.ts";
 import { createCommand, sendEmbed } from "../utils/helpers.ts";
 
@@ -10,7 +10,7 @@ createCommand({
       name: "member",
       type: "member",
       missing: (message) => {
-        return sendMessage(message.channelID, "User not found!");
+        return message.reply("User not found!");
       },
     },
     {
@@ -27,7 +27,7 @@ createCommand({
   ],
   execute: async (message, args: KickArgs) => {
     try {
-      await kick(message.guildID, args.member.user.id, args.reason);
+      await args.member.kick(message.guildID, args.reason);
 
       const embed = new Embed()
         .setColor("#FFA500")
@@ -39,7 +39,7 @@ createCommand({
 
       return sendEmbed(message.channelID, embed);
     } catch (error) {
-      return sendMessage(message.channelID, "Attempt to kick user has failed!");
+      return message.send("Attempt to kick user has failed!");
     }
   },
 });
