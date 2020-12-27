@@ -1,15 +1,11 @@
 import { Embed } from "./../utils/Embed.ts";
-import { botID, cache, sendMessage } from "../../deps.ts";
+import { botID, cache } from "../../deps.ts";
 import { createCommand } from "../utils/helpers.ts";
 
 createCommand({
   name: `stats`,
   guildOnly: true,
-  execute: (message, _args, guild) => {
-    const botMember = guild?.members.get(botID);
-
-    if (!botMember) return;
-
+  execute: (message) => {
     let totalMemberCount = 0;
     let cachedMemberCount = 0;
 
@@ -19,10 +15,7 @@ createCommand({
     }
 
     const embed = new Embed()
-      .setAuthor(
-        `${botMember?.nick || botMember?.tag} Stats`,
-        botMember.avatarURL,
-      )
+      .setAuthor(`${message.guild?.botMember?.nick || message.guild?.bot?.tag} Stats`, message.guild?.bot?.avatarURL)
       .setColor("random")
       .addField("Guilds:", cache.guilds.size.toLocaleString(), true)
       .addField("Total Members:", totalMemberCount.toLocaleString(), true)
@@ -32,6 +25,6 @@ createCommand({
       .addField("Deno Version:", `v${Deno.version.deno}`, true)
       .setTimestamp();
 
-    return sendMessage(message.channelID, { embed });
+    return message.send({ embed });
   },
 });

@@ -1,4 +1,4 @@
-import { sendMessage, ban, highestRole, sendDirectMessage, Member, botID, higherRolePosition } from "./../../../deps.ts";
+import { botID, higherRolePosition, highestRole, Member, sendDirectMessage } from "../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -10,7 +10,7 @@ createCommand({
       name: "member",
       type: "member",
       missing: (message) => {
-        return sendMessage(message.channelID, "User not found!");
+        return message.reply("User not found!");
       },
     },
     {
@@ -29,7 +29,6 @@ createCommand({
   botChannelPermissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
   execute: async (message, args: BanArgs) => {
     try {
-
       const { guildID, channelID } = message;
       const authorID = message.author.id;
       const memberID = args.member.id;
@@ -58,15 +57,13 @@ createCommand({
         .setTitle(`Banned from ${message.member?.guild.name}`)
         .addField("Banned By:", `<@${authorID}>`)
         .addField("Reason:", reason)
-        .setTimestamp();
-        await sendDirectMessage(memberID, { embed });
+          .setTimestamp();
+        await args.member.sendDM({ embed });
       } catch {}
 
 
-      await ban(guildID, memberID, {
-        reason: reason,
-        days: days,
-      });
+      const banned = await args.member.ban(guildID, { reason, days }).catch((console.error));
+      if (!banned) return;
 
       const embed = new Embed()
         .setColor("#F04747")
@@ -80,7 +77,7 @@ createCommand({
 
       return sendEmbed(channelID, embed);
     } catch (error) {
-      return sendMessage(message.channelID, "Attempt to ban user has failed!");
+      return message.reply("Attempt to ban user has failed!");
     }
   },
 });
