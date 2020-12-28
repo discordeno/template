@@ -1,0 +1,28 @@
+{
+    "name": "Deno",
+    "image": "hayd/debian-deno",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "deno.enable": true,
+        "editor.defaultFormatter": "denoland.vscode-deno",
+        "editor.minimap.enabled": false,
+        "editor.wordWrap": "on",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+            "source.fixAll": true
+        },
+        "editor.fontSize": 16,
+        "workbench.colorTheme": "equinusocio.vsc-material-theme",
+        "workbench.iconTheme": "pkief.material-icon-theme",
+        "breadcrumbs.enabled": true,
+        "editor.renderWhitespace": "all",
+        "editor.suggestSelection": "first"
+    },
+    "extensions": [
+        "denoland.vscode-deno",
+        "pkief.material-icon-theme",
+        "coenraads.bracket-pair-colorizer",
+        "equinusocio.vsc-material-theme",
+    ],
+    "postCreateCommand": "deno cache mod.ts"
+}
