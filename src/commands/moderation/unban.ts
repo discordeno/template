@@ -1,4 +1,3 @@
-import { unban, sendMessage } from "./../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { sendEmbed, createCommand } from "./../../utils/helpers.ts";
 
@@ -10,7 +9,7 @@ createCommand({
       name: "memberId",
       type: "snowflake",
       missing: (message) => {
-        return sendMessage(message.channelID, "User not found!");
+        return message.reply("User not found!");
       },
     },
   ],
@@ -19,26 +18,19 @@ createCommand({
   botChannelPermissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
   execute: async (message, args: UnbanArgs) => {
     try {
-      const { memberId } = args;
-      const author = message.member;
-      if (!author) return;
-
-      await unban(message.guildID, memberId);
+      await message.guild?.unban(args.memberId);
 
       const embed = new Embed()
         .setColor("#43b581")
         .setTitle(`Unbanned User`)
-        .setThumbnail(author.avatarURL)
-        .addField("User ID:", memberId, true)
+        .setThumbnail(message.member!.avatarURL)
+        .addField("User ID:", args.memberId, true)
         .addField("Unbanned By:", `<@${message.author.id}>`, true)
         .setTimestamp();
 
       return sendEmbed(message.channelID, embed);
     } catch (error) {
-      return sendMessage(
-        message.channelID,
-        "Attempt to unban user has failed!"
-      );
+      return message.reply("Attempt to unban user has failed!");
     }
   },
 });

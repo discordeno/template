@@ -8,7 +8,7 @@ botCache.inhibitors.set("nsfw", async function (message, command, guild) {
   if (!guild) return true;
 
   // Checks if this channel is nsfw on or off
-  const isNsfw = cache.channels.get(message.channelID)?.nsfw;
+  const isNsfw = message.channel?.nsfw;
   // if it is a nsfw channel return false so the command runs otherwise return true to inhibit the command
   return !isNsfw;
 });

@@ -30,7 +30,7 @@ export async function determineNamespaces(
       namespaces = await determineNamespaces(
         `${path}/${file.name}`,
         namespaces,
-        isLanguage ? "" : `${file.name}/`,
+        isLanguage ? "" : `${folderName + file.name}/`,
       );
     } else {
       namespaces.push(

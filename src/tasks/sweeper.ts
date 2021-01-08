@@ -22,7 +22,7 @@ botCache.tasks.set(`sweeper`, {
         const lastActive = botCache.memberLastActive.get(member.id);
         // If the user is active recently
         if (lastActive && now - lastActive < MEMBER_LIFETIME) return;
-        guild.members.delete(member.id);
+        cache.members.delete(member.id);
         botCache.memberLastActive.delete(member.id);
       });
     });

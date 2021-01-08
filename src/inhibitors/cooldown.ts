@@ -1,5 +1,5 @@
 import { botCache } from "../../deps.ts";
-import { sendResponse, humanizeMilliseconds } from "../utils/helpers.ts";
+import { humanizeMilliseconds } from "../utils/helpers.ts";
 
 const membersInCooldown = new Map<string, Cooldown>();
 
@@ -17,8 +17,7 @@ botCache.inhibitors.set("cooldown", async function (message, command) {
     if (cooldown.used >= (command.cooldown.allowedUses || 1)) {
       const now = Date.now();
       if (cooldown.timestamp > now) {
-        sendResponse(
-          message,
+        message.reply(
           `You must wait **${humanizeMilliseconds(
             cooldown.timestamp - now
           )}** before using this command again.`

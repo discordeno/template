@@ -77,7 +77,8 @@ export class Embed {
     return this;
   }
 
-  setDescription(description: string) {
+  setDescription(description: string | string[]) {
+    if (Array.isArray(description)) description = description.join('\n');
     this.description = this.fitData(description, embedLimits.description);
 
     return this;

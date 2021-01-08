@@ -1,5 +1,5 @@
 import { configs } from "../../configs.ts";
-import { sendResponse, getTime } from "../utils/helpers.ts";
+import { getTime } from "../utils/helpers.ts";
 import { handleError } from "../utils/errors.ts";
 import {
   botCache,
@@ -19,7 +19,7 @@ import {
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 
-export const parsePrefix = (guildID: string | undefined) => {
+export const parsePrefix = (guildID?: string) => {
   const prefix = guildID ? botCache.guildPrefixes.get(guildID) : configs.prefix;
   return prefix || configs.prefix;
 };
@@ -29,47 +29,27 @@ export const parseCommand = (commandName: string) => {
   if (command) return command;
 
   // Check aliases if the command wasn't found
-  return botCache.commands.find((cmd) =>
-    Boolean(cmd.aliases?.includes(commandName))
-  );
+  return botCache.commands.find((cmd) => Boolean(cmd.aliases?.includes(commandName)));
 };
 
 export const logCommand = (
   message: Message,
   guildName: string,
   type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing",
-  commandName: string,
+  commandName: string
 ) => {
-  const command = `[COMMAND: ${bgYellow(black(commandName))} - ${
-    bgBlack(
-      ["Failure", "Slowmode", "Missing"].includes(type)
-        ? red(type)
-        : type === "Success"
-        ? green(type)
-        : white(type),
-    )
-  }]`;
+  const command = `[COMMAND: ${bgYellow(black(commandName))} - ${bgBlack(
+    ["Failure", "Slowmode", "Missing"].includes(type) ? red(type) : type === "Success" ? green(type) : white(type)
+  )}]`;
 
-  const user = bgGreen(
-    black(
-      `${message.author.username}#${message.author.discriminator}(${message.author.id})`,
-    ),
-  );
-  const guild = bgMagenta(
-    black(`${guildName}${message.guildID ? `(${message.guildID})` : ""}`),
-  );
+  const user = bgGreen(black(`${message.author.username}#${message.author.discriminator}(${message.author.id})`));
+  const guild = bgMagenta(black(`${guildName}${message.guildID ? `(${message.guildID})` : ""}`));
 
-  console.log(
-    `${bgBlue(`[${getTime()}]`)} => ${command} by ${user} in ${guild}`,
-  );
+  console.log(`${bgBlue(`[${getTime()}]`)} => ${command} by ${user} in ${guild}`);
 };
 
 /** Parses all the arguments for the command based on the message sent by the user. */
-async function parseArguments(
-  message: Message,
-  command: Command,
-  parameters: string[],
-) {
+async function parseArguments(message: Message, command: Command, parameters: string[]) {
   const args: { [key: string]: unknown } = {};
   if (!command.arguments) return args;
 
@@ -99,6 +79,8 @@ async function parseArguments(
     // Invalid arg provided.
     if (Object.prototype.hasOwnProperty.call(argument, "defaultValue")) {
       args[argument.name] = argument.defaultValue;
+    } else if (command.subcommands?.has(parameters[0])) {
+      continue;
     } else if (argument.required !== false) {
       missingRequiredArg = true;
       argument.missing?.(message);
@@ -111,36 +93,41 @@ async function parseArguments(
 }
 
 /** Runs the inhibitors to see if a command is allowed to run. */
-async function commandAllowed(
-  message: Message,
-  command: Command,
-  guild?: Guild,
-) {
+async function commandAllowed(message: Message, command: Command, guild?: Guild) {
   const inhibitorResults = await Promise.all(
-    [...botCache.inhibitors.values()].map((inhibitor) =>
-      inhibitor(message, command, guild)
-    ),
+    botCache.inhibitors.map(async (inhibitor, name) => {
+      const inhibited = await inhibitor(message, command, guild);
+      return [name, inhibited];
+    })
   );
 
-  if (inhibitorResults.includes(true)) {
-    logCommand(message, guild?.name || "DM", "Failure", command.name);
-    return false;
+  let allowed = true;
+
+  for (const result of inhibitorResults) {
+    const [name, inhibited] = result;
+    if (inhibited) {
+      // Make sure the command will not run
+      allowed = false;
+      // Logs the command failure
+      logCommand(message, guild?.name || "DM", "Failure", command.name);
+      // Logs the exact inhibitors that failed
+      console.log(
+        `[Inhibitor] ${name} on ${command.name} for ${message.author.username}#${message.author.discriminator}`
+      );
+    }
   }
 
-  return true;
+  return allowed;
 }
 
-async function executeCommand(
-  message: Message,
-  command: Command,
-  parameters: string[],
-  guild?: Guild,
-) {
+async function executeCommand(message: Message, command: Command, parameters: string[], guild?: Guild) {
   try {
     // Parsed args and validated
-    const args = await parseArguments(message, command, parameters) as {
-      [key: string]: unknown;
-    } | false;
+    const args = (await parseArguments(message, command, parameters)) as
+      | {
+          [key: string]: unknown;
+        }
+      | false;
     // Some arg that was required was missing and handled already
     if (!args) {
       return logCommand(message, guild?.name || "DM", "Missing", command.name);
@@ -148,25 +135,21 @@ async function executeCommand(
 
     // If no subcommand execute the command
     const [argument] = command.arguments || [];
-    const subcommand = argument ? args[argument.name] as Command : undefined;
+    let subcommand = argument ? (args[argument.name] as Command) : undefined;
 
     if (!argument || argument.type !== "subcommand" || !subcommand) {
       // Check subcommand permissions and options
       if (!(await commandAllowed(message, command, guild))) return;
 
       await command.execute?.(message, args, guild);
-      return logCommand(
-        message,
-        guild?.name || "DM",
-        "Success",
-        command.name,
-      );
+      return logCommand(message, guild?.name || "DM", "Success", command.name);
     }
 
+    if (!subcommand?.name) {
+      subcommand = command?.subcommands?.get((subcommand as unknown) as string) as Command;
+    }
     // A subcommand was asked for in this command
-    if (
-      ![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])
-    ) {
+    if (![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])) {
       executeCommand(message, subcommand, parameters, guild);
     } else {
       const subParameters = parameters.slice(1);
@@ -193,25 +176,19 @@ botCache.monitors.set("commandHandler", {
 
     // If the message is not using the valid prefix or bot mention cancel the command
     if (message.content === botMention) {
-      return sendResponse(message, parsePrefix(message.guildID));
+      return message.reply(parsePrefix(message.guildID));
     } else if (message.content.startsWith(botMention)) prefix = botMention;
     else if (!message.content.startsWith(prefix)) return;
 
     // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
-    const [commandName, ...parameters] = message.content.substring(
-      prefix.length,
-    )
-      .split(
-        " ",
-      );
+    const [commandName, ...parameters] = message.content.substring(prefix.length).split(" ");
 
     // Check if this is a valid command
     const command = parseCommand(commandName);
     if (!command) return;
 
-    const guild = cache.guilds.get(message.guildID);
-    logCommand(message, guild?.name || "DM", "Trigger", commandName);
+    logCommand(message, message.guild?.name || "DM", "Trigger", commandName);
 
-    return executeCommand(message, command, parameters, guild);
+    return executeCommand(message, command, parameters, message.guild);
   },
 });

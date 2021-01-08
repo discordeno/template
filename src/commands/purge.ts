@@ -1,10 +1,5 @@
-import { createCommand, sendEmbed } from "../utils/helpers.ts";
-import {
-  botCache,
-  deleteMessages,
-  getMessages,
-  sendMessage,
-} from "../../deps.ts";
+import { createCommand } from "../utils/helpers.ts";
+import { deleteMessages, getMessages } from "../../deps.ts";
 import { Embed } from "../utils/Embed.ts";
 
 createCommand({
@@ -22,25 +17,18 @@ createCommand({
       defaultValue: "No reason given",
     },
   ],
-  userChannelPermissions: [
-    "MANAGE_MESSAGES",
-  ],
-  botChannelPermissions: [
-    "MANAGE_MESSAGES",
-  ],
+  userChannelPermissions: ["MANAGE_MESSAGES"],
+  botChannelPermissions: ["MANAGE_MESSAGES"],
   guildOnly: true,
   execute: async function (message, args: PurgeArgs) {
     try {
-      const messagesToDelete = await getMessages(
-        message.channelID,
-        { limit: 100 },
-      );
+      const messagesToDelete = await getMessages(message.channelID, { limit: 100 });
       if (!messagesToDelete) return;
 
       await deleteMessages(
         message.channelID,
         // + 1 to include the message that triggered the command
-        messagesToDelete.slice(0, args.count + 1).map((m) => m.id),
+        messagesToDelete.slice(0, args.count + 1).map((m) => m.id)
       );
 
       const embed = new Embed()
@@ -51,14 +39,11 @@ createCommand({
         .addField("Reason:", args.reason)
         .setTimestamp();
 
-      return sendEmbed(message.channelID, embed);
+      return message.send({ embed });
     } catch (error) {
       console.error(error);
 
-      return sendMessage(
-        message.channelID,
-        "Attempt to delete messages has failed!",
-      );
+      return message.reply("Attempt to delete messages has failed!");
     }
   },
 });
