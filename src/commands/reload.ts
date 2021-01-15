@@ -12,6 +12,7 @@ const folderPaths = new Map([
   ["monitors", "./src/monitors"],
   ["tasks", "./src/tasks"],
   ["perms", "./src/permissionLevels"],
+  ["languages", "languages"]
 ]);
 
 createCommand({
@@ -37,9 +38,7 @@ createCommand({
   execute: async function (message, args: ReloadArgs) {
     // Reload a specific folder
     if (args.folder) {
-      const path = args.folder !== "languages"
-        ? folderPaths.get(args.folder)
-        : "languages";
+      const path = folderPaths.get(args.folder)
       if (!path) {
         return message.reply(
           "The folder you provided did not have a path available.",
