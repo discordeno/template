@@ -4,7 +4,10 @@ import { createSubcommand, createCommand, getCurrentLanguage } from "../utils/he
 import { Embed } from "../utils/Embed.ts";
 import { db } from "../database/database.ts";
 
-const allowedLanguages = [ { id: "en_US", flag: ":flag_us:", name: "English"}, { id: "cs_CZ", flag:":flag_cz:", name: "Czech"}];
+const allowedLanguages = [
+  { id: "en_US", flag: ":flag_us:", name: "English"},
+  { id: "cs_CZ", flag:":flag_cz:", name: "Czech"}
+];
 
 createCommand({
   name: "language",
