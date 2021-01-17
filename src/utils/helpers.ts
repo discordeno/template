@@ -10,6 +10,7 @@ import {
   editMessage,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
+import { cache } from "https://deno.land/x/discordeno@10.0.0/src/util/cache.ts";
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -154,6 +155,6 @@ export function getTime() {
   return `${hour >= 10 ? hour : `0${hour}`}:${minute >= 10 ? minute : `0${minute}`} ${amOrPm}`;
 }
 
-export function getCurrentLanguage(guildID: string, preferredLocale?: string) {
-  return botCache.guildLanguages.get(guildID) || preferredLocale || 'en_US';
+export function getCurrentLanguage(guildID: string) {
+  return botCache.guildLanguages.get(guildID) || cache.guilds.get(guildID)?.preferredLocale || 'en_US';
 }
