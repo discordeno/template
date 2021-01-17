@@ -27,7 +27,7 @@ createCommand({
       .setDescription(`**Current Language**: ${currentLanguage.flag} - \`${currentLanguage.name}\``)
       .setTimestamp();
 
-    await message.send({ embed }).catch(console.log);
+    message.send({ embed });
   },
 });
 
@@ -43,7 +43,7 @@ createSubcommand("language", {
         const embed = new Embed()
           .setTitle("Available Languages")
           .setDescription(listOfLanguages);
-        await message.send({ embed}).catch(console.log);
+        message.send({ embed });
       },
     },
   ],
@@ -65,14 +65,14 @@ createSubcommand("language", {
         .setDescription('Check list of languages by running command `language set`.')
         .addField('Error', `\`${args.language}\` is not a valid language`);
 
-        await message.send({ embed }).catch(console.log);
+        message.send({ embed });
     } else if(newLanguage.id === oldLanguageId) {
       const embed = new Embed()
         .setTitle("Error")
         .setDescription('Check list of languages by running command `language set`.')
         .addField('Error', `\`${args.language}\` is already set.`);
 
-        await message.send({ embed }).catch(console.log);
+        message.send({ embed });
     }
     else {
       botCache.guildLanguages.set(message.guildID, newLanguage.id);
@@ -83,7 +83,7 @@ createSubcommand("language", {
         .setDescription([`**Old Language**: ${oldLanguage.flag} - \`${oldLanguage.name}\``, `**New Language**: ${newLanguage.flag} - \`${newLanguage.name}\``])
         .setTimestamp();
 
-      await message.send({ embed }).catch(console.log);
+      message.send({ embed });
     }
   },
 });
