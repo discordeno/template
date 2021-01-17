@@ -10,7 +10,7 @@ createCommand({
   aliases: ['lang'],
   arguments: [
     {
-      name: "subcommmand",
+      name: "subcommand",
       type: "subcommand",
       required: false,
     },
