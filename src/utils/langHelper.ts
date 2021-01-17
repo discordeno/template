@@ -5,7 +5,7 @@ const loadLanguages = async () => {
     let guilds = await db.guilds.getAll(true).catch(console.log);
     for(const guild of guilds) {
         if (guild[1].language) {
-            botCache.guildLanguages.set(guild[1].id, guild[1].language);
+            botCache.guildLanguages.set(guild.id, guild.language);
         }
     }
 }
