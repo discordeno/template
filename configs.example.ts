@@ -7,6 +7,8 @@ export const configs = {
   token: "",
   // The default prefix for your bot. Don't worry guilds can change this later.
   prefix: "!",
+  // The default language for your bot. Don't worry guilds can change this later.
+  language: "en_US",
   // This isn't required but you can add bot list api keys here.
   botListTokens: {
     DISCORD_BOTS_CO: "",

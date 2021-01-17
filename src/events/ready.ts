@@ -6,6 +6,7 @@ import {
   ActivityType,
 } from "../../deps.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
+import { loadLanguages } from "./../utils/langHelper.ts";
 
 botCache.eventHandlers.ready = function () {
   editBotsStatus(
@@ -22,6 +23,7 @@ botCache.eventHandlers.ready = function () {
   console.log(`Loaded ${botCache.tasks.size} Task(s)`);
 
   registerTasks();
+  loadLanguages();
 
   console.log(
     `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`
