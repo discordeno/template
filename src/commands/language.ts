@@ -23,7 +23,7 @@ createCommand({
       .setDescription(`**Current Language**: \`${getCurrentLanguage(message.guildID)}\``)
       .setTimestamp();
 
-    message.send({ embed });
+    await message.send({ embed }).catch(console.log);
   },
 });
 
