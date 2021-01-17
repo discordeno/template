@@ -66,15 +66,7 @@ createSubcommand("language", {
         .addField('Error', `\`${args.language}\` is not a valid language`);
 
         message.send({ embed });
-    } else if(newLanguage.id === oldLanguageId) {
-      const embed = new Embed()
-        .setTitle("Error")
-        .setDescription('Check list of languages by running command `language set`.')
-        .addField('Error', `\`${args.language}\` is already set.`);
-
-        message.send({ embed });
-    }
-    else {
+    } else {
       botCache.guildLanguages.set(message.guildID, newLanguage.id);
       await db.guilds.update(message.guildID, { language: newLanguage.id });
 
