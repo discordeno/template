@@ -34,7 +34,7 @@ createSubcommand("language", {
       name: "language",
       type: "string",
       required: true,
-      missing: (message) => {
+      missing: async function(message) {
         message.reply(`Please provide a language`);
       },
     },
