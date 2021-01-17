@@ -4,6 +4,7 @@ import {
   GuildSchema,
   UserSchema,
 } from "./schemas.ts";
+import { loadLanguages } from "./../utils/langHelper.ts";
 
 // Create the database class
 const sabr = new Sabr();
@@ -18,3 +19,5 @@ export const db = {
 
 // This is important as it prepares all the tables.
 await sabr.init();
+
+loadLanguages();

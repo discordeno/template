@@ -6,7 +6,6 @@ import {
   ActivityType,
 } from "../../deps.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
-import { loadLanguages } from "./../utils/langHelper.ts";
 
 botCache.eventHandlers.ready = function () {
   editBotsStatus(

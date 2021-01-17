@@ -1,6 +1,6 @@
 import { botCache } from "../../deps.ts";
 import { PermissionLevels } from "../types/commands.ts";
-import { createSubcommand, createCommand } from "../utils/helpers.ts";
+import { createSubcommand, createCommand, getCurrentLanguage } from "../utils/helpers.ts";
 import { Embed } from "../utils/Embed.ts";
 import { db } from "../database/database.ts";
 import { configs } from "../../configs.ts";
@@ -40,7 +40,7 @@ createSubcommand("language", {
     },
   ],
   permissionLevels: [PermissionLevels.ADMIN],
-  execute: (message, args) => {
+  execute: async function (message, args) {
     const oldLanguage = getCurrentLanguage(message.guildID);
     botCache.guildLanguages.set(message.guildID, args.language);
     db.guilds.update(message.guildID, { language: args.language });
@@ -53,7 +53,3 @@ createSubcommand("language", {
     await message.send({ embed }).catch(console.log);
   },
 });
-
-function getCurrentLanguage(guildID: string) {
-  return botCache.guildLanguages.get(guildID) ? botCache.guildLanguages.get(guildID) : configs.language;
-}
