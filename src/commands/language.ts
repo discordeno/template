@@ -17,7 +17,7 @@ createCommand({
   ],
   guildOnly: true,
   permissionLevels: [PermissionLevels.MEMBER],
-  execute: (message) => {
+  execute: async function (message) {
     const embed = new Embed()
       .setTitle("Language Information")
       .setDescription(`**Current Language**: \`${getCurrentLanguage(message.guildID)}\``)
