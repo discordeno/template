@@ -23,7 +23,6 @@ botCache.eventHandlers.ready = function () {
   console.log(`Loaded ${botCache.tasks.size} Task(s)`);
 
   registerTasks();
-  loadLanguages();
 
   console.log(
     `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`
