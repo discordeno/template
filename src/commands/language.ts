@@ -43,7 +43,7 @@ createSubcommand("language", {
   execute: async function (message, args) {
     const oldLanguage = getCurrentLanguage(message.guildID);
     botCache.guildLanguages.set(message.guildID, args.language);
-    db.guilds.update(message.guildID, { language: args.language });
+    await db.guilds.update(message.guildID, { language: args.language });
 
     const embed = new Embed()
       .setTitle("Success, language was changed")
