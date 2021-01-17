@@ -19,7 +19,8 @@ createCommand({
   guildOnly: true,
   permissionLevels: [PermissionLevels.MEMBER],
   execute: async function (message) {
-    const currentLanguageId = getCurrentLanguage(message.guildID) || 'en_US';
+    //@ts-ignore
+    const currentLanguageId = getCurrentLanguage(message.guildID, message.guild.preferredLocale);
     let currentLanguage = allowedLanguages.find(item => item.id === currentLanguageId) || allowedLanguages[0];
     const embed = new Embed()
       .setTitle("Language Information")
@@ -49,7 +50,8 @@ createSubcommand("language", {
   permissionLevels: [PermissionLevels.ADMIN],
   execute: async function (message, args) {
     //Old
-    const oldLanguageId = getCurrentLanguage(message.guildID) || 'en_US';
+    //@ts-ignore
+    const oldLanguageId = getCurrentLanguage(message.guildID, message.guild.preferredLocale);
     const oldLanguage = allowedLanguages.find(item => item.id === oldLanguageId) || allowedLanguages[0];
 
     //New

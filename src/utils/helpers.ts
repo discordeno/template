@@ -154,6 +154,7 @@ export function getTime() {
   return `${hour >= 10 ? hour : `0${hour}`}:${minute >= 10 ? minute : `0${minute}`} ${amOrPm}`;
 }
 
-export function getCurrentLanguage(guildID: string) {
-  return botCache.guildLanguages.get(guildID) ? botCache.guildLanguages.get(guildID) : 'en_US';
+export function getCurrentLanguage(guildID: string, preferredLocale: string | undefined) {
+  const prefLocale = preferredLocale ? preferredLocale : 'en_US';
+  return botCache.guildLanguages.get(guildID) ? botCache.guildLanguages.get(guildID) : prefLocale;
 }
