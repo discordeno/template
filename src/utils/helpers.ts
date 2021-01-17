@@ -130,7 +130,7 @@ export async function importDirectory(path: string) {
 
     const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
-      import(`file:///${currentPath}#${uniqueFilePathCounter}`);
+      await import(`file:///${currentPath}#${uniqueFilePathCounter}`);
       continue;
     }
 
