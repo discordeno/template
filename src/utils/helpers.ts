@@ -155,6 +155,5 @@ export function getTime() {
 }
 
 export function getCurrentLanguage(guildID: string, preferredLocale: string | undefined) {
-  const prefLocale = preferredLocale ? preferredLocale : 'en_US';
-  return botCache.guildLanguages.get(guildID) ? botCache.guildLanguages.get(guildID) : prefLocale;
+  return botCache.guildLanguages.get(guildID) || preferredLocale || 'en_US';
 }
