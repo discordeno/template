@@ -50,7 +50,7 @@ createSubcommand("language", {
       .setDescription([`**Old Language**: \`${oldLanguage}\``, `**New Language**: \`${args.language}\``])
       .setTimestamp();
 
-    return message.send({ embed });
+    await message.send({ embed }).catch(console.log);
   },
 });
 
