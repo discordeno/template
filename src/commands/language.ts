@@ -84,5 +84,5 @@ createSubcommand("language", {
 interface LanguageSetArgs {
   language?:
     | "Czech"
-    | "English"
+    | "English";
 }
