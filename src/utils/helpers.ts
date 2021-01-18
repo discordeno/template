@@ -8,6 +8,7 @@ import {
   sendMessage,
   deleteMessageByID,
   editMessage,
+  cache,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
 
@@ -152,4 +153,8 @@ export function getTime() {
   }
 
   return `${hour >= 10 ? hour : `0${hour}`}:${minute >= 10 ? minute : `0${minute}`} ${amOrPm}`;
+}
+
+export function getCurrentLanguage(guildID: string) {
+  return botCache.guildLanguages.get(guildID) || cache.guilds.get(guildID)?.preferredLocale || 'en_US';
 }

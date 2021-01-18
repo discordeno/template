@@ -8,8 +8,8 @@ export interface GuildSchema {
 	id: string;
 	/** The custom prefix for this guild */
 	prefix: string;
-	/** The language for this guild */
-  language: string;
+	/** The custom language for this guild */
+	language: string;
 }
 
 export interface UserSchema {
