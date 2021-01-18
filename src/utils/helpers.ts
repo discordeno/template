@@ -135,7 +135,7 @@ export async function importDirectory(path: string) {
       continue;
     }
 
-    importDirectory(currentPath);
+    await importDirectory(currentPath);
   }
   uniqueFilePathCounter++;
 }
