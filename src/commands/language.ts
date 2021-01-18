@@ -8,10 +8,11 @@ const allowedLanguages = [
   { id: "en_US", flag: ":flag_us:", name: "English"},
   { id: "cs_CZ", flag:":flag_cz:", name: "Czech"}
 ];
+const listOfLanguages = allowedLanguages.map(lang => `${lang.flag} - \`${lang.name}\``).join('\n');
 
 createCommand({
   name: "language",
-  aliases: ['lang'],
+  aliases: ["lang"],
   arguments: [
     {
       name: "subcommand",
@@ -41,7 +42,6 @@ createSubcommand("language", {
       type: "string",
       required: true,
       missing: async function(message) {
-        const listOfLanguages = allowedLanguages.map(lang => `${lang.flag} - \`${lang.name}\``).join('\n');
         const embed = new Embed()
           .setTitle("Available Languages")
           .setDescription(listOfLanguages);
