@@ -50,7 +50,7 @@ createSubcommand("language", {
     },
   ],
   permissionLevels: [PermissionLevels.ADMIN],
-  execute: async function (message, args: SetArgs) {
+  execute: async function (message, args: LanguageSetArgs) {
     //Old
     const oldLanguageId = getCurrentLanguage(message.guildID);
     const oldLanguage = allowedLanguages.find(item => item.id === oldLanguageId) || allowedLanguages[0];
@@ -81,7 +81,7 @@ createSubcommand("language", {
   },
 });
 
-interface SetArgs {
+interface LanguageSetArgs {
   language?:
     | "Czech"
     | "English"
