@@ -6,8 +6,7 @@ export async function loadLanguages() {
 
     if (!guilds) return;
     for(const guild of guilds) {
-        if (guild.language) {
-            botCache.guildLanguages.set(guild.id, guild.language);
-        }
+        if (!guild.language) continue;
+        botCache.guildLanguages.set(guild.id, guild.language);
     }
 }
