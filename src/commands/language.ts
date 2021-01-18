@@ -64,7 +64,7 @@ createSubcommand("language", {
       const embed = new Embed()
         .setTitle("Error")
         .setDescription('Check list of languages by running command `language set`.')
-        .addField('Error', `\`${args.language}\` is not a valid language`);
+        .addField('Error', `\`${args.language}\` is not a valid language.`);
 
         message.send({ embed });
     } else {
