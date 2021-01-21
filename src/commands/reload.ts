@@ -1,5 +1,5 @@
 import { botCache, updateEventHandlers } from "../../deps.ts";
-import { createCommand, importDirectory } from "../utils/helpers.ts";
+import { createCommand, fileLoader, importDirectory } from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import { clearTasks, registerTasks } from "../utils/taskHelper.ts";
 import { reloadLang } from "../utils/i18next.ts";
@@ -12,7 +12,7 @@ const folderPaths = new Map([
   ["monitors", "./src/monitors"],
   ["tasks", "./src/tasks"],
   ["perms", "./src/permissionLevels"],
-  ["languages", "languages"]
+  ["languages", "./src/languages"]
 ]);
 
 createCommand({
@@ -48,6 +48,7 @@ createCommand({
       if (args.folder === "tasks") {
         clearTasks();
         await importDirectory(Deno.realPathSync(path));
+        await fileLoader();
         registerTasks();
         return message.reply(
           `The **${args.folder}** have been reloaded.`,
@@ -62,6 +63,7 @@ createCommand({
       }
 
       await importDirectory(Deno.realPathSync(path));
+      await fileLoader();
       return message.reply(`The **${args.folder}** have been reloaded.`);
     }
 
@@ -72,6 +74,7 @@ createCommand({
         importDirectory(Deno.realPathSync(path))
       ),
     );
+    await fileLoader();
     registerTasks();
     // Reload the languages
     await reloadLang();
