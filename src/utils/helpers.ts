@@ -165,12 +165,9 @@ export async function fileLoader() {
       Deno.mainModule.lastIndexOf("/")
     )}/fileloader.ts#${uniqueFilePathCounter}`
   );
-  resetPaths();
-}
-
-export function resetPaths() {
   paths = [];
 }
+
 
 export function getTime() {
   const now = new Date();
