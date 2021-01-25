@@ -1,6 +1,6 @@
 import { botCache, Intents, startBot } from "./deps.ts";
 import { configs } from "./configs.ts";
-import { importDirectory } from "./src/utils/helpers.ts";
+import { fileLoader, importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 
 console.info(
@@ -22,6 +22,7 @@ await Promise.all(
     (path) => importDirectory(Deno.realPathSync(path)),
   ),
 );
+await fileLoader();
 
 // Loads languages
 await loadLanguages();
