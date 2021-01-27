@@ -1,4 +1,5 @@
 import { createCommand } from "../utils/helpers.ts";
+import { Embed } from "../utils/Embed.ts";
 
 createCommand({
   name: `avatar`,
@@ -8,16 +9,10 @@ createCommand({
     const member = message.guild?.members.get(memberID);
     if (!member) return;
 
-    return message.reply({
-      embed: {
-        author: {
-          name: member.tag,
-          icon_url: member.avatarURL,
-        },
-        image: {
-          url: member.makeAvatarURL({ size: 2048 }),
-        },
-      },
-    });
+    const embed = new Embed()
+      .setAuthor(member.tag, member.avatarURL)
+      .setImage(member.makeAvatarURL({ size: 2048, format: member.avatarURL.includes(".gif") ? "gif" : "png" }));
+
+    return message.send({embed});
   },
 });
