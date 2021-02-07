@@ -67,6 +67,19 @@ export const configs = {
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run -A --quiet -r" `
 
+## Step By Step with Docker
+
+You can also run this image with Docker.
+
+1. Clone the repository
+2. Create your `configs.ts` 
+3. Build the container, from the directory containing the repository `docker build -t mybot .`
+4. Run the container with `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+
+**Notes:** 
+- In the previous commands `$(pwd)` and `.` can be replaced with the full path to directory
+- You can also use the `-d` argument to run the container in background
+
 ## Features
 
 ## Beginner Developers
