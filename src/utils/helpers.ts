@@ -128,6 +128,7 @@ let paths: string[] = [];
 export async function importDirectory(path: string) {
   const files = Deno.readDirSync(Deno.realPathSync(path));
   const folder = path.substring(path.indexOf("/src/") + 5);
+
   if (!folder.includes("/")) console.log(`Loading ${folder}...`);
 
   for (const file of files) {
@@ -137,11 +138,11 @@ export async function importDirectory(path: string) {
     if (file.isFile) {
       if (!currentPath.endsWith(".ts")) continue;
       paths.push(
-        `import "${Deno.mainModule.substring(
-          0,
-          Deno.mainModule.lastIndexOf("/")
-        )}/${currentPath.substring(
-          currentPath.indexOf("src/")
+        `import "${currentPath.substring(
+          currentPath.indexOf(Deno.mainModule.substring(
+            0,
+            Deno.mainModule.lastIndexOf("/")
+          ))
         )}#${uniqueFilePathCounter}";`
       );
       continue;
