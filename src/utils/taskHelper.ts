@@ -4,7 +4,7 @@ import { Task } from "./../types/tasks.ts";
 const registerTasks = () => {
   for (const task of botCache.tasks.values()) {
     botCache.runningTasks.push(
-      setInterval(() => task.execute(), task.interval)
+      setInterval(() => task.execute(), task.interval),
     );
   }
 };
@@ -17,4 +17,4 @@ const clearTasks = () => {
   botCache.runningTasks = [];
 };
 
-export { registerTasks, clearTasks };
+export { clearTasks, registerTasks };

@@ -1,9 +1,9 @@
 import {
+  ActivityType,
   botCache,
   cache,
   editBotsStatus,
   StatusTypes,
-  ActivityType,
 } from "../../deps.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
 
@@ -11,7 +11,7 @@ botCache.eventHandlers.ready = function () {
   editBotsStatus(
     StatusTypes.DoNotDisturb,
     "Discordeno Best Lib",
-    ActivityType.Game
+    ActivityType.Game,
   );
 
   console.log(`Loaded ${botCache.arguments.size} Argument(s)`);
@@ -24,6 +24,6 @@ botCache.eventHandlers.ready = function () {
   registerTasks();
 
   console.log(
-    `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`
+    `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`,
   );
 };

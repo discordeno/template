@@ -2,6 +2,7 @@ import { botCache } from "../../deps.ts";
 
 botCache.arguments.set("command", {
   name: "command",
+  // deno-lint-ignore require-await
   execute: async function (_argument, parameters) {
     const [name] = parameters;
     if (!name) return;

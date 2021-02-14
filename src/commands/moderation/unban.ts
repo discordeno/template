@@ -1,5 +1,5 @@
 import { Embed } from "./../../utils/Embed.ts";
-import { sendEmbed, createCommand } from "./../../utils/helpers.ts";
+import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
 createCommand({
   name: `unban`,

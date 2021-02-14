@@ -2,13 +2,13 @@ import { configs } from "../../configs.ts";
 import { getTime } from "../utils/helpers.ts";
 import { handleError } from "../utils/errors.ts";
 import {
-  botCache,
   bgBlack,
   bgBlue,
   bgGreen,
   bgMagenta,
   bgYellow,
   black,
+  botCache,
   botID,
   cache,
   green,
@@ -29,27 +29,47 @@ export const parseCommand = (commandName: string) => {
   if (command) return command;
 
   // Check aliases if the command wasn't found
-  return botCache.commands.find((cmd) => Boolean(cmd.aliases?.includes(commandName)));
+  return botCache.commands.find((cmd) =>
+    Boolean(cmd.aliases?.includes(commandName))
+  );
 };
 
 export const logCommand = (
   message: Message,
   guildName: string,
   type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing",
-  commandName: string
+  commandName: string,
 ) => {
-  const command = `[COMMAND: ${bgYellow(black(commandName))} - ${bgBlack(
-    ["Failure", "Slowmode", "Missing"].includes(type) ? red(type) : type === "Success" ? green(type) : white(type)
-  )}]`;
+  const command = `[COMMAND: ${bgYellow(black(commandName))} - ${
+    bgBlack(
+      ["Failure", "Slowmode", "Missing"].includes(type)
+        ? red(type)
+        : type === "Success"
+        ? green(type)
+        : white(type),
+    )
+  }]`;
 
-  const user = bgGreen(black(`${message.author.username}#${message.author.discriminator}(${message.author.id})`));
-  const guild = bgMagenta(black(`${guildName}${message.guildID ? `(${message.guildID})` : ""}`));
+  const user = bgGreen(
+    black(
+      `${message.author.username}#${message.author.discriminator}(${message.author.id})`,
+    ),
+  );
+  const guild = bgMagenta(
+    black(`${guildName}${message.guildID ? `(${message.guildID})` : ""}`),
+  );
 
-  console.log(`${bgBlue(`[${getTime()}]`)} => ${command} by ${user} in ${guild}`);
+  console.log(
+    `${bgBlue(`[${getTime()}]`)} => ${command} by ${user} in ${guild}`,
+  );
 };
 
 /** Parses all the arguments for the command based on the message sent by the user. */
-async function parseArguments(message: Message, command: Command, parameters: string[]) {
+async function parseArguments(
+  message: Message,
+  command: Command,
+  parameters: string[],
+) {
   const args: { [key: string]: unknown } = {};
   if (!command.arguments) return args;
 
@@ -93,12 +113,16 @@ async function parseArguments(message: Message, command: Command, parameters: st
 }
 
 /** Runs the inhibitors to see if a command is allowed to run. */
-async function commandAllowed(message: Message, command: Command, guild?: Guild) {
+async function commandAllowed(
+  message: Message,
+  command: Command,
+  guild?: Guild,
+) {
   const inhibitorResults = await Promise.all(
     botCache.inhibitors.map(async (inhibitor, name) => {
       const inhibited = await inhibitor(message, command, guild);
       return [name, inhibited];
-    })
+    }),
   );
 
   let allowed = true;
@@ -112,7 +136,7 @@ async function commandAllowed(message: Message, command: Command, guild?: Guild)
       logCommand(message, guild?.name || "DM", "Failure", command.name);
       // Logs the exact inhibitors that failed
       console.log(
-        `[Inhibitor] ${name} on ${command.name} for ${message.author.username}#${message.author.discriminator}`
+        `[Inhibitor] ${name} on ${command.name} for ${message.author.username}#${message.author.discriminator}`,
       );
     }
   }
@@ -120,13 +144,18 @@ async function commandAllowed(message: Message, command: Command, guild?: Guild)
   return allowed;
 }
 
-async function executeCommand(message: Message, command: Command, parameters: string[], guild?: Guild) {
+async function executeCommand(
+  message: Message,
+  command: Command,
+  parameters: string[],
+  guild?: Guild,
+) {
   try {
     // Parsed args and validated
     const args = (await parseArguments(message, command, parameters)) as
       | {
-          [key: string]: unknown;
-        }
+        [key: string]: unknown;
+      }
       | false;
     // Some arg that was required was missing and handled already
     if (!args) {
@@ -146,10 +175,14 @@ async function executeCommand(message: Message, command: Command, parameters: st
     }
 
     if (!subcommand?.name) {
-      subcommand = command?.subcommands?.get((subcommand as unknown) as string) as Command;
+      subcommand = command?.subcommands?.get(
+        (subcommand as unknown) as string,
+      ) as Command;
     }
     // A subcommand was asked for in this command
-    if (![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])) {
+    if (
+      ![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])
+    ) {
       executeCommand(message, subcommand, parameters, guild);
     } else {
       const subParameters = parameters.slice(1);
@@ -167,6 +200,7 @@ botCache.monitors.set("commandHandler", {
   name: "commandHandler",
   ignoreDM: false,
   /** The main code that will be run when this monitor is triggered. */
+  // deno-lint-ignore require-await
   execute: async function (message: Message) {
     // If the message was sent by a bot we can just ignore it
     if (message.author.bot) return;
@@ -181,7 +215,9 @@ botCache.monitors.set("commandHandler", {
     else if (!message.content.startsWith(prefix)) return;
 
     // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
-    const [commandName, ...parameters] = message.content.substring(prefix.length).split(" ");
+    const [commandName, ...parameters] = message.content.substring(
+      prefix.length,
+    ).split(" ");
 
     // Check if this is a valid command
     const command = parseCommand(commandName);

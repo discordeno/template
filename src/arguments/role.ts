@@ -2,6 +2,7 @@ import { botCache, cache } from "../../deps.ts";
 
 botCache.arguments.set("role", {
   name: "role",
+  // deno-lint-ignore require-await
   execute: async function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;

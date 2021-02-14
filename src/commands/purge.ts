@@ -22,13 +22,15 @@ createCommand({
   guildOnly: true,
   execute: async function (message, args: PurgeArgs) {
     try {
-      const messagesToDelete = await getMessages(message.channelID, { limit: 100 });
+      const messagesToDelete = await getMessages(message.channelID, {
+        limit: 100,
+      });
       if (!messagesToDelete) return;
 
       await deleteMessages(
         message.channelID,
         // + 1 to include the message that triggered the command
-        messagesToDelete.slice(0, args.count + 1).map((m) => m.id)
+        messagesToDelete.slice(0, args.count + 1).map((m) => m.id),
       );
 
       const embed = new Embed()

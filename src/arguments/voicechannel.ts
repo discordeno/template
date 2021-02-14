@@ -2,6 +2,7 @@ import { botCache, cache, ChannelTypes } from "../../deps.ts";
 
 botCache.arguments.set("voicechannel", {
   name: "voicechannel",
+  // deno-lint-ignore require-await
   execute: async function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
