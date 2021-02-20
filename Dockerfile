@@ -1,4 +1,13 @@
+
+# Start the build stage
 # Start from a base image which includes Deno (https://github.com/hayd/deno-docker)
+FROM hayd/deno:latest AS builder
+
+COPY . .
+# build 
+RUN docker build -t mybot ./build
+
+# Start the run stage
 FROM hayd/deno:latest
 
 # Create and move into /bot directory
@@ -7,8 +16,8 @@ WORKDIR /bot
 # Create a volume to store the database
 VOLUME /bot/db
 
-# Copy the source code
-COPY . .
+# Copy the build files from first stage to current working directory
+COPY --from=builder /build .
 
 # Chown the directory and its content so that it belong to Deno user
 RUN chown -R deno:deno /bot
@@ -17,8 +26,7 @@ RUN chown -R deno:deno /bot
 USER deno
 
 # Cache all of the dependencies so they don't need to be downloaded every run
-RUN cp /bot/configs.example.ts /bot/configs.ts && \
-    deno cache deps.ts && \
+RUN deno cache deps.ts && \
     deno cache mod.ts
 
 # Finally run the bot
