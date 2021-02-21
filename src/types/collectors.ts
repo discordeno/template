@@ -56,6 +56,7 @@ export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
 
 export interface MessageCollector extends CollectMessagesOptions {
   resolve: (value: Message[] | PromiseLike<Message[]>) => void;
+  // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the messages are stored if the amount to collect is more than 1. */
   messages: Message[];
@@ -63,6 +64,7 @@ export interface MessageCollector extends CollectMessagesOptions {
 
 export interface ReactionCollector extends CollectReactionsOptions {
   resolve: (value: string[] | PromiseLike<string[]>) => void;
+  // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the messages are stored if the amount to collect is more than 1. */
   reactions: string[];

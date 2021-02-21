@@ -1,5 +1,9 @@
 import { botCache, updateEventHandlers } from "../../deps.ts";
-import { createCommand, fileLoader, importDirectory } from "../utils/helpers.ts";
+import {
+  createCommand,
+  fileLoader,
+  importDirectory,
+} from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import { clearTasks, registerTasks } from "../utils/taskHelper.ts";
 import { reloadLang } from "../utils/i18next.ts";
@@ -12,7 +16,7 @@ const folderPaths = new Map([
   ["monitors", "./src/monitors"],
   ["tasks", "./src/tasks"],
   ["perms", "./src/permissionLevels"],
-  ["languages", "./src/languages"]
+  ["languages", "./src/languages"],
 ]);
 
 createCommand({
@@ -33,12 +37,12 @@ createCommand({
         "languages",
       ],
       required: false,
-    }
+    },
   ],
   execute: async function (message, args: ReloadArgs) {
     // Reload a specific folder
     if (args.folder) {
-      const path = folderPaths.get(args.folder)
+      const path = folderPaths.get(args.folder);
       if (!path) {
         return message.reply(
           "The folder you provided did not have a path available.",

@@ -1,5 +1,6 @@
 import { botCache } from "../../deps.ts";
 
+// deno-lint-ignore require-await
 botCache.inhibitors.set("onlyIn", async function (_message, command, guild) {
   // If the command is guildOnly and does not have a guild, inhibit the command
   if (command.guildOnly && !guild) return true;

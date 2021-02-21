@@ -1,15 +1,15 @@
 export interface ClientSchema {
-	/** The bot id */
+  /** The bot id */
   id: string;
 }
 
 export interface GuildSchema {
-	/** The guild id */
-	id: string;
-	/** The custom prefix for this guild */
-	prefix: string;
-	/** The custom language for this guild */
-	language: string;
+  /** The guild id */
+  id: string;
+  /** The custom prefix for this guild */
+  prefix: string;
+  /** The custom language for this guild */
+  language: string;
 }
 
 export interface UserSchema {
