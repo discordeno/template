@@ -22,7 +22,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 // Step 3: Remove these comments if you like.
 
 export const configs = {
-  // Your bot token goes here. 
+  // Your bot token goes here. See the Website/Guide for more info.
   token: "",
   // The default prefix for your bot. Don't worry guilds can change this later.
   prefix: "!",
