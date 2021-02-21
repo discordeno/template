@@ -66,9 +66,6 @@ export function stringToMilliseconds(text: string) {
       case `m`:
         multiplier = Milliseconds.MINUTE;
         break;
-      case `s`:
-        multiplier = Milliseconds.SECOND;
-        break;
     }
 
     const amount = number ? parseInt(number, 10) : undefined;
