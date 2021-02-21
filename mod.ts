@@ -1,5 +1,4 @@
 import { botCache, Intents, startBot } from "./deps.ts";
-import { configs } from "./configs.ts";
 import { fileLoader, importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 import { config } from "https://deno.land/x/dotenv/mod.ts";
