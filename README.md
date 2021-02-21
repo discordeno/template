@@ -22,7 +22,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 // Step 3: Remove these comments if you like.
 
 export const configs = {
-  // Your bot token goes here
+  // Your bot token goes here. 
   token: "",
   // The default prefix for your bot. Don't worry guilds can change this later.
   prefix: "!",
@@ -73,12 +73,12 @@ You can also run this image with Docker.
 
 1. Clone the repository
 2. Create your `configs.ts` 
-3. Build the container, from the directory containing the repository `docker build -t mybot .`
-4. Run the container with `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+3. Run the container with `docker run -d -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
 
 **Notes:** 
 - In the previous commands `$(pwd)` and `.` can be replaced with the full path to directory
-- You can also use the `-d` argument to run the container in background
+- You can find the `<container_name>` with `docker ps` and inspect it using `docker logs <container_name>` and `docker top <container_name>` 
+- You can also remove the `-d` argument to keep the container from running in the background
 
 ## Features
 
