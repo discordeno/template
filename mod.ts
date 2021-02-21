@@ -35,4 +35,4 @@ startBot({
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   // These are all your event handler functions. Imported from the events folder
   eventHandlers: botCache.eventHandlers,
-});
+}).catch(console.error);
