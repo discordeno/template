@@ -15,15 +15,14 @@ This repo is meant as a template which you can use to create a Discord bot very 
 1. Create your own repo using the template button. It is next to the button where you get the url to clone. It will say `Use this template` This is a template repo.
 2. Clone your own repo that Github created for you. `git clone url-here-for-your-repo`
 3. Create your `configs.ts` file in the main folder.
+4. Create an `.env` file with your bot token. `echo TOKEN=my_token > .env`  
 
 ```ts
 // Step 1: Remove the `.example` from this file name so it is called `configs.ts`
-// Step 2: Add all your bot's information below. The only required one is token and prefix. NOTE: As long as `.gitignore` file is ignoring configs.ts your configurations will be kept private!
+// Step 2: Add all your bot's information below. The only required one is prefix. NOTE: As long as `.gitignore` file is ignoring configs.ts and .env your configurations will be kept private!
 // Step 3: Remove these comments if you like.
 
 export const configs = {
-  // Your bot token goes here. See the Website/Guide for more info.
-  token: "",
   // The default prefix for your bot. Don't worry guilds can change this later.
   prefix: "!",
   // This isn't required but you can add bot list api keys here.
@@ -73,12 +72,13 @@ You can also run this image with Docker.
 
 1. Clone the repository
 2. Create your `configs.ts` 
-3. Run the container with `docker run -d -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+3. Build the container, from the directory containing the repository `docker build -t mybot .`
+4. Run the container with `docker run -t mybot`
 
 **Notes:** 
-- In the previous commands `$(pwd)` and `.` can be replaced with the full path to directory
+- In the previous command `.` can be replaced with the full path to directory
 - You can find the `<container_name>` with `docker ps` and inspect it using `docker logs <container_name>` and `docker top <container_name>` 
-- You can also remove the `-d` argument to keep the container from running in the background
+- You can also use the -d argument to run the container in background
 
 ## Features
 

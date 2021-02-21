@@ -1,13 +1,4 @@
-
-# Start the build stage
 # Start from a base image which includes Deno (https://github.com/hayd/deno-docker)
-FROM hayd/deno:latest AS builder
-
-COPY . .
-# build 
-RUN docker build -t mybot ./build
-
-# Start the run stage
 FROM hayd/deno:latest
 
 # Create and move into /bot directory
@@ -17,7 +8,7 @@ WORKDIR /bot
 VOLUME /bot/db
 
 # Copy the build files from first stage to current working directory
-COPY --from=builder /build .
+COPY . .
 
 # Chown the directory and its content so that it belong to Deno user
 RUN chown -R deno:deno /bot
