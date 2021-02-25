@@ -1,0 +1,6 @@
+db/
+.git/*
+**/_*.ts
+configs.ts
+fileloader.ts
+.env
