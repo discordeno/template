@@ -17,7 +17,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 3. Create your `configs.ts` file in the main folder.
 
 ```ts
-// Step 1: If you do NOT use Docker, remove (or copy) the `.example` from this file name so it is called `configs.ts` Docker will require this file.
+// Step 1: If you do NOT use Docker, remove the `.example` from this file name so it is called `configs.ts` or copy the contents of the `configs.example.ts` file into a new `configs.ts` file. Docker will require this file.
 // Step 2: Add all your bot's information below. The only required one is token and prefix. NOTE: As long as `.gitignore` file is ignoring configs.ts your configurations will be kept private!
 // Step 3: Remove these comments if you like.
 
