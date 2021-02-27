@@ -1,4 +1,4 @@
-.git/
-db/
+.git
 configs.ts
+db
 fileloader.ts

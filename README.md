@@ -17,7 +17,7 @@ This repo is meant as a template which you can use to create a Discord bot very 
 3. Create your `configs.ts` file in the main folder.
 
 ```ts
-// Step 1: If you do NOT use Docker, remove the `.example` from this file name so it is called `configs.ts` Docker will require this file.
+// Step 1: If you do NOT use Docker, remove the `.example` from this file name so it is called `configs.ts` or copy the contents of the `configs.example.ts` file into a new `configs.ts` file. Docker will require this file.
 // Step 2: Add all your bot's information below. The only required one is token and prefix. NOTE: As long as `.gitignore` file is ignoring configs.ts your configurations will be kept private!
 // Step 3: Remove these comments if you like.
 
@@ -71,14 +71,48 @@ export const configs = {
 
 You can also run this image with Docker.
 
-1. Clone the repository
-2. Create your `configs.ts` 
-3. Build the container, from the directory containing the repository `docker build -t mybot .`
-4. Run the container with `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+1. Install `docker` [Getting started with docker](https://docs.docker.com/get-started/)
+2. Clone the repository
+3. Create your `configs.ts` 
+4. Build the container, from the directory containing the repository `docker build -t mybot .`
+5. Run the container with `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+
 
 **Notes:** 
 - In the previous commands `$(pwd)` and `.` can be replaced with the full path to directory
 - You can also use the `-d` argument to run the container in background
+
+### With docker-compose
+
+1. Install `docker`
+2. Build the container following the steps (up to the fourth) mentionned above 
+3. Install `docker-compose`. [Getting started with docker-compose](https://docs.docker.com/compose/gettingstarted/)
+4. Create a `docker-compose.yml` with this content
+
+```yml
+---
+version: "3.6"
+
+services:
+  app:
+    image: mybot:latest # name of the image see docker's step 4 above
+    restart: always # restart the bot on failure
+    volumes:
+      - mybot_database:/bot/db # store database inside a volume so it's persistent
+      # bind mount your config with secrets inside the container
+      - ./config.ts:/bot/config.ts
+
+# define a volume. You can also bind a path see https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes
+volumes:
+  mybot_database: 
+```
+5. Start with `docker-compose up -d docker-compose.yml`
+6. Stop with `docker-compose down docker-compose.yml`
+
+
+**Notes:** 
+- I assume that you're running docker-compose from where your `config.ts` is
+- You can also remove the `-d` argument to run the container in foreground
 
 ## Features
 
