@@ -23,11 +23,20 @@ createCommand({
       return message.send(`Command ${args.command} not found.`);
     }
 
-    const description = translate(message.guildID!, `commands/${args.command}:DESCRIPTION`);
+    const description = translate(
+      message.guildID!,
+      `commands/${args.command}:DESCRIPTION`,
+    );
 
     const embed = new Embed()
-      .setAuthor(translate(message.guildID!, `commands/help:AUTHOR`, { name: args.command }))
-      .setDescription(description === "DESCRIPTION" ? command.description : description);
+      .setAuthor(
+        translate(message.guildID!, `commands/help:AUTHOR`, {
+          name: args.command,
+        }),
+      )
+      .setDescription(
+        description === "DESCRIPTION" ? command.description : description,
+      );
 
     return message.send({ embed });
   },

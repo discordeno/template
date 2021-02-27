@@ -20,6 +20,10 @@ createCommand({
       memberCount += guild.members.size;
     });
 
-    message.send(`Ping MS: ${Date.now() - message.timestamp}ms | Guilds: ${cache.guilds.size} | Users: ${memberCount}`);
+    message.send(
+      `Ping MS: ${Date.now() -
+        message
+          .timestamp}ms | Guilds: ${cache.guilds.size} | Users: ${memberCount}`,
+    );
   },
 });

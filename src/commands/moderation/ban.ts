@@ -1,4 +1,10 @@
-import { botID, higherRolePosition, highestRole, Member, sendDirectMessage } from "../../../deps.ts";
+import {
+  botID,
+  higherRolePosition,
+  highestRole,
+  Member,
+  sendDirectMessage,
+} from "../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -39,30 +45,45 @@ createCommand({
       const memberHighestRoleId = (await highestRole(guildID, memberID))!.id;
       const authorHighestRoleId = (await highestRole(guildID, authorID))!.id;
 
-      const canBotBanMember = await higherRolePosition(guildID, botHighestRoleId, memberHighestRoleId)
-      const canAuthorBanMember = await higherRolePosition(guildID, authorHighestRoleId, memberHighestRoleId)
+      const canBotBanMember = await higherRolePosition(
+        guildID,
+        botHighestRoleId,
+        memberHighestRoleId,
+      );
+      const canAuthorBanMember = await higherRolePosition(
+        guildID,
+        authorHighestRoleId,
+        memberHighestRoleId,
+      );
 
       if (!(canBotBanMember && canAuthorBanMember)) {
         const embed = new Embed()
-        .setColor("#F04747")
-        .setTitle("Could not Ban")
-        .setDescription("Cannot ban member with same or higher Roleposition than Author or Bot")
-        .setTimestamp();
+          .setColor("#F04747")
+          .setTitle("Could not Ban")
+          .setDescription(
+            "Cannot ban member with same or higher Roleposition than Author or Bot",
+          )
+          .setTimestamp();
         return sendEmbed(channelID, embed);
       }
 
       try {
         const embed = new Embed()
-        .setColor("#F04747")
-        .setTitle(`Banned from ${message.member?.guild.name}`)
-        .addField("Banned By:", `<@${authorID}>`)
-        .addField("Reason:", reason)
+          .setColor("#F04747")
+          .setTitle(`Banned from ${message.member?.guild.name}`)
+          .addField("Banned By:", `<@${authorID}>`)
+          .addField("Reason:", reason)
           .setTimestamp();
         await args.member.sendDM({ embed });
-      } catch {}
+      } catch (error) {
+        console.error(
+          `Could not notify member ${args.member.tag} for ban via DM`,
+        );
+      }
 
-
-      const banned = await args.member.ban(guildID, { reason, days }).catch((console.error));
+      const banned = await args.member.ban(guildID, { reason, days }).catch(
+        (console.error),
+      );
       if (!banned) return;
 
       const embed = new Embed()

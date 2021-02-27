@@ -36,7 +36,7 @@ export function humanizeMilliseconds(milliseconds: number) {
 
 /** This function helps convert a string like 1d5h to milliseconds. */
 export function stringToMilliseconds(text: string) {
-  const matches = text.match(/(\d+[w|d|h|m]{1})/g);
+  const matches = text.match(/(\d+[w|d|h|m|s]{1})/g);
   if (!matches) return;
 
   let total = 0;
@@ -142,6 +142,7 @@ let paths: string[] = [];
 export async function importDirectory(path: string) {
   const files = Deno.readDirSync(Deno.realPathSync(path));
   const folder = path.substring(path.indexOf("/src/") + 5);
+
   if (!folder.includes("/")) console.log(`Loading ${folder}...`);
 
   for (const file of files) {
@@ -225,6 +226,7 @@ export async function createEmbedsPagination(
       deletePagination: () => void,
     ) => Promise<void>;
   } = {
+    // deno-lint-ignore require-await
     "◀️": async (setPage, currentPage) => setPage(Math.max(currentPage - 1, 1)),
     "↗️": async (setPage) => {
       const question = await sendMessage(
@@ -255,8 +257,10 @@ export async function createEmbedsPagination(
 
       setPage(newPageNumber);
     },
+    // deno-lint-ignore require-await
     "▶️": async (setPage, currentPage, pageCount) =>
       setPage(Math.min(currentPage + 1, pageCount)),
+    // deno-lint-ignore require-await
     "🗑️": async (setPage, currentPage, pageCount, deletePagination) =>
       deletePagination(),
   },

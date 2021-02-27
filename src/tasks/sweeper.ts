@@ -7,6 +7,7 @@ const MEMBER_LIFETIME = Milliseconds.MINUTE * 30;
 botCache.tasks.set(`sweeper`, {
   name: `sweeper`,
   interval: Milliseconds.MINUTE * 5,
+  // deno-lint-ignore require-await
   execute: async function () {
     const now = Date.now();
     // Delete presences from the bots cache.
@@ -18,7 +19,7 @@ botCache.tasks.set(`sweeper`, {
       // Delete any member who has not been active in the last 30 minutes and is not currently in a voice channel
       guild.members.forEach((member) => {
         // Don't purge the bot else bugs will occure
-        if (member.id === botID) return
+        if (member.id === botID) return;
         // The user is currently active in a voice channel
         if (guild.voiceStates.has(member.id)) return;
         const lastActive = botCache.memberLastActive.get(member.id);

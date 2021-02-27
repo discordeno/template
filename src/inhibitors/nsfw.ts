@@ -1,5 +1,6 @@
 import { botCache, cache } from "../../deps.ts";
 
+// deno-lint-ignore require-await
 botCache.inhibitors.set("nsfw", async function (message, command, guild) {
   // If this command does not need nsfw the inhibitor returns false so the command can run
   if (!command.nsfw) return false;

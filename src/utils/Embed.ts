@@ -1,7 +1,7 @@
 import type {
-  EmbedFooter,
-  EmbedField,
   EmbedAuthor,
+  EmbedField,
+  EmbedFooter,
   EmbedImage,
 } from "../../deps.ts";
 
@@ -78,7 +78,7 @@ export class Embed {
   }
 
   setDescription(description: string | string[]) {
-    if (Array.isArray(description)) description = description.join('\n');
+    if (Array.isArray(description)) description = description.join("\n");
     this.description = this.fitData(description, embedLimits.description);
 
     return this;
