@@ -1,0 +1,6 @@
+# Read more about docker-compose.yml files here: https://docs.docker.com/compose/
+
+services: # Specify all services one indentation under this line.
+  mybot: # Name your container. It can be whatever you like.
+    build: . # The directory of your Dockerfile, URL or official docker images.
+    env_file: .env # Docker Compose will load the environment variables from this file to your docker container

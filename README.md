@@ -11,129 +11,51 @@ easily using the [Discordeno library](https://github.com/discordeno/discordeno).
 
 - [Deno](https://deno.land)
 
-## Step By Step
+## Optional
+- [Docker](https://docs.docker.com) - Standardize your environment, run anywhere, deploy anywhere. 
+- [Docker Compose](https://docs.docker.com/compose) - Simplify management of one or multiple containers. 
 
-1. Create your own repo using the template button. It is next to the button
-   where you get the url to clone. It will say `Use this template` This is a
-   template repo.
-2. Clone your own repo that Github created for you.
-   `git clone url-here-for-your-repo`
-3. Create your `configs.ts` file in the main folder.
+## First steps, setting up the project
+1. Create your own repo using the template button. It is next to the button where you get the url to clone. It will say `Use this template` This is a template repo.
+2. Clone that new repo that Github created for you. `git clone url-here-for-your-repo`
+3. Create an `.env` file in your root directory
+4. Add your bot's token to `.env` file like so:
+    ```
+    TOKEN=123123123
+    ```
+    *The token will get loaded into the application from the `configs.ts` file*
+5. Proceed with one of the step-by-step instructions below. Whichever suits your taste.
+## Step By Step using Docker Compose
 
-```ts
-// Step 1: If you do NOT use Docker, remove the `.example` from this file name so it is called `configs.ts` or copy the contents of the `configs.example.ts` file into a new `configs.ts` file. Docker will require this file.
-// Step 2: Add all your bot's information below. The only required one is token and prefix. NOTE: As long as `.gitignore` file is ignoring configs.ts your configurations will be kept private!
-// Step 3: Remove these comments if you like.
+After setting up the project: 
+1. Install `docker` [Getting started with docker](https://docs.docker.com/get-started/)
+2. Install `docker compose` [Install Docker Compose](https://docs.docker.com/compose/install/)
+3. Start your container with `docker-compose up -d`
+4. Stop your container with `docker-compose down` 
 
-export const configs = {
-  // Your bot token goes here
-  token: "",
-  // The default prefix for your bot. Don't worry guilds can change this later.
-  prefix: "!",
-  // This isn't required but you can add bot list api keys here.
-  botListTokens: {
-    DISCORD_BOT_ORG: "",
-    BOTS_ON_DISCORD: "",
-    DISCORD_BOT_LIST: "",
-    BOTS_FOR_DISCORD: "",
-    DISCORD_BOATS: "",
-    DISCORD_BOTS_GG: "",
-    DISCORD_BOTS_GROUP: "",
-  },
-  // This is the server id for your bot's main server where users can get help/support
-  supportServerID: "",
-  // These are channel ids that will enable some functionality
-  channelIDs: {
-    // When a translation is missing this is the channel you will be alerted in.
-    missingTranslation: "",
-    // When an error occurs, we will try and log it to this channel
-    errorChannelID: "",
-  },
-  // These are the role ids that will enable some functionality.
-  roleIDs: {
-    // If you have a patreon set up you can add the patreon vip role id here.
-    patreonVIPRoleID: "",
-  },
-  // These are the user ids that will enable some functionality.
-  userIDs: {
-    // You can delete the `as string[]` when you add atleast 1 id in them.
-    // The user ids for the support team
-    botSupporters: [] as string[],
-    // The user ids for the other devs on your team
-    botDevs: [] as string[],
-    // The user ids who have complete 100% access to your bot
-    botOwners: [] as string[],
-  },
-};
-```
+## Step By Step using Docker (without Docker Compose)
+After setting up the project:
+1. Build the container, from the root of your project with the command `docker build -t mybot .`
+2. Run the container `docker run --env-file ./env -t mybot`
 
-4. Start the bot
-   `deno run --allow-read --allow-write --allow-net --import-map=./import-map.json mod.ts`
+## Step By Step Without Docker
+
+After setting up the project:
+1. Start the bot `deno run -A --quiet mod.ts`
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
 `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
 
-## Step By Step with Docker
+## Configuring your project
+You will most likely want to configure your project by adding discord channel ids and user ids. This is done by adding variables to the `.env` file and updating the `configs.ts` file accordingly. 
 
-You can also run this image with Docker.
-
-1. Install `docker`
-   [Getting started with docker](https://docs.docker.com/get-started/)
-2. Clone the repository
-3. Create your `configs.ts`
-4. Build the container, from the directory containing the repository
-   `docker build -t mybot .`
-5. Run the container with
-   `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
-
-**Notes:**
-
-- In the previous commands `$(pwd)` and `.` can be replaced with the full path
-  to directory
-- You can also use the `-d` argument to run the container in background
-
-### With docker-compose
-
-1. Install `docker`
-2. Build the container following the steps (up to the fourth) mentionned above
-3. Install `docker-compose`.
-   [Getting started with docker-compose](https://docs.docker.com/compose/gettingstarted/)
-4. Create a `docker-compose.yml` with this content
-
-```yml
----
-version: "3.6"
-
-services:
-  app:
-    image: mybot:latest # name of the image see docker's step 4 above
-    restart: always # restart the bot on failure
-    volumes:
-      - mybot_database:/bot/db # store database inside a volume so it's persistent
-      # bind mount your config with secrets inside the container
-      - ./config.ts:/bot/config.ts
-
-# define a volume. You can also bind a path see https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes
-volumes:
-  mybot_database:
-```
-
-5. Start with `docker-compose up -d docker-compose.yml`
-6. Stop with `docker-compose down docker-compose.yml`
-
-**Notes:**
-
-- I assume that you're running docker-compose from where your `config.ts` is
-- You can also remove the `-d` argument to run the container in foreground
-
-## Features
+## Hot reloading
+1. add `--watch` to your start command. I.e `deno run -A --watch mod.ts`
+2. Enjoy hot reloading anytime you save a file. 🔥   
 
 ## Beginner Developers
 
-Don't worry a lot of developers start out coding their first projects as a
-Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it
-in a way that solved all the headaches I had when first starting out coding
-bots. If you are a beginner developer, please use this boilerplate.
+Don't worry, a lot of developers start out coding their first projects as a Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it in a way that solved all the headaches I had when first starting out coding bots. If you are a beginner developer, please use this boilerplate.
 
 **Modular commands, arguments, events, inhibitors, monitors, tasks.**
 
