@@ -17,8 +17,7 @@ RUN chown -R deno:deno /bot
 USER deno
 
 # Cache all of the dependencies so they don't need to be downloaded every run
-RUN cp /bot/configs.example.ts /bot/configs.ts && \
-    deno cache deps.ts && \
+RUN deno cache deps.ts && \
     deno cache mod.ts
 
 # Finally run the bot
