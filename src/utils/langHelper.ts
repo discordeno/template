@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
 import { db } from "../database/database.ts";
 
 export async function loadLanguages() {

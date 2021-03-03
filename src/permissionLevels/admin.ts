@@ -1,4 +1,5 @@
-import { botCache, memberIDHasPermission } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
+import { memberIDHasPermission } from "discordeno";
 import { PermissionLevels } from "../types/commands.ts";
 
 // The member using the command must be an admin. (Required ADMIN server perm.)

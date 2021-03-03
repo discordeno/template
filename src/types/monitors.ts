@@ -1,4 +1,4 @@
-import type { Message, Permission } from "../../deps.ts";
+import type { Message, Permission } from "discordeno";
 
 export interface Monitor {
   /** The name of the monitor */

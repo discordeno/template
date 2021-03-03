@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "discordeno": "https://deno.land/x/discordeno@10.4.0/mod.ts",
+    "sabr": "https://deno.land/x/sabr@1.1.2/mod.ts",
+    "colors": "https://deno.land/std@0.88.0/fmt/colors.ts"
+  }
+}

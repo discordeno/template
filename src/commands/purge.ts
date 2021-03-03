@@ -1,5 +1,5 @@
 import { createCommand } from "../utils/helpers.ts";
-import { deleteMessages, getMessages } from "../../deps.ts";
+import { deleteMessages, getMessages } from "discordeno";
 import { Embed } from "../utils/Embed.ts";
 
 createCommand({

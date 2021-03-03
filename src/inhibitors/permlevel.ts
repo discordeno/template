@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
 
 botCache.inhibitors.set("permlevel", async function (message, command, guild) {
   // This command doesnt require a perm level so allow the command.

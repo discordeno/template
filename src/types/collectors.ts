@@ -1,4 +1,4 @@
-import type { Message, MessageReactionUncachedPayload } from "../../deps.ts";
+import type { Message, MessageReactionUncachedPayload } from "discordeno";
 
 export interface BaseCollectorOptions {
   /** The amount of messages to collect before resolving. Defaults to 1 */

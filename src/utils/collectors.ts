@@ -5,12 +5,12 @@ import {
   ReactionCollectorOptions,
 } from "../types/collectors.ts";
 import {
-  botCache,
   botID,
   Message,
   MessageReactionUncachedPayload,
   ReactionPayload,
-} from "../../deps.ts";
+} from "discordeno";
+import { botCache } from "../../cache.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 export async function needMessage(

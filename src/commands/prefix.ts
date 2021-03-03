@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import { createCommand, createSubcommand } from "../utils/helpers.ts";
 import { parsePrefix } from "../monitors/commandHandler.ts";

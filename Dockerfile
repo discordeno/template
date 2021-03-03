@@ -18,8 +18,7 @@ USER deno
 
 # Cache all of the dependencies so they don't need to be downloaded every run
 RUN cp /bot/configs.example.ts /bot/configs.ts && \
-    deno cache deps.ts && \
-    deno cache mod.ts
+    deno cache --import-map=./import-map.json mod.ts
 
 # Finally run the bot
 CMD ["run", "--allow-net", "--allow-read=/bot", "--allow-write=/bot", "./mod.ts"]

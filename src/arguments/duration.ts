@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
 import { stringToMilliseconds } from "../utils/helpers.ts";
 
 botCache.arguments.set("duration", {

@@ -1,12 +1,12 @@
 import {
-  botCache,
   botHasChannelPermissions,
   botHasPermission,
   botID,
   ChannelTypes,
   hasChannelPermissions,
   memberIDHasPermission,
-} from "../../deps.ts";
+} from "discordeno";
+import { botCache } from "../../cache.ts";
 
 // deno-lint-ignore require-await
 botCache.eventHandlers.messageCreate = async function (message) {

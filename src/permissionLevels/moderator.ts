@@ -1,5 +1,6 @@
 import { PermissionLevels } from "../types/commands.ts";
-import { botCache, memberIDHasPermission } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
+import { memberIDHasPermission } from "discordeno";
 
 // The member using the command must be a moderator. (Usually has MANAGE_GUILD perm)
 botCache.permissionLevels.set(

@@ -1,4 +1,5 @@
-import { botCache, cache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
+import { cache } from "discordeno";
 
 botCache.arguments.set("role", {
   name: "role",

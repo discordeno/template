@@ -1,4 +1,4 @@
-import { Member } from "../../deps.ts";
+import { Member } from "discordeno";
 import { Embed } from "./../utils/Embed.ts";
 import { createCommand, sendEmbed } from "../utils/helpers.ts";
 
