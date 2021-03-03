@@ -1,9 +1,4 @@
-import {
-  ActivityType,
-  cache,
-  editBotsStatus,
-  StatusTypes,
-} from "discordeno";
+import { ActivityType, cache, editBotsStatus, StatusTypes } from "discordeno";
 import { botCache } from "../../cache.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
 

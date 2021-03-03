@@ -12,7 +12,7 @@ import {
   red,
   white,
 } from "colors";
-import { Guild, Message, botID } from "discordeno";
+import { botID, Guild, Message } from "discordeno";
 import { botCache } from "../../cache.ts";
 import { Command } from "../types/commands.ts";
 
