@@ -63,9 +63,9 @@ export const configs = {
 };
 ```
 
-4. Start the bot `deno run -A --quiet mod.ts`
+4. Start the bot `deno run --allow-read --allow-write --allow-net --import-map=./import-map.json mod.ts`
 
-**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run -A --quiet -r" `
+**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json" `
 
 ## Step By Step with Docker
 

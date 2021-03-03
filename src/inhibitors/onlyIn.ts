@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
 
 // deno-lint-ignore require-await
 botCache.inhibitors.set("onlyIn", async function (_message, command, guild) {

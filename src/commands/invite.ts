@@ -1,4 +1,4 @@
-import { botID } from "../../deps.ts";
+import { botID } from "discordeno";
 import { createCommand } from "../utils/helpers.ts";
 
 createCommand({

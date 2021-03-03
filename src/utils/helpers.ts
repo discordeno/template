@@ -2,16 +2,15 @@ import { Command } from "../types/commands.ts";
 import { Embed } from "./Embed.ts";
 import {
   addReactions,
-  botCache,
   cache,
   Collection,
   deleteMessageByID,
   editMessage,
   Message,
-  MessageContent,
   removeUserReaction,
   sendMessage,
-} from "../../deps.ts";
+} from "discordeno";
+import { botCache } from "../../cache.ts";
 import { Milliseconds } from "./constants/time.ts";
 import { needMessage, needReaction } from "./collectors.ts";
 

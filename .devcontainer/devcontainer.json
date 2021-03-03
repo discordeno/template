@@ -24,5 +24,5 @@
         "coenraads.bracket-pair-colorizer",
         "equinusocio.vsc-material-theme",
     ],
-    "postCreateCommand": "deno cache mod.ts"
+    "postCreateCommand": "deno cache --import-map=./import-map.json mod.ts"
 }

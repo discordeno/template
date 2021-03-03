@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
 import { PermissionLevels } from "../types/commands.ts";
 
 // The default level where any member can use the command

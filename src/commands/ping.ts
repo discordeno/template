@@ -1,5 +1,5 @@
 // This file is meant to show how you can create multiple commands in the same file if you wish.
-import { cache } from "../../deps.ts";
+import { cache } from "discordeno";
 import { createCommand } from "../utils/helpers.ts";
 
 createCommand({

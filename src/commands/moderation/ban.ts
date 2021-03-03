@@ -4,7 +4,7 @@ import {
   highestRole,
   Member,
   sendDirectMessage,
-} from "../../../deps.ts";
+} from "discordeno";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 

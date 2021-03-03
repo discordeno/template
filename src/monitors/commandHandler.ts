@@ -8,15 +8,12 @@ import {
   bgMagenta,
   bgYellow,
   black,
-  botCache,
-  botID,
-  cache,
   green,
-  Guild,
-  Message,
   red,
   white,
-} from "../../deps.ts";
+} from "colors";
+import { Guild, Message, botID } from "discordeno";
+import { botCache } from "../../cache.ts";
 import { Command } from "../types/commands.ts";
 
 export const parsePrefix = (guildID?: string) => {

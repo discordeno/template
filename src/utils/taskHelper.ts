@@ -1,4 +1,5 @@
-import { botCache, Collection } from "../../deps.ts";
+import { Collection } from "discordeno";
+import { botCache } from "../../cache.ts";
 import { Task } from "./../types/tasks.ts";
 
 const registerTasks = () => {

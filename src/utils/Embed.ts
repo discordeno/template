@@ -3,7 +3,7 @@ import type {
   EmbedField,
   EmbedFooter,
   EmbedImage,
-} from "../../deps.ts";
+} from "discordeno";
 
 const embedLimits = {
   title: 256,

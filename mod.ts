@@ -1,7 +1,8 @@
-import { botCache, Intents, startBot } from "./deps.ts";
+import { Intents, startBot } from "discordeno";
 import { configs } from "./configs.ts";
 import { fileLoader, importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
+import { botCache } from "./cache.ts";
 
 console.info(
   "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",

@@ -1,5 +1,6 @@
 import { Milliseconds } from "../utils/constants/time.ts";
-import { botCache, botID, cache } from "../../deps.ts";
+import { botCache } from "../../cache.ts";
+import { botID, cache } from "discordeno";
 import { configs } from "../../configs.ts";
 
 botCache.tasks.set(`botlists`, {
