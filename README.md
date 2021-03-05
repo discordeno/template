@@ -179,6 +179,7 @@ bots. If you are a beginner developer, please use this boilerplate.
   Discordeno on our website! https://discordeno.mod.land/stepbystep
 
 ---
+
 ## Troubleshooting
 ### `Module “./deps” has no exported member X deno-ts(2305)`
 This is most likely because you don’t have the modules cached. Run `deno cache mod.ts` and then reload your code editor.
