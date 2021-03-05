@@ -69,7 +69,7 @@ export const configs = {
 
 4. Start the bot using either:
 
-* `deno run -A --quiet mod.ts` or
+    - `deno run -A --quiet mod.ts` or
 * `deno run -A --quiet --unstable --watch mod.ts` to enable automatic reloading on changes
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
