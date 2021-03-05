@@ -67,8 +67,9 @@ export const configs = {
 };
 ```
 
-4. Start the bot
-   `deno run --allow-read --allow-write --allow-net --import-map=./import-map.json mod.ts`
+4. Start the bot using either:
+* `deno run -A --quiet mod.ts` or
+* `deno run -A --quiet --unstable --watch mod.ts` to enable automatic reloading on changes
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
 `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
@@ -176,3 +177,8 @@ bots. If you are a beginner developer, please use this boilerplate.
 
 - There is a step by step walkthrough to learn how to create Discord bots with
   Discordeno on our website! https://discordeno.mod.land/stepbystep
+
+---
+## Troubleshooting
+### `Module “./deps” has no exported member X deno-ts(2305)`
+This is most likely because you don’t have the modules cached. Run `deno cache mod.ts` and then reload your code editor.
