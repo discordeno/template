@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/dotenv/load.ts"; // Load environment variables from .env, making them available via `Deno.env.get("MY_VARIABLE")`
 
 // Step 1: Add all your bot's information below. The only required one is token and prefix.

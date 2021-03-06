@@ -12,50 +12,75 @@ easily using the [Discordeno library](https://github.com/discordeno/discordeno).
 - [Deno](https://deno.land)
 
 ## Optional
-- [Docker](https://docs.docker.com) - Standardize your environment, run anywhere, deploy anywhere. 
-- [Docker Compose](https://docs.docker.com/compose) - Simplify management of one or multiple containers. 
+
+- [Docker](https://docs.docker.com) - Standardize your environment, run
+  anywhere, deploy anywhere.
+- [Docker Compose](https://docs.docker.com/compose) - Simplify management of one
+  or multiple containers.
 
 ## First steps, setting up the project
-1. Create your own repo using the template button. It is next to the button where you get the url to clone. It will say `Use this template` This is a template repo.
-2. Clone that new repo that Github created for you. `git clone url-here-for-your-repo`
+
+1. Create your own repo using the template button. It is next to the button
+   where you get the url to clone. It will say `Use this template` This is a
+   template repo.
+2. Clone that new repo that Github created for you.
+   `git clone url-here-for-your-repo`
 3. Create an `.env` file in your root directory
 4. Add your bot's token to `.env` file like so:
-    ```
-    TOKEN=123123123
-    ```
-    *The token will get loaded into the application from the `configs.ts` file*
-5. Proceed with one of the step-by-step instructions below. Whichever suits your taste.
+   ```
+   TOKEN=123123123
+   ```
+   _The token will get loaded into the application from the `configs.ts` file_
+5. Proceed with one of the step-by-step instructions below. Whichever suits your
+   taste.
+
 ## Step By Step using Docker Compose
 
-After setting up the project: 
-1. Install `docker` [Getting started with docker](https://docs.docker.com/get-started/)
-2. Install `docker compose` [Install Docker Compose](https://docs.docker.com/compose/install/)
+After setting up the project:
+
+1. Install `docker`
+   [Getting started with docker](https://docs.docker.com/get-started/)
+2. Install `docker compose`
+   [Install Docker Compose](https://docs.docker.com/compose/install/)
 3. Start your container with `docker-compose up -d`
-4. Stop your container with `docker-compose down` 
+4. Stop your container with `docker-compose down`
 
 ## Step By Step using Docker (without Docker Compose)
+
 After setting up the project:
-1. Build the container, from the root of your project with the command `docker build --unstable -t mybot .`
+
+1. Build the container, from the root of your project with the command
+   `docker build --unstable -t mybot .`
 2. Run the container `docker run --env-file .env -t mybot`
 
 ## Step By Step Without Docker
 
 After setting up the project:
-1. Start the bot `deno run -A --quiet --import-map=./import-map.json --unstable mod.ts`
+
+1. Start the bot
+   `deno run -A --quiet --import-map=./import-map.json --unstable mod.ts`
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
 `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
 
 ## Configuring your project
-You will most likely want to configure your project by adding discord channel ids and user ids. This is done by adding variables to the `.env` file and updating the `configs.ts` file accordingly. 
+
+You will most likely want to configure your project by adding discord channel
+ids and user ids. This is done by adding variables to the `.env` file and
+updating the `configs.ts` file accordingly.
 
 ## Hot reloading
-1. add `--watch` to your start command. I.e `deno run -A --watch --import-map=./import-map.json --unstable mod.ts`
-2. Enjoy hot reloading anytime you save a file. 🔥   
+
+1. add `--watch` to your start command. I.e
+   `deno run -A --watch --import-map=./import-map.json --unstable mod.ts`
+2. Enjoy hot reloading anytime you save a file. 🔥
 
 ## Beginner Developers
 
-Don't worry, a lot of developers start out coding their first projects as a Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it in a way that solved all the headaches I had when first starting out coding bots. If you are a beginner developer, please use this boilerplate.
+Don't worry, a lot of developers start out coding their first projects as a
+Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it
+in a way that solved all the headaches I had when first starting out coding
+bots. If you are a beginner developer, please use this boilerplate.
 
 **Modular commands, arguments, events, inhibitors, monitors, tasks.**
 
