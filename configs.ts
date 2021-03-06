@@ -1,5 +1,5 @@
 
-import "https://deno.land/x/dotenv/load.ts" // Load environment variables from .env, making them available via `Deno.env.get("MY_VARIABLE")`
+import "https://deno.land/x/dotenv/load.ts"; // Load environment variables from .env, making them available via `Deno.env.get("MY_VARIABLE")`
 
 // Step 1: Add all your bot's information below. The only required one is token and prefix.
 // Step 2: Create a file called `.env` in your root directory and add your token to it on the format `TOKEN=123123123123123` or `BOT_OWNERS=12121212,3434343434,454545` for a list.
