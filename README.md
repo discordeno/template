@@ -35,13 +35,13 @@ After setting up the project:
 
 ## Step By Step using Docker (without Docker Compose)
 After setting up the project:
-1. Build the container, from the root of your project with the command `docker build -t mybot .`
-2. Run the container `docker run --env-file ./env -t mybot`
+1. Build the container, from the root of your project with the command `docker build --unstable -t mybot .`
+2. Run the container `docker run --env-file .env -t mybot`
 
 ## Step By Step Without Docker
 
 After setting up the project:
-1. Start the bot `deno run -A --quiet mod.ts`
+1. Start the bot `deno run -A --quiet --import-map=./import-map.json --unstable mod.ts`
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
 `pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
@@ -50,7 +50,7 @@ After setting up the project:
 You will most likely want to configure your project by adding discord channel ids and user ids. This is done by adding variables to the `.env` file and updating the `configs.ts` file accordingly. 
 
 ## Hot reloading
-1. add `--watch` to your start command. I.e `deno run -A --watch mod.ts`
+1. add `--watch` to your start command. I.e `deno run -A --watch --import-map=./import-map.json --unstable mod.ts`
 2. Enjoy hot reloading anytime you save a file. 🔥   
 
 ## Beginner Developers
