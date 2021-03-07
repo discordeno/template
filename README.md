@@ -50,7 +50,7 @@ After setting up the project:
 After setting up the project:
 
 1. Build the container, from the root of your project with the command
-   `docker build --unstable -t mybot .`
+   `docker build -t mybot .`
 2. Run the container `docker run --env-file .env -t mybot`
 
 ## Step By Step Without Docker
@@ -58,10 +58,10 @@ After setting up the project:
 After setting up the project:
 
 1. Start the bot
-   `deno run -A --quiet --import-map=./import-map.json --unstable mod.ts`
+   `deno run -A --quiet --import-map=./import-map.json mod.ts`
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
-`pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --unstable --import-map=./import-map.json"`
+`pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
 
 ## Configuring your project
 
@@ -72,7 +72,7 @@ updating the `configs.ts` file accordingly.
 ## Hot reloading
 
 1. add `--watch` to your start command. I.e
-   `deno run -A --watch --import-map=./import-map.json --unstable mod.ts`
+   `deno run -A --watch --import-map=./import-map.json mod.ts`
 2. Enjoy hot reloading anytime you save a file. 🔥
 
 ## Beginner Developers
