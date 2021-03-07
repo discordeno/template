@@ -43,10 +43,10 @@ export const configs = {
   userIDs: {
     // You can delete the `as string[]` when you add atleast 1 id in them.
     // The user ids for the support team
-    botSupporters: Deno.env.get("BOT_SUPPORTERS")?.split(",") ?? [],
+    botSupporters: Deno.env.get("BOT_SUPPORTERS")?.split(",") || [],
     // The user ids for the other devs on your team
-    botDevs: Deno.env.get("BOT_DEVS")?.split(",") ?? [],
+    botDevs: Deno.env.get("BOT_DEVS")?.split(",") || [],
     // The user ids who have complete 100% access to your bot.
-    botOwners: Deno.env.get("BOT_OWNERS")?.split(",") ?? [],
+    botOwners: Deno.env.get("BOT_OWNERS")?.split(",") || [],
   },
 };
