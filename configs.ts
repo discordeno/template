@@ -1,5 +1,3 @@
-import "https://deno.land/x/dotenv/load.ts"; // Load environment variables from .env, making them available via `Deno.env.get("MY_VARIABLE")`
-
 // Step 1: Add all your bot's information below. The only required one is token and prefix.
 // Step 2: Create a file called `.env` in your root directory and add your token to it on the format `TOKEN=123123123123123` or `BOT_OWNERS=12121212,3434343434,454545` for a list.
 // Step 3: Add any other secret variables to the config file in the same way as in step 2.
@@ -8,6 +6,8 @@ import "https://deno.land/x/dotenv/load.ts"; // Load environment variables from 
 
 // When deploying or setting up the repo on another machine, the .env file should be created manually
 // We don't want to add our .env file and its contents to git
+import { config } from "dotenv"
+config({ export: true }) // Load environment variables from .env and export them to be available via `Deno.env.get("MY_VARIABLE")`
 
 export const configs = {
   // Your bot token goes here
