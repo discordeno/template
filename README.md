@@ -57,11 +57,10 @@ After setting up the project:
 
 After setting up the project:
 
-1. Start the bot
-   `deno run -A --quiet --import-map=./import-map.json mod.ts`
+1. Start the bot `deno run -A --quiet --import-map=./import-map.json mod.ts`
 
 **Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
-`pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
+`pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --allow-env --import-map=./import-map.json"`
 
 ## Configuring your project
 

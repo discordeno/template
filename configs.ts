@@ -7,7 +7,7 @@
 // When deploying or setting up the repo on another machine, the .env file should be created manually
 // We don't want to add our .env file and its contents to git
 
-import "dotenv" // Load environment variables from .env and make them available via `Deno.env.get("MY_VARIABLE")`
+import "dotenv"; // Load environment variables from .env and make them available via `Deno.env.get("MY_VARIABLE")`
 
 export const configs = {
   // Your bot token goes here
