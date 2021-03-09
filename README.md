@@ -172,6 +172,9 @@ bots. If you are a beginner developer, please use this boilerplate.
 
 - Easily update your code without having to restart the bot everytime.
 
+**Cool Looking Logs**
+![Log Image](https://i.imgur.com/LHu1DL7.png)
+
 **Step By Step Guide**
 
 - There is a step by step walkthrough to learn how to create Discord bots with
