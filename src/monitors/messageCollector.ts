@@ -1,5 +1,4 @@
-import { botCache } from "../../cache.ts";
-import { Message } from "discordeno";
+import { botCache, Message } from "../../deps.ts";
 
 botCache.monitors.set("messageCollector", {
   name: "messageCollector",

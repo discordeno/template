@@ -1,5 +1,4 @@
-import { botCache } from "../../cache.ts";
-import { cache } from "discordeno";
+import { botCache, cache } from "../../deps.ts";
 import { PermissionLevels } from "../types/commands.ts";
 
 // The member using the command must be an server owner.

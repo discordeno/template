@@ -1,5 +1,4 @@
-import { botCache } from "../../cache.ts";
-import { cache, getMember } from "discordeno";
+import { botCache, cache, getMember } from "../../deps.ts";
 
 botCache.arguments.set("member", {
   name: "member",
