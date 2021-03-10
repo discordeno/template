@@ -1,4 +1,4 @@
-import type { Collection, Guild, Message, Permission } from "discordeno";
+import type { Collection, Guild, Message, Permission } from "../../deps.ts";
 
 export interface Command {
   name: string;

@@ -1,4 +1,4 @@
-import { botCache } from "../../cache.ts";
+import { botCache } from "../../deps.ts";
 
 botCache.arguments.set("command", {
   name: "command",

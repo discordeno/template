@@ -1,5 +1,4 @@
-import { cache, sendMessage } from "discordeno";
-import { botCache } from "../../cache.ts";
+import { botCache, cache, sendMessage } from "../../deps.ts";
 import i18next from "https://deno.land/x/i18next@v19.8.4/index.js";
 import Backend from "https://deno.land/x/i18next_fs_backend@v1.0.8-rc.1/index.js";
 import { configs } from "../../configs.ts";

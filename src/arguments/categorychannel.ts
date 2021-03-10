@@ -1,5 +1,4 @@
-import { botCache } from "../../cache.ts";
-import { cache, ChannelTypes } from "discordeno";
+import { botCache, cache, ChannelTypes } from "../../deps.ts";
 
 botCache.arguments.set("categorychannel", {
   name: "categorychannel",

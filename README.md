@@ -1,7 +1,6 @@
 # Discordeno Bot Template
 
-This repo is meant as a template which you can use to create a Discord bot very
-easily using the [Discordeno library](https://github.com/discordeno/discordeno).
+This repo is meant as a template which you can use to create a Discord bot very easily using the [Discordeno library](https://github.com/discordeno/discordeno).
 
 [Website/Guide:](https://discordeno.mod.land/)
 
@@ -13,11 +12,8 @@ easily using the [Discordeno library](https://github.com/discordeno/discordeno).
 
 ## Step By Step
 
-1. Create your own repo using the template button. It is next to the button
-   where you get the url to clone. It will say `Use this template` This is a
-   template repo.
-2. Clone your own repo that Github created for you.
-   `git clone url-here-for-your-repo`
+1. Create your own repo using the template button. It is next to the button where you get the url to clone. It will say `Use this template` This is a template repo.
+2. Clone your own repo that Github created for you. `git clone url-here-for-your-repo`
 3. Create your `configs.ts` file in the main folder.
 
 ```ts
@@ -67,37 +63,30 @@ export const configs = {
 };
 ```
 
-4. Start the bot
-   `deno run --allow-read --allow-write --allow-net --import-map=./import-map.json mod.ts`
+4. Start the bot `deno run -A --quiet mod.ts`
 
-**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2):
-`pm2 start mod.ts --interpreter="deno" --interpreter-args="run --allow-read --allow-write --allow-net --import-map=./import-map.json"`
+**Note:** To run the bot with [PM2](https://github.com/Unitech/pm2): `pm2 start mod.ts --interpreter="deno" --interpreter-args="run -A --quiet -r" `
 
 ## Step By Step with Docker
 
 You can also run this image with Docker.
 
-1. Install `docker`
-   [Getting started with docker](https://docs.docker.com/get-started/)
+1. Install `docker` [Getting started with docker](https://docs.docker.com/get-started/)
 2. Clone the repository
-3. Create your `configs.ts`
-4. Build the container, from the directory containing the repository
-   `docker build -t mybot .`
-5. Run the container with
-   `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+3. Create your `configs.ts` 
+4. Build the container, from the directory containing the repository `docker build -t mybot .`
+5. Run the container with `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
 
-**Notes:**
 
-- In the previous commands `$(pwd)` and `.` can be replaced with the full path
-  to directory
+**Notes:** 
+- In the previous commands `$(pwd)` and `.` can be replaced with the full path to directory
 - You can also use the `-d` argument to run the container in background
 
 ### With docker-compose
 
 1. Install `docker`
-2. Build the container following the steps (up to the fourth) mentionned above
-3. Install `docker-compose`.
-   [Getting started with docker-compose](https://docs.docker.com/compose/gettingstarted/)
+2. Build the container following the steps (up to the fourth) mentionned above 
+3. Install `docker-compose`. [Getting started with docker-compose](https://docs.docker.com/compose/gettingstarted/)
 4. Create a `docker-compose.yml` with this content
 
 ```yml
@@ -115,14 +104,13 @@ services:
 
 # define a volume. You can also bind a path see https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes
 volumes:
-  mybot_database:
+  mybot_database: 
 ```
-
 5. Start with `docker-compose up -d docker-compose.yml`
 6. Stop with `docker-compose down docker-compose.yml`
 
-**Notes:**
 
+**Notes:** 
 - I assume that you're running docker-compose from where your `config.ts` is
 - You can also remove the `-d` argument to run the container in foreground
 
@@ -130,10 +118,7 @@ volumes:
 
 ## Beginner Developers
 
-Don't worry a lot of developers start out coding their first projects as a
-Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it
-in a way that solved all the headaches I had when first starting out coding
-bots. If you are a beginner developer, please use this boilerplate.
+Don't worry a lot of developers start out coding their first projects as a Discord bot(I did 😉) and it is not so easy. With Discordeno, I tried to build it in a way that solved all the headaches I had when first starting out coding bots. If you are a beginner developer, please use this boilerplate.
 
 **Modular commands, arguments, events, inhibitors, monitors, tasks.**
 
@@ -152,17 +137,13 @@ bots. If you are a beginner developer, please use this boilerplate.
   - Stops a command from running if a requirement fails.
   - Easily add custom inhibitors!
 - Clean and powerful monitors system.
-  - Runs a function on every message sent. Useful for stuff like auto-moderation
-    or tags.
+  - Runs a function on every message sent. Useful for stuff like auto-moderation or tags.
   - Easily ignore bots, users, edits, dms.
   - Powerful permission checks.
 - Clean and powerful tasks system.
-  - Runs a function at a certain interval. Useful for things like unmute and
-    updating bot lists etc.
-  - Can be used for cache sweeping to keep your cache optimized for exactly what
-    you want.
-  - Botlists code already made for most botlists. Just add your api tokens for
-    each site and magic!
+  - Runs a function at a certain interval. Useful for things like unmute and updating bot lists etc.
+  - Can be used for cache sweeping to keep your cache optimized for exactly what you want.
+  - Botlists code already made for most botlists. Just add your api tokens for each site and magic!
 - Clean and powerful languages system.
   - Built in multi-lingual support.
   - Uses i18next, one of the best localization tools available.
@@ -174,5 +155,4 @@ bots. If you are a beginner developer, please use this boilerplate.
 
 **Step By Step Guide**
 
-- There is a step by step walkthrough to learn how to create Discord bots with
-  Discordeno on our website! https://discordeno.mod.land/stepbystep
+- There is a step by step walkthrough to learn how to create Discord bots with Discordeno on our website! https://discordeno.mod.land/stepbystep

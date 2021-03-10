@@ -1,5 +1,4 @@
-import { botCache } from "../../cache.ts";
-import { updateEventHandlers } from "discordeno";
+import { botCache, updateEventHandlers } from "../../deps.ts";
 import {
   createCommand,
   fileLoader,

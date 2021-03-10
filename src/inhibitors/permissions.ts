@@ -1,12 +1,12 @@
 import {
+  botCache,
   botHasChannelPermissions,
   botHasPermission,
   hasChannelPermissions,
   memberIDHasPermission,
   Message,
   Permission,
-} from "discordeno";
-import { botCache } from "../../cache.ts";
+} from "../../deps.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(

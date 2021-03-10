@@ -1,4 +1,4 @@
-import { Errors, Message, sendMessage } from "discordeno";
+import { Errors, Message, sendMessage } from "../../deps.ts";
 
 function missingPermResponse(permission: string) {
   const perm = permission.split("_").slice(1).join(" ");
