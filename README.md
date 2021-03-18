@@ -95,7 +95,7 @@ You can also run this image with Docker.
 ### With docker-compose
 
 1. Install `docker`
-2. Build the container following the steps (up to the fourth) mentionned above
+2. Build the container following the steps (up to the fourth) mentioned above
 3. Install `docker-compose`.
    [Getting started with docker-compose](https://docs.docker.com/compose/gettingstarted/)
 4. Create a `docker-compose.yml` with this content
