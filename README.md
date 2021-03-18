@@ -83,11 +83,11 @@ You can also run this image with Docker.
 4. Build the container, from the directory containing the repository
    `docker build -t mybot .`
 5. Run the container with
-   `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+   `docker run -v ${PWD}/configs.ts:/bot/configs.ts -t mybot`
 
 **Notes:**
 
-- In the previous commands `$(pwd)` and `.` can be replaced with the full path
+- In the previous commands `${PWD}` and `.` can be replaced with the full path
   to directory
 - You can also use the `-d` argument to run the container in background
 
