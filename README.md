@@ -89,7 +89,7 @@ You can also run this image with Docker.
 
 - In the previous commands `${PWD}` and `.` can be replaced with the full path
   to directory
-- If you are using Windows OS and want to use `${pwd}` than you need to use PowerShell
+- If you are using Windows OS and want to use `${PWD}` than you need to use PowerShell
 - You can also use the `-d` argument to run the container in background
 
 ### With docker-compose
