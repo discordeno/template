@@ -118,8 +118,8 @@ volumes:
   mybot_database:
 ```
 
-5. Start with `docker-compose up -d docker-compose.yml`
-6. Stop with `docker-compose down docker-compose.yml`
+5. Start with `docker-compose up -d`
+6. Stop with `docker-compose down`
 
 **Notes:**
 
