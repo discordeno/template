@@ -85,18 +85,19 @@ You can also run this image with Docker.
 4. Build the container, from the directory containing the repository
    `docker build -t mybot .`
 5. Run the container with
-   `docker run -v $(pwd)/configs.ts:/bot/configs.ts -t mybot`
+   `docker run -v ${PWD}/configs.ts:/bot/configs.ts -t mybot`
 
 **Notes:**
 
-- In the previous commands `$(pwd)` and `.` can be replaced with the full path
+- In the previous commands `${PWD}` and `.` can be replaced with the full path
   to directory
+- If you are using Windows OS and want to use `${PWD}` than you need to use PowerShell
 - You can also use the `-d` argument to run the container in background
 
 ### With docker-compose
 
 1. Install `docker`
-2. Build the container following the steps (up to the fourth) mentionned above
+2. Build the container following the steps (up to the fourth) mentioned above
 3. Install `docker-compose`.
    [Getting started with docker-compose](https://docs.docker.com/compose/gettingstarted/)
 4. Create a `docker-compose.yml` with this content
@@ -119,8 +120,8 @@ volumes:
   mybot_database:
 ```
 
-5. Start with `docker-compose up -d docker-compose.yml`
-6. Stop with `docker-compose down docker-compose.yml`
+5. Start with `docker-compose up -d`
+6. Stop with `docker-compose down`
 
 **Notes:**
 
