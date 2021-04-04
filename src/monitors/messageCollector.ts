@@ -2,6 +2,7 @@ import { botCache, Message } from "../../deps.ts";
 
 botCache.monitors.set("messageCollector", {
   name: "messageCollector",
+  ignoreDM: true,
   /** The main code that will be run when this monitor is triggered. */
   // deno-lint-ignore require-await
   execute: async function (message: Message) {
