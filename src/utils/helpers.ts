@@ -140,6 +140,7 @@ let paths: string[] = [];
 
 /** This function allows reading all files in a folder. Useful for loading/reloading commands, monitors etc */
 export async function importDirectory(path: string) {
+  path = path.replaceAll("\\", "/");
   const files = Deno.readDirSync(Deno.realPathSync(path));
   const folder = path.substring(path.indexOf("/src/") + 5);
 
@@ -148,7 +149,7 @@ export async function importDirectory(path: string) {
   for (const file of files) {
     if (!file.name) continue;
 
-    const currentPath = `${path}/${file.name}`.replaceAll("\\", "/");
+    const currentPath = `${path}/${file.name}`;
     if (file.isFile) {
       if (!currentPath.endsWith(".ts")) continue;
       paths.push(
