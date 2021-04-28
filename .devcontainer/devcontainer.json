@@ -19,14 +19,20 @@
         "workbench.iconTheme": "eq-material-theme-icons-darker",
         "breadcrumbs.enabled": true,
         "editor.renderWhitespace": "all",
-        "editor.suggestSelection": "first"
+        "editor.suggestSelection": "first",
+        "editor.formatOnSave": true,
+        "files.autoSave": "afterDelay",
+        "editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "javascript.updateImportsOnFileMove.enabled": "always"
     },
     // Add the IDs of extensions you want installed when the container is created.
     "extensions": [
         "denoland.vscode-deno",
         "pkief.material-icon-theme",
         "coenraads.bracket-pair-colorizer",
-        "equinusocio.vsc-material-theme"
+        "equinusocio.vsc-material-theme",
+        "tabnine.tabnine-vscode"
     ],
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
