@@ -1,4 +1,4 @@
-import { botCache, updateEventHandlers } from "../../deps.ts";
+import { bot, updateEventHandlers } from "../../deps.ts";
 import {
   createCommand,
   fileLoader,
@@ -83,7 +83,7 @@ createCommand({
     // Reload the languages
     await reloadLang();
     // Updates the events in the library
-    updateEventHandlers(botCache.eventHandlers);
+    updateEventHandlers(bot.eventHandlers);
 
     return message.reply("Reloaded everything.");
   },

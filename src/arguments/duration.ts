@@ -1,7 +1,7 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { stringToMilliseconds } from "../utils/helpers.ts";
 
-botCache.arguments.set("duration", {
+bot.arguments.set("duration", {
   name: "duration",
   // deno-lint-ignore require-await
   execute: async function (_argument, parameters) {

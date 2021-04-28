@@ -1,7 +1,7 @@
-import { botCache } from "../../cache.ts";
+import { bot } from "../../cache.ts";
 import { EMOJI_REGEX } from "../utils/constants/emoj_regex.ts";
 
-botCache.arguments.set("...emoji", {
+bot.arguments.set("...emoji", {
   name: "...emoji",
   execute: function (_argument, parameters: string[]) {
     if (!parameters.length) return;

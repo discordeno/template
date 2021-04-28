@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import {
   createCommand,
@@ -86,7 +86,7 @@ createSubcommand("language", {
 
       message.send({ embed });
     } else {
-      botCache.guildLanguages.set(message.guildId, newLanguage.id);
+      bot.guildLanguages.set(message.guildId, newLanguage.id);
       await db.guilds.update(message.guildId, { language: newLanguage.id })
         .catch(console.log);
 

@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import { createCommand, createSubcommand } from "../utils/helpers.ts";
 import { parsePrefix } from "../monitors/commandHandler.ts";
@@ -47,7 +47,7 @@ createSubcommand("prefix", {
     }
 
     const oldPrefix = parsePrefix(message.guildId);
-    botCache.guildPrefixes.set(message.guildId, args.prefix);
+    bot.guildPrefixes.set(message.guildId, args.prefix);
     db.guilds.update(message.guildId, { prefix: args.prefix });
 
     const embed = new Embed()

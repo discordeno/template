@@ -1,8 +1,8 @@
-import { botCache } from "../../cache.ts";
+import { bot } from "../../cache.ts";
 
 const SNOWFLAKE_REGEX = /[0-9]{17,19}/;
 
-botCache.arguments.set("snowflake", {
+bot.arguments.set("snowflake", {
   name: "snowflake",
   execute: function (_argument, parameters) {
     const [text] = parameters;

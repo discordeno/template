@@ -1,8 +1,8 @@
 import { PermissionLevels } from "../types/commands.ts";
-import { botCache, hasGuildPermissions } from "../../deps.ts";
+import { bot, hasGuildPermissions } from "../../deps.ts";
 
 // The member using the command must be a moderator. (Usually has MANAGE_GUILD perm)
-botCache.permissionLevels.set(
+bot.permissionLevels.set(
   PermissionLevels.MODERATOR,
   (message) =>
     hasGuildPermissions(

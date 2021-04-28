@@ -1,10 +1,10 @@
 import {
-  botCache,
+  bot,
   botHasChannelPermissions,
   botHasGuildPermissions,
+  DiscordenoMessage,
   hasChannelPermissions,
   hasGuildPermissions,
-  DiscordenoMessage,
   PermissionStrings,
 } from "../../deps.ts";
 
@@ -37,7 +37,7 @@ function missingCommandPermission(
   message.reply(response);
 }
 
-botCache.inhibitors.set("permissions", async function (message, command) {
+bot.inhibitors.set("permissions", async function (message, command) {
   if (!message.guild) return false;
 
   // No permissions are required

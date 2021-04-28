@@ -4,7 +4,7 @@ import {
   MessageCollectorOptions,
   ReactionCollectorOptions,
 } from "../types/collectors.ts";
-import { botCache, botId, DiscordenoMessage, Emoji } from "../../deps.ts";
+import { bot, botId, DiscordenoMessage, Emoji } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 export async function needMessage(
@@ -29,11 +29,11 @@ export async function collectMessages(
   options: CollectMessagesOptions,
 ): Promise<DiscordenoMessage[]> {
   return new Promise((resolve, reject) => {
-    botCache.messageCollectors.get(options.key)?.reject(
+    bot.messageCollectors.get(options.key)?.reject(
       "A new collector began before the user responded to the previous one.",
     );
 
-    botCache.messageCollectors.set(options.key, {
+    bot.messageCollectors.set(options.key, {
       ...options,
       messages: [],
       resolve,
@@ -64,10 +64,10 @@ export async function collectReactions(
   options: CollectReactionsOptions,
 ): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    botCache.reactionCollectors.get(options.key)?.reject(
+    bot.reactionCollectors.get(options.key)?.reject(
       "A new collector began before the user responded to the previous one.",
     );
-    botCache.reactionCollectors.set(options.key, {
+    bot.reactionCollectors.set(options.key, {
       ...options,
       reactions: [] as string[],
       resolve,
@@ -87,7 +87,7 @@ export function processReactionCollectors(
   const emojiName = emoji.id || emoji.name;
   if (!emojiName) return;
 
-  const collector = botCache.reactionCollectors.get(userID);
+  const collector = bot.reactionCollectors.get(userID);
   if (!collector) return;
 
   // This user has no collectors pending or the message is in a different channel
@@ -101,7 +101,7 @@ export function processReactionCollectors(
     collector.amount === collector.reactions.length + 1
   ) {
     // Remove the collector
-    botCache.reactionCollectors.delete(userID);
+    bot.reactionCollectors.delete(userID);
     // Resolve the collector
     return collector.resolve([...collector.reactions, emojiName]);
   }

@@ -1,6 +1,6 @@
-import { DiscordenoMember } from "../../deps.ts";
-import { Embed } from "./../utils/Embed.ts";
-import { createCommand, sendEmbed } from "../utils/helpers.ts";
+import { DiscordenoMember } from "../../../deps.ts";
+import { Embed } from "../../utils/Embed.ts";
+import { createCommand, sendEmbed } from "../../utils/helpers.ts";
 
 createCommand({
   name: `kick`,

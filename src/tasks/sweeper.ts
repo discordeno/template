@@ -1,10 +1,10 @@
 import { Milliseconds } from "../utils/constants/time.ts";
-import { botCache, botId, cache, cacheHandlers } from "../../deps.ts";
+import { bot, botId, cache, cacheHandlers } from "../../deps.ts";
 
 const MESSAGE_LIFETIME = Milliseconds.MINUTE * 10;
 const MEMBER_LIFETIME = Milliseconds.MINUTE * 30;
 
-botCache.tasks.set(`sweeper`, {
+bot.tasks.set(`sweeper`, {
   name: `sweeper`,
   interval: Milliseconds.MINUTE * 5,
   // deno-lint-ignore require-await
@@ -22,11 +22,11 @@ botCache.tasks.set(`sweeper`, {
         if (member.id === botId) return;
         // The user is currently active in a voice channel
         if (guild.voiceStates.has(member.id)) return;
-        const lastActive = botCache.memberLastActive.get(member.id);
+        const lastActive = bot.memberLastActive.get(member.id);
         // If the user is active recently
         if (lastActive && now - lastActive < MEMBER_LIFETIME) return;
         cache.members.delete(member.id);
-        botCache.memberLastActive.delete(member.id);
+        bot.memberLastActive.delete(member.id);
       });
     });
 

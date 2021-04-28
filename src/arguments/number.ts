@@ -1,6 +1,6 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.arguments.set("number", {
+bot.arguments.set("number", {
   name: "number",
   execute: function (_argument, parameters) {
     const [number] = parameters;

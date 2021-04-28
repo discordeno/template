@@ -1,6 +1,6 @@
-import { botCache, cache } from "../../deps.ts";
+import { bot, cache } from "../../deps.ts";
 
-botCache.arguments.set("role", {
+bot.arguments.set("role", {
   name: "role",
   // deno-lint-ignore require-await
   execute: async function (_argument, parameters, message) {

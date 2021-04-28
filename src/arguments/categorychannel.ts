@@ -1,6 +1,6 @@
-import { botCache, cache, DiscordChannelTypes } from "../../deps.ts";
+import { bot, cache, DiscordChannelTypes } from "../../deps.ts";
 
-botCache.arguments.set("categorychannel", {
+bot.arguments.set("categorychannel", {
   name: "categorychannel",
   // deno-lint-ignore require-await
   execute: async function (_argument, parameters, message) {

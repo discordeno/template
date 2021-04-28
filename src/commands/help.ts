@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { translate } from "../utils/i18next.ts";
 import { Embed } from "../utils/Embed.ts";
 import { createCommand } from "../utils/helpers.ts";
@@ -18,7 +18,7 @@ createCommand({
       return message.send(`No command provided.`);
     }
 
-    const command = botCache.commands.get(args.command);
+    const command = bot.commands.get(args.command);
     if (!command) {
       return message.send(`Command ${args.command} not found.`);
     }

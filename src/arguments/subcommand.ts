@@ -1,6 +1,6 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.arguments.set("subcommand", {
+bot.arguments.set("subcommand", {
   name: "subcommand",
   execute: function (_argument, parameters, _message, command) {
     const [subcommandName] = parameters;

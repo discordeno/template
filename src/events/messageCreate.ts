@@ -1,5 +1,5 @@
 import {
-  botCache,
+  bot,
   botHasChannelPermissions,
   botHasGuildPermissions,
   botId,
@@ -9,10 +9,10 @@ import {
 } from "../../deps.ts";
 
 // deno-lint-ignore require-await
-botCache.eventHandlers.messageCreate = async function (message) {
-  botCache.memberLastActive.set(message.author.id, message.timestamp);
+bot.eventHandlers.messageCreate = async function (message) {
+  bot.memberLastActive.set(message.author.id, message.timestamp);
 
-  botCache.monitors.forEach(async (monitor) => {
+  bot.monitors.forEach(async (monitor) => {
     // The !== false is important because when not provided we default to true
     if (monitor.ignoreBots !== false && message.author.bot) return;
 

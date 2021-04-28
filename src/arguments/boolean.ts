@@ -1,6 +1,6 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.arguments.set("boolean", {
+bot.arguments.set("boolean", {
   name: "boolean",
   execute: function (_argument, parameters) {
     const [boolean] = parameters;

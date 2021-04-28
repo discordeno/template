@@ -1,6 +1,6 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.arguments.set("command", {
+bot.arguments.set("command", {
   name: "command",
   // deno-lint-ignore require-await
   execute: async function (_argument, parameters) {
@@ -8,11 +8,11 @@ botCache.arguments.set("command", {
     if (!name) return;
 
     const commandName = name.toLowerCase();
-    const command = botCache.commands.get(commandName);
+    const command = bot.commands.get(commandName);
     if (command) return command;
 
     // Check if its an alias
-    return botCache.commands.find((cmd) =>
+    return bot.commands.find((cmd) =>
       Boolean(cmd.aliases?.includes(commandName))
     );
   },

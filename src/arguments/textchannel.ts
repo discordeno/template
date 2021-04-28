@@ -1,7 +1,7 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { cache, DiscordChannelTypes } from "../../deps.ts";
 
-botCache.arguments.set("textchannel", {
+bot.arguments.set("textchannel", {
   name: "textchannel",
   // deno-lint-ignore require-await
   execute: async function (_argument, parameters, message) {

@@ -1,7 +1,7 @@
 import { Command } from "../types/commands.ts";
 import { Embed } from "./Embed.ts";
 import {
-  botCache,
+  bot,
   cache,
   Collection,
   deleteMessages,
@@ -76,7 +76,7 @@ export function stringToMilliseconds(text: string) {
 }
 
 export function createCommand(command: Command) {
-  botCache.commands.set(command.name, command);
+  bot.commands.set(command.name, command);
 }
 
 export function createSubcommand(
@@ -86,13 +86,13 @@ export function createSubcommand(
 ) {
   const names = commandName.split("-");
 
-  let command = botCache.commands.get(commandName);
+  let command = bot.commands.get(commandName);
 
   if (names.length > 1) {
     for (const name of names) {
       const validCommand = command
         ? command.subcommands?.get(name)
-        : botCache.commands.get(name);
+        : bot.commands.get(name);
       if (!validCommand) break;
 
       command = validCommand;
@@ -101,16 +101,16 @@ export function createSubcommand(
 
   if (!command) {
     // If 10 minutes have passed something must have been wrong
-    if (retries === 20) {
+    if (retries === 600) {
       return console.error(
         `Subcommand ${subcommand} unable to be created for ${commandName}`,
       );
     }
 
-    // Try again in 30 seconds in case this command file just has not been loaded yet.
+    // Try again in 3 seconds in case this command file just has not been loaded yet.
     setTimeout(
       () => createSubcommand(commandName, subcommand, retries++),
-      30000,
+      1000,
     );
     return;
   }
@@ -210,7 +210,7 @@ export function getTime() {
 }
 
 export function getCurrentLanguage(guildID: string) {
-  return botCache.guildLanguages.get(guildID) ||
+  return bot.guildLanguages.get(guildID) ||
     cache.guilds.get(guildID)?.preferredLocale || "en_US";
 }
 

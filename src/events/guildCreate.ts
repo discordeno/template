@@ -1,6 +1,6 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.eventHandlers.guildCreate = function (guild) {
+bot.eventHandlers.guildCreate = function (guild) {
   console.log(
     `[EVENT=GuildCreate]: ${guild.name} with ${guild.memberCount} members.`,
   );

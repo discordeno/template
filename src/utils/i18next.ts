@@ -1,4 +1,4 @@
-import { botCache, cache, sendMessage } from "../../deps.ts";
+import { bot, cache, sendMessage } from "../../deps.ts";
 import i18next from "https://deno.land/x/i18next@v20.2.2/index.js";
 import Backend from "https://deno.land/x/i18next_fs_backend@v1.1.1/index.js";
 import { configs } from "../../configs.ts";
@@ -6,7 +6,7 @@ import { configs } from "../../configs.ts";
 /** This function helps translate the string to the specific guilds needs. */
 export function translate(guildID: string, key: string, options?: unknown) {
   const guild = cache.guilds.get(guildID);
-  const language = botCache.guildLanguages.get(guildID) ||
+  const language = bot.guildLanguages.get(guildID) ||
     guild?.preferredLocale || "en_US";
 
   // undefined is silly bug cause i18next dont have proper typings

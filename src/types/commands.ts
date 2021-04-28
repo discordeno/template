@@ -1,7 +1,7 @@
 import {
+  ApplicationCommandOption,
   Collection,
   DiscordenoMessage,
-  Guild,
   PermissionStrings,
 } from "../../deps.ts";
 
@@ -16,7 +16,6 @@ export interface Command {
     | ((
       message: DiscordenoMessage,
       command: Command,
-      guild?: Guild,
     ) => boolean | Promise<boolean>);
   botServerPermissions?: PermissionStrings[];
   botChannelPermissions?: PermissionStrings[];
@@ -29,8 +28,22 @@ export interface Command {
   };
   arguments?: CommandArgument[];
   subcommands?: Collection<string, Command>;
+  slash?: DiscordenoSlashCommand;
   // deno-lint-ignore no-explicit-any
   execute?: (message: DiscordenoMessage, args: any) => unknown;
+}
+
+export interface DiscordenoSlashCommand {
+  /** Whether or not this slash command should be enabled right now. Defaults to true. */
+  enabled?: boolean;
+  /** Whether this slash command should be created per guild. Defaults to true. */
+  guild?: boolean;
+  /** Whether this slash command should be created once globally and allowed in DMs. Defaults to false. */
+  global?: boolean;
+  /** Whether or not to use the Advanced mode. Defaults to true. */
+  advanced?: boolean;
+  /** The slash command options for this command. */
+  options?: ApplicationCommandOption[];
 }
 
 export interface CommandArgument {

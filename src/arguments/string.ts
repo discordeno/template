@@ -1,6 +1,6 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.arguments.set("string", {
+bot.arguments.set("string", {
   name: "string",
   execute: function (argument, parameters) {
     const [text] = parameters;

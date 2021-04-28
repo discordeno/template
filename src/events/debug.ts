@@ -1,5 +1,5 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 
-botCache.eventHandlers.debug = function (_data) {
+bot.eventHandlers.debug = function (_data) {
   // console.warn(_data);
 };

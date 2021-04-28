@@ -8,27 +8,26 @@ import {
   bgMagenta,
   bgYellow,
   black,
-  botCache,
+  bot,
   botId,
   DiscordenoMessage,
   green,
-  Guild,
   red,
   white,
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 
 export const parsePrefix = (guildID?: string) => {
-  const prefix = guildID ? botCache.guildPrefixes.get(guildID) : configs.prefix;
+  const prefix = guildID ? bot.guildPrefixes.get(guildID) : configs.prefix;
   return prefix || configs.prefix;
 };
 
 export const parseCommand = (commandName: string) => {
-  const command = botCache.commands.get(commandName);
+  const command = bot.commands.get(commandName);
   if (command) return command;
 
   // Check aliases if the command wasn't found
-  return botCache.commands.find((cmd) =>
+  return bot.commands.find((cmd) =>
     Boolean(cmd.aliases?.includes(commandName))
   );
 };
@@ -79,7 +78,7 @@ async function parseArguments(
 
   // Loop over each argument and validate
   for (const argument of command.arguments) {
-    const resolver = botCache.arguments.get(argument.type || "string");
+    const resolver = bot.arguments.get(argument.type || "string");
     if (!resolver) continue;
 
     const result = await resolver.execute(argument, params, message, command);
@@ -115,11 +114,10 @@ async function parseArguments(
 async function commandAllowed(
   message: DiscordenoMessage,
   command: Command,
-  guild?: Guild,
 ) {
   const inhibitorResults = await Promise.all(
-    botCache.inhibitors.map(async (inhibitor, name) => {
-      const inhibited = await inhibitor(message, command, guild);
+    bot.inhibitors.map(async (inhibitor, name) => {
+      const inhibited = await inhibitor(message, command);
       return [name, inhibited];
     }),
   );
@@ -132,7 +130,7 @@ async function commandAllowed(
       // Make sure the command will not run
       allowed = false;
       // Logs the command failure
-      logCommand(message, guild?.name || "DM", "Failure", command.name);
+      logCommand(message, message.guild?.name || "DM", "Failure", command.name);
       // Logs the exact inhibitors that failed
       console.log(
         `[Inhibitor] ${name} on ${command.name} for ${message.author.username}#${message.author.discriminator}`,
@@ -157,7 +155,12 @@ async function executeCommand(
       | false;
     // Some arg that was required was missing and handled already
     if (!args) {
-      return logCommand(message, message.guild?.name || "DM", "Missing", command.name);
+      return logCommand(
+        message,
+        message.guild?.name || "DM",
+        "Missing",
+        command.name,
+      );
     }
 
     // If no subcommand execute the command
@@ -169,7 +172,12 @@ async function executeCommand(
       if (!(await commandAllowed(message, command))) return;
 
       await command.execute?.(message, args);
-      return logCommand(message, message.guild?.name || "DM", "Success", command.name);
+      return logCommand(
+        message,
+        message.guild?.name || "DM",
+        "Success",
+        command.name,
+      );
     }
 
     if (!subcommand?.name) {
@@ -194,7 +202,7 @@ async function executeCommand(
 }
 
 // The monitor itself for this file. Above is helper functions for this monitor.
-botCache.monitors.set("commandHandler", {
+bot.monitors.set("commandHandler", {
   name: "commandHandler",
   ignoreDM: false,
   /** The main code that will be run when this monitor is triggered. */

@@ -1,8 +1,8 @@
 import { Milliseconds } from "../utils/constants/time.ts";
-import { botCache, botId, cache } from "../../deps.ts";
+import { bot, botId, cache } from "../../deps.ts";
 import { configs } from "../../configs.ts";
 
-botCache.tasks.set(`botlists`, {
+bot.tasks.set(`botlists`, {
   name: `botlists`,
   // Runs this function once an hour
   interval: Milliseconds.HOUR,

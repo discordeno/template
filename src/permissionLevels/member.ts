@@ -1,5 +1,5 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { PermissionLevels } from "../types/commands.ts";
 
 // The default level where any member can use the command
-botCache.permissionLevels.set(PermissionLevels.MEMBER, () => true);
+bot.permissionLevels.set(PermissionLevels.MEMBER, () => true);

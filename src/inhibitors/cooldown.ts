@@ -1,4 +1,4 @@
-import { botCache } from "../../deps.ts";
+import { bot } from "../../deps.ts";
 import { humanizeMilliseconds } from "../utils/helpers.ts";
 
 const membersInCooldown = new Map<string, Cooldown>();
@@ -8,8 +8,7 @@ export interface Cooldown {
   timestamp: number;
 }
 
-// deno-lint-ignore require-await
-botCache.inhibitors.set("cooldown", async function (message, command) {
+bot.inhibitors.set("cooldown", function (message, command) {
   if (!command.cooldown) return false;
 
   const key = `${message.author.id}-${command.name}`;
