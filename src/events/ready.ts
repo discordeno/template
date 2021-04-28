@@ -51,11 +51,13 @@ bot.eventHandlers.ready = async function () {
   }
 
   // GLOBAL COMMANDS CAN TAKE 1 HOUR TO UPDATE IN DISCORD
-  await upsertSlashCommands(globalCommands).catch(console.log);
+  if (globalCommands.length) {
+    await upsertSlashCommands(globalCommands).catch(console.log);
+  }
 
   // GUILD COMMANDS WILL UPDATE INSTANTLY
-  cache.guilds.forEach(async (guild) => {
-    await upsertSlashCommands(
+  await Promise.all(cache.guilds.map((guild) =>
+    upsertSlashCommands(
       perGuildCommands.map((cmd) => {
         // USER OPTED TO USE BASIC VERSION ONLY
         if (cmd.slash?.advanced === false) {
@@ -94,6 +96,8 @@ bot.eventHandlers.ready = async function () {
         };
       }),
       guild.id,
-    ).catch(console.log);
-  });
+    ).catch(console.log)
+  ));
+
+  console.log(getTime(), `Slash Commands loaded successfully!`);
 };
