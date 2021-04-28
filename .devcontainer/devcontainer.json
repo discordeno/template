@@ -15,8 +15,8 @@
             "source.fixAll": true
         },
         "editor.fontSize": 16,
-        "workbench.colorTheme": "equinusocio.vsc-material-theme",
-        "workbench.iconTheme": "pkief.material-icon-theme",
+        "workbench.colorTheme": "Material Theme Darker",
+        "workbench.iconTheme": "eq-material-theme-icons-darker",
         "breadcrumbs.enabled": true,
         "editor.renderWhitespace": "all",
         "editor.suggestSelection": "first"
