@@ -6,7 +6,7 @@ botCache.arguments.set("member", {
     const [id] = parameters;
     if (!id) return;
 
-    const guild = cache.guilds.get(message.guildID);
+    const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
     const userID = id.startsWith("<@")

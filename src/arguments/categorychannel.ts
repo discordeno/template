@@ -1,4 +1,4 @@
-import { botCache, cache, ChannelTypes } from "../../deps.ts";
+import { botCache, cache, DiscordChannelTypes } from "../../deps.ts";
 
 botCache.arguments.set("categorychannel", {
   name: "categorychannel",
@@ -7,7 +7,7 @@ botCache.arguments.set("categorychannel", {
     const [id] = parameters;
     if (!id) return;
 
-    const guild = cache.guilds.get(message.guildID);
+    const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
     const channelIDOrName = id.startsWith("<#")
@@ -17,7 +17,7 @@ botCache.arguments.set("categorychannel", {
     const channel = guild.channels.get(channelIDOrName) ||
       guild.channels.find((channel) => channel.name === channelIDOrName);
 
-    if (channel?.type !== ChannelTypes.GUILD_CATEGORY) return;
+    if (channel?.type !== DiscordChannelTypes.GUILD_CATEGORY) return;
 
     return channel;
   },

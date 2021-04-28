@@ -1,4 +1,4 @@
-import type { Message, MessageReactionUncachedPayload } from "../../deps.ts";
+import { DiscordenoMessage } from "../../deps.ts";
 
 export interface BaseCollectorOptions {
   /** The amount of messages to collect before resolving. Defaults to 1 */
@@ -9,7 +9,7 @@ export interface BaseCollectorOptions {
 
 export interface MessageCollectorOptions extends BaseCollectorOptions {
   /** Function that will filter messages to determine whether to collect this message. Defaults to making sure the message is sent by the same member. */
-  filter?: (message: Message) => boolean;
+  filter?: (message: DiscordenoMessage) => boolean;
   /** The amount of messages to collect before resolving. Defaults to 1 */
   amount?: number;
   /** The amount of milliseconds this should collect for before expiring. Defaults to 5 minutes. */
@@ -21,7 +21,7 @@ export interface ReactionCollectorOptions extends BaseCollectorOptions {
   filter?: (
     userID: string,
     reaction: string,
-    message: Message | MessageReactionUncachedPayload,
+    message: DiscordenoMessage | { id: string },
   ) => boolean;
 }
 
@@ -38,9 +38,9 @@ export interface BaseCollectorCreateOptions {
 
 export interface CollectMessagesOptions extends BaseCollectorCreateOptions {
   /** The channel ID where this is listening to */
-  channelID: string;
+  channelId: string;
   /** Function that will filter messages to determine whether to collect this message */
-  filter: (message: Message) => boolean;
+  filter: (message: DiscordenoMessage) => boolean;
 }
 
 export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
@@ -50,16 +50,18 @@ export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
   filter: (
     userID: string,
     reaction: string,
-    message: Message | MessageReactionUncachedPayload,
+    message: DiscordenoMessage | { id: string },
   ) => boolean;
 }
 
 export interface MessageCollector extends CollectMessagesOptions {
-  resolve: (value: Message[] | PromiseLike<Message[]>) => void;
+  resolve: (
+    value: DiscordenoMessage[] | PromiseLike<DiscordenoMessage[]>,
+  ) => void;
   // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the messages are stored if the amount to collect is more than 1. */
-  messages: Message[];
+  messages: DiscordenoMessage[];
 }
 
 export interface ReactionCollector extends CollectReactionsOptions {

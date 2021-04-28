@@ -1,5 +1,5 @@
 import { Milliseconds } from "../utils/constants/time.ts";
-import { botCache, botID, cache, cacheHandlers } from "../../deps.ts";
+import { botCache, botId, cache, cacheHandlers } from "../../deps.ts";
 
 const MESSAGE_LIFETIME = Milliseconds.MINUTE * 10;
 const MEMBER_LIFETIME = Milliseconds.MINUTE * 30;
@@ -19,7 +19,7 @@ botCache.tasks.set(`sweeper`, {
       // Delete any member who has not been active in the last 30 minutes and is not currently in a voice channel
       guild.members.forEach((member) => {
         // Don't purge the bot else bugs will occure
-        if (member.id === botID) return;
+        if (member.id === botId) return;
         // The user is currently active in a voice channel
         if (guild.voiceStates.has(member.id)) return;
         const lastActive = botCache.memberLastActive.get(member.id);

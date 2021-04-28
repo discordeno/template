@@ -1,14 +1,14 @@
-import { botCache, Message } from "../../deps.ts";
+import { botCache, DiscordenoMessage } from "../../deps.ts";
 
 botCache.monitors.set("messageCollector", {
   name: "messageCollector",
   ignoreDM: true,
   /** The main code that will be run when this monitor is triggered. */
   // deno-lint-ignore require-await
-  execute: async function (message: Message) {
+  execute: async function (message: DiscordenoMessage) {
     const collector = botCache.messageCollectors.get(message.author.id);
     // This user has no collectors pending or the message is in a different channel
-    if (!collector || message.channelID !== collector.channelID) return;
+    if (!collector || message.channelId !== collector.channelId) return;
     // This message is a response to a collector. Now running the filter function.
     if (!collector.filter(message)) return;
 

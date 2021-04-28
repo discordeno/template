@@ -1,14 +1,12 @@
 import { Command } from "../types/commands.ts";
 import { Embed } from "./Embed.ts";
 import {
-  addReactions,
   botCache,
   cache,
   Collection,
-  deleteMessageByID,
+  deleteMessages,
+  DiscordenoMessage,
   editMessage,
-  Message,
-  MessageContent,
   removeUserReaction,
   sendMessage,
 } from "../../deps.ts";
@@ -125,12 +123,16 @@ export function createSubcommand(
 }
 
 /** Use this function to send an embed with ease. */
-export function sendEmbed(channelID: string, embed: Embed, content?: string) {
-  return sendMessage(channelID, { content, embed });
+export function sendEmbed(channelId: string, embed: Embed, content?: string) {
+  return sendMessage(channelId, { content, embed });
 }
 
 /** Use this function to edit an embed with ease. */
-export function editEmbed(message: Message, embed: Embed, content?: string) {
+export function editEmbed(
+  message: DiscordenoMessage,
+  embed: Embed,
+  content?: string,
+) {
   return editMessage(message, { content, embed });
 }
 
@@ -214,8 +216,8 @@ export function getCurrentLanguage(guildID: string) {
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
 export async function createEmbedsPagination(
-  channelID: string,
-  authorID: string,
+  channelId: string,
+  authorId: string,
   embeds: Embed[],
   defaultPage = 1,
   reactionTimeout = Milliseconds.SECOND * 30,
@@ -225,35 +227,28 @@ export async function createEmbedsPagination(
       currentPage: number,
       pageCount: number,
       deletePagination: () => void,
-    ) => Promise<void>;
+    ) => Promise<unknown>;
   } = {
     // deno-lint-ignore require-await
     "◀️": async (setPage, currentPage) => setPage(Math.max(currentPage - 1, 1)),
     "↗️": async (setPage) => {
       const question = await sendMessage(
-        channelID,
+        channelId,
         "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
       );
-      const answer = await needMessage(authorID, channelID);
+      const answer = await needMessage(authorId, channelId);
+      await deleteMessages(channelId, [question.id, answer.id]).catch(
+        console.log,
+      );
 
-      if (question) {
-        await deleteMessageByID(question.channelID, question.id);
-      }
-
-      const newPageNumber = parseInt(answer.content);
-
-      if (answer) {
-        await deleteMessageByID(answer.channelID, answer.id);
-      }
+      const newPageNumber = Math.ceil(Number(answer.content));
 
       if (isNaN(newPageNumber)) {
-        await sendMessage(channelID, "This is not a valid number!");
-        return;
+        return await sendMessage(channelId, "This is not a valid number!");
       }
 
       if (newPageNumber < 1 || newPageNumber > embeds.length) {
-        await sendMessage(channelID, `This is not a valid page!`);
-        return;
+        return await sendMessage(channelId, `This is not a valid page!`);
       }
 
       setPage(newPageNumber);
@@ -262,52 +257,40 @@ export async function createEmbedsPagination(
     "▶️": async (setPage, currentPage, pageCount) =>
       setPage(Math.min(currentPage + 1, pageCount)),
     // deno-lint-ignore require-await
-    "🗑️": async (setPage, currentPage, pageCount, deletePagination) =>
+    "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) =>
       deletePagination(),
   },
 ) {
-  if (embeds.length === 0) {
-    return;
-  }
+  if (embeds.length === 0) return;
 
   let currentPage = defaultPage;
-  const embedMessage = await sendEmbed(channelID, embeds[currentPage - 1]);
+  const embedMessage = await sendEmbed(channelId, embeds[currentPage - 1]);
 
-  if (!embedMessage) {
-    return;
-  }
+  if (!embedMessage) return;
 
-  if (embeds.length <= 1) {
-    return;
-  }
+  if (embeds.length <= 1) return;
 
-  await addReactions(
-    embedMessage.channelID,
-    embedMessage.id,
-    Object.keys(reactions),
-    true,
+  await embedMessage.addReactions(Object.keys(reactions), true).catch(
+    console.log,
   );
 
   let isEnded = false;
 
   while (!isEnded) {
-    if (!embedMessage) {
-      return;
-    }
-    const reaction = await needReaction(authorID, embedMessage.id, {
+    if (!embedMessage) return;
+
+    const reaction = await needReaction(authorId, embedMessage.id, {
       duration: reactionTimeout,
     });
-    if (!reaction) {
-      return;
-    }
+    if (!reaction) return;
 
-    if (embedMessage.guildID) {
+    if (embedMessage.guildId) {
       await removeUserReaction(
-        embedMessage.channelID,
+        embedMessage.channelId,
         embedMessage.id,
         reaction,
-        authorID,
-      );
+        authorId,
+      ).catch(console.log);
     }
 
     if (reactions[reaction]) {
@@ -317,16 +300,18 @@ export async function createEmbedsPagination(
         },
         currentPage,
         embeds.length,
-        () => {
+        async () => {
           isEnded = true;
-          deleteMessageByID(embedMessage.channelID, embedMessage.id);
+          await embedMessage.delete().catch(console.log);
         },
       );
     }
 
     if (
       isEnded || !embedMessage ||
-      !(await editEmbed(embedMessage, embeds[currentPage - 1]))
+      !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
+        console.log,
+      ))
     ) {
       return;
     }

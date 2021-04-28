@@ -4,7 +4,7 @@ const SNOWFLAKE_REGEX = /[0-9]{17,19}/;
 
 botCache.arguments.set("...snowflakes", {
   name: "...snowflakes",
-  execute: function (argument, parameters) {
+  execute: function (_argument, parameters) {
     const cleaned = parameters.map((p) => {
       // If its just a normal id number
       if (!p.startsWith("<")) return p;

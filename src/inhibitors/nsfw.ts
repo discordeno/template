@@ -1,4 +1,4 @@
-import { botCache, cache } from "../../deps.ts";
+import { botCache } from "../../deps.ts";
 
 // deno-lint-ignore require-await
 botCache.inhibitors.set("nsfw", async function (message, command, guild) {

@@ -9,11 +9,10 @@ import {
   bgYellow,
   black,
   botCache,
-  botID,
-  cache,
+  botId,
+  DiscordenoMessage,
   green,
   Guild,
-  Message,
   red,
   white,
 } from "../../deps.ts";
@@ -35,7 +34,7 @@ export const parseCommand = (commandName: string) => {
 };
 
 export const logCommand = (
-  message: Message,
+  message: DiscordenoMessage,
   guildName: string,
   type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing",
   commandName: string,
@@ -56,7 +55,7 @@ export const logCommand = (
     ),
   );
   const guild = bgMagenta(
-    black(`${guildName}${message.guildID ? `(${message.guildID})` : ""}`),
+    black(`${guildName}${message.guildId ? `(${message.guildId})` : ""}`),
   );
 
   console.log(
@@ -66,7 +65,7 @@ export const logCommand = (
 
 /** Parses all the arguments for the command based on the message sent by the user. */
 async function parseArguments(
-  message: Message,
+  message: DiscordenoMessage,
   command: Command,
   parameters: string[],
 ) {
@@ -114,7 +113,7 @@ async function parseArguments(
 
 /** Runs the inhibitors to see if a command is allowed to run. */
 async function commandAllowed(
-  message: Message,
+  message: DiscordenoMessage,
   command: Command,
   guild?: Guild,
 ) {
@@ -145,10 +144,9 @@ async function commandAllowed(
 }
 
 async function executeCommand(
-  message: Message,
+  message: DiscordenoMessage,
   command: Command,
   parameters: string[],
-  guild?: Guild,
 ) {
   try {
     // Parsed args and validated
@@ -159,7 +157,7 @@ async function executeCommand(
       | false;
     // Some arg that was required was missing and handled already
     if (!args) {
-      return logCommand(message, guild?.name || "DM", "Missing", command.name);
+      return logCommand(message, message.guild?.name || "DM", "Missing", command.name);
     }
 
     // If no subcommand execute the command
@@ -168,10 +166,10 @@ async function executeCommand(
 
     if (!argument || argument.type !== "subcommand" || !subcommand) {
       // Check subcommand permissions and options
-      if (!(await commandAllowed(message, command, guild))) return;
+      if (!(await commandAllowed(message, command))) return;
 
-      await command.execute?.(message, args, guild);
-      return logCommand(message, guild?.name || "DM", "Success", command.name);
+      await command.execute?.(message, args);
+      return logCommand(message, message.guild?.name || "DM", "Success", command.name);
     }
 
     if (!subcommand?.name) {
@@ -183,13 +181,13 @@ async function executeCommand(
     if (
       ![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])
     ) {
-      executeCommand(message, subcommand, parameters, guild);
+      executeCommand(message, subcommand, parameters);
     } else {
       const subParameters = parameters.slice(1);
-      executeCommand(message, subcommand, subParameters, guild);
+      executeCommand(message, subcommand, subParameters);
     }
   } catch (error) {
-    logCommand(message, guild?.name || "DM", "Failure", command.name);
+    logCommand(message, message.guild?.name || "DM", "Failure", command.name);
     console.error(error);
     handleError(message, error);
   }
@@ -201,16 +199,16 @@ botCache.monitors.set("commandHandler", {
   ignoreDM: false,
   /** The main code that will be run when this monitor is triggered. */
   // deno-lint-ignore require-await
-  execute: async function (message: Message) {
+  execute: async function (message: DiscordenoMessage) {
     // If the message was sent by a bot we can just ignore it
     if (message.author.bot) return;
 
-    let prefix = parsePrefix(message.guildID);
-    const botMention = `<@!${botID}>`;
+    let prefix = parsePrefix(message.guildId);
+    const botMention = `<@!${botId}>`;
 
     // If the message is not using the valid prefix or bot mention cancel the command
     if (message.content === botMention) {
-      return message.reply(parsePrefix(message.guildID));
+      return message.reply(parsePrefix(message.guildId));
     } else if (message.content.startsWith(botMention)) prefix = botMention;
     else if (!message.content.startsWith(prefix)) return;
 
@@ -225,6 +223,6 @@ botCache.monitors.set("commandHandler", {
 
     logCommand(message, message.guild?.name || "DM", "Trigger", commandName);
 
-    return executeCommand(message, command, parameters, message.guild);
+    return executeCommand(message, command, parameters);
   },
 });

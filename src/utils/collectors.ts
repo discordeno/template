@@ -4,25 +4,19 @@ import {
   MessageCollectorOptions,
   ReactionCollectorOptions,
 } from "../types/collectors.ts";
-import {
-  botCache,
-  botID,
-  Message,
-  MessageReactionUncachedPayload,
-  ReactionPayload,
-} from "../../deps.ts";
+import { botCache, botId, DiscordenoMessage, Emoji } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 export async function needMessage(
-  memberID: string,
-  channelID: string,
+  memberId: string,
+  channelId: string,
   options?: MessageCollectorOptions,
 ) {
   const [message] = await collectMessages({
-    key: memberID,
-    channelID,
+    key: memberId,
+    channelId,
     createdAt: Date.now(),
-    filter: options?.filter || ((msg) => memberID === msg.author.id),
+    filter: options?.filter || ((msg) => memberId === msg.author.id),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
@@ -33,7 +27,7 @@ export async function needMessage(
 // deno-lint-ignore require-await
 export async function collectMessages(
   options: CollectMessagesOptions,
-): Promise<Message[]> {
+): Promise<DiscordenoMessage[]> {
   return new Promise((resolve, reject) => {
     botCache.messageCollectors.get(options.key)?.reject(
       "A new collector began before the user responded to the previous one.",
@@ -49,15 +43,15 @@ export async function collectMessages(
 }
 
 export async function needReaction(
-  memberID: string,
+  memberId: string,
   messageID: string,
   options?: ReactionCollectorOptions,
 ) {
   const [reaction] = await collectReactions({
-    key: memberID,
+    key: memberId,
     messageID,
     createdAt: Date.now(),
-    filter: options?.filter || ((userID) => memberID === userID),
+    filter: options?.filter || ((userID) => memberId === userID),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
@@ -83,12 +77,12 @@ export async function collectReactions(
 }
 
 export function processReactionCollectors(
-  message: Message | MessageReactionUncachedPayload,
-  emoji: ReactionPayload,
+  message: DiscordenoMessage | { id: string },
+  emoji: Partial<Emoji>,
   userID: string,
 ) {
   // Ignore bot reactions
-  if (userID === botID) return;
+  if (userID === botId) return;
 
   const emojiName = emoji.id || emoji.name;
   if (!emojiName) return;

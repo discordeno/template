@@ -28,8 +28,8 @@ createCommand({
         .addField("Unbanned By:", `<@${message.author.id}>`, true)
         .setTimestamp();
 
-      return sendEmbed(message.channelID, embed);
-    } catch (error) {
+      return sendEmbed(message.channelId, embed);
+    } catch {
       return message.reply("Attempt to unban user has failed!");
     }
   },

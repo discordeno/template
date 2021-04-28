@@ -4,15 +4,17 @@ createCommand({
   name: `avatar`,
   guildOnly: true,
   execute: (message) => {
-    const memberID = message.mentions[0] || message.author.id;
-    const member = message.guild?.members.get(memberID);
+    const mentioned = message.mentions?.[0];
+    const member = message.guild?.members.get(
+      mentioned?.id || message.author.id,
+    );
     if (!member) return;
 
     return message.reply({
       embed: {
         author: {
           name: member.tag,
-          icon_url: member.avatarURL,
+          iconUrl: member.avatarURL,
         },
         image: {
           url: member.makeAvatarURL({ size: 2048 }),

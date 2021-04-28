@@ -1,4 +1,4 @@
-import { Collection, Guild, Message } from "./deps.ts";
+import { Collection, Guild, DiscordenoMessage } from "./deps.ts";
 import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
 import { Argument, Command, PermissionLevels } from "./src/types/commands.ts";
 import { CustomEvents } from "./src/types/events.ts";
@@ -15,12 +15,12 @@ export const botCache = {
   reactionCollectors: new Collection<string, ReactionCollector>(),
   inhibitors: new Collection<
     string,
-    (message: Message, command: Command, guild?: Guild) => Promise<boolean>
+    (message: DiscordenoMessage, command: Command, guild?: Guild) => Promise<boolean>
   >(),
   monitors: new Collection<string, Monitor>(),
   permissionLevels: new Collection<
     PermissionLevels,
-    (message: Message, command: Command, guild?: Guild) => Promise<boolean>
+    (message: DiscordenoMessage, command: Command, guild?: Guild) => Promise<boolean> | boolean
   >(),
   tasks: new Collection<string, Task>(),
   runningTasks: [] as number[],

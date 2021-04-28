@@ -30,7 +30,7 @@ createCommand({
   permissionLevels: [PermissionLevels.MEMBER],
   // deno-lint-ignore require-await
   execute: async function (message) {
-    const currentLanguageId = getCurrentLanguage(message.guildID);
+    const currentLanguageId = getCurrentLanguage(message.guildId);
     const currentLanguage = allowedLanguages.find((item) =>
       item.id === currentLanguageId
     ) || allowedLanguages[0];
@@ -64,7 +64,7 @@ createSubcommand("language", {
   permissionLevels: [PermissionLevels.ADMIN],
   execute: async function (message, args: LanguageSetArgs) {
     //Old
-    const oldLanguageId = getCurrentLanguage(message.guildID);
+    const oldLanguageId = getCurrentLanguage(message.guildId);
     const oldLanguage = allowedLanguages.find((item) =>
       item.id === oldLanguageId
     ) || allowedLanguages[0];
@@ -86,8 +86,8 @@ createSubcommand("language", {
 
       message.send({ embed });
     } else {
-      botCache.guildLanguages.set(message.guildID, newLanguage.id);
-      await db.guilds.update(message.guildID, { language: newLanguage.id })
+      botCache.guildLanguages.set(message.guildId, newLanguage.id);
+      await db.guilds.update(message.guildId, { language: newLanguage.id })
         .catch(console.log);
 
       const embed = new Embed()

@@ -1,9 +1,8 @@
 import {
-  botID,
+  botId,
+  DiscordenoMember,
   higherRolePosition,
   highestRole,
-  Member,
-  sendDirectMessage,
 } from "../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
@@ -35,23 +34,21 @@ createCommand({
   botChannelPermissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
   execute: async (message, args: BanArgs) => {
     try {
-      const { guildID, channelID } = message;
-      const authorID = message.author.id;
-      const memberID = args.member.id;
+      const { guildId, channelId } = message;
+      const authorId = message.author.id;
+      const memberId = args.member.id;
 
-      const { reason, days } = args;
-
-      const botHighestRoleId = (await highestRole(guildID, botID))!.id;
-      const memberHighestRoleId = (await highestRole(guildID, memberID))!.id;
-      const authorHighestRoleId = (await highestRole(guildID, authorID))!.id;
+      const botHighestRoleId = (await highestRole(guildId, botId))!.id;
+      const memberHighestRoleId = (await highestRole(guildId, memberId))!.id;
+      const authorHighestRoleId = (await highestRole(guildId, authorId))!.id;
 
       const canBotBanMember = await higherRolePosition(
-        guildID,
+        guildId,
         botHighestRoleId,
         memberHighestRoleId,
       );
       const canAuthorBanMember = await higherRolePosition(
-        guildID,
+        guildId,
         authorHighestRoleId,
         memberHighestRoleId,
       );
@@ -64,24 +61,27 @@ createCommand({
             "Cannot ban member with same or higher Roleposition than Author or Bot",
           )
           .setTimestamp();
-        return sendEmbed(channelID, embed);
+        return sendEmbed(channelId, embed);
       }
 
       try {
         const embed = new Embed()
           .setColor("#F04747")
           .setTitle(`Banned from ${message.member?.guild.name}`)
-          .addField("Banned By:", `<@${authorID}>`)
-          .addField("Reason:", reason)
+          .addField("Banned By:", `<@${authorId}>`)
+          .addField("Reason:", args.reason)
           .setTimestamp();
         await args.member.sendDM({ embed });
-      } catch (error) {
+      } catch {
         console.error(
           `Could not notify member ${args.member.tag} for ban via DM`,
         );
       }
 
-      const banned = await args.member.ban(guildID, { reason, days }).catch(
+      const banned = await args.member.ban(guildId, {
+        reason: args.reason,
+        deleteMessageDays: args.days,
+      }).catch(
         (console.error),
       );
       if (!banned) return;
@@ -91,20 +91,20 @@ createCommand({
         .setTitle(`Banned User`)
         .setThumbnail(args.member.avatarURL)
         .addField("User:", args.member.mention, true)
-        .addField("Banned By:", `<@${authorID}>`, true)
-        .addField("Reason:", reason)
-        .addField("Deleted Message History:", `${days} Days`)
+        .addField("Banned By:", `<@${authorId}>`, true)
+        .addField("Reason:", args.reason)
+        .addField("Deleted DiscordenoMessage History:", `${args.days} Days`)
         .setTimestamp();
 
-      return sendEmbed(channelID, embed);
-    } catch (error) {
+      return sendEmbed(channelId, embed);
+    } catch {
       return message.reply("Attempt to ban user has failed!");
     }
   },
 });
 
 interface BanArgs {
-  member: Member;
+  member: DiscordenoMember;
   reason: string;
   days: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 }

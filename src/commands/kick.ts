@@ -1,4 +1,4 @@
-import { Member } from "../../deps.ts";
+import { DiscordenoMember } from "../../deps.ts";
 import { Embed } from "./../utils/Embed.ts";
 import { createCommand, sendEmbed } from "../utils/helpers.ts";
 
@@ -27,7 +27,7 @@ createCommand({
   ],
   execute: async (message, args: KickArgs) => {
     try {
-      await args.member.kick(message.guildID, args.reason);
+      await args.member.kick(message.guildId, args.reason);
 
       const embed = new Embed()
         .setColor("#FFA500")
@@ -37,14 +37,14 @@ createCommand({
         .addField("Reason:", args.reason)
         .setTimestamp();
 
-      return sendEmbed(message.channelID, embed);
-    } catch (error) {
+      return sendEmbed(message.channelId, embed);
+    } catch {
       return message.send("Attempt to kick user has failed!");
     }
   },
 });
 
 interface KickArgs {
-  member: Member;
+  member: DiscordenoMember;
   reason: string;
 }

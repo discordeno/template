@@ -1,18 +1,20 @@
 import {
-  ActivityType,
   botCache,
   cache,
-  editBotsStatus,
-  StatusTypes,
+  DiscordActivityTypes,
+  editBotStatus,
 } from "../../deps.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
 
 botCache.eventHandlers.ready = function () {
-  editBotsStatus(
-    StatusTypes.DoNotDisturb,
-    "Discordeno Best Lib",
-    ActivityType.Game,
-  );
+  editBotStatus({
+    status: "dnd",
+    activities: [{
+      name: "Discordeno Best Lib",
+      type: DiscordActivityTypes.Game,
+      createdAt: Date.now(),
+    }],
+  });
 
   console.log(`Loaded ${botCache.arguments.size} Argument(s)`);
   console.log(`Loaded ${botCache.commands.size} Command(s)`);

@@ -20,7 +20,7 @@ createCommand({
   execute: (message) => {
     const embed = new Embed()
       .setTitle("Prefix Information")
-      .setDescription(`**Current Prefix**: \`${parsePrefix(message.guildID)}\``)
+      .setDescription(`**Current Prefix**: \`${parsePrefix(message.guildId)}\``)
       .setTimestamp();
 
     message.send({ embed });
@@ -46,9 +46,9 @@ createSubcommand("prefix", {
       return message.reply("Prefix input too long");
     }
 
-    const oldPrefix = parsePrefix(message.guildID);
-    botCache.guildPrefixes.set(message.guildID, args.prefix);
-    db.guilds.update(message.guildID, { prefix: args.prefix });
+    const oldPrefix = parsePrefix(message.guildId);
+    botCache.guildPrefixes.set(message.guildId, args.prefix);
+    db.guilds.update(message.guildId, { prefix: args.prefix });
 
     const embed = new Embed()
       .setTitle("Success, prefix was changed")

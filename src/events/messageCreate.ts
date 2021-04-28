@@ -1,11 +1,11 @@
 import {
   botCache,
   botHasChannelPermissions,
-  botHasPermission,
-  botID,
-  ChannelTypes,
+  botHasGuildPermissions,
+  botId,
+  DiscordChannelTypes,
   hasChannelPermissions,
-  memberIDHasPermission,
+  hasGuildPermissions,
 } from "../../deps.ts";
 
 // deno-lint-ignore require-await
@@ -17,13 +17,14 @@ botCache.eventHandlers.messageCreate = async function (message) {
     if (monitor.ignoreBots !== false && message.author.bot) return;
 
     if (
-      monitor.ignoreDM !== false && message.channel?.type === ChannelTypes.DM
+      monitor.ignoreDM !== false &&
+      message.channel?.type === DiscordChannelTypes.DM
     ) {
       return;
     }
 
     if (monitor.ignoreEdits && message.editedTimestamp) return;
-    if (monitor.ignoreOthers && message.author.id !== botID) return;
+    if (monitor.ignoreOthers && message.author.id !== botId) return;
 
     // Permission checks
 
@@ -44,7 +45,7 @@ botCache.eventHandlers.messageCreate = async function (message) {
     if (monitor.userChannelPermissions) {
       const results = await Promise.all(
         monitor.userChannelPermissions.map((perm) =>
-          hasChannelPermissions(message.author.id, message.guildID, [perm])
+          hasChannelPermissions(message.channelId, message.author.id, [perm])
         ),
       );
       if (results.includes(false)) return;
@@ -53,9 +54,9 @@ botCache.eventHandlers.messageCreate = async function (message) {
     // Check if the message author has the necessary permissions to run this monitor
     if (
       monitor.userServerPermissions &&
-      !(await memberIDHasPermission(
+      !(await hasGuildPermissions(
+        message.guildId,
         message.author.id,
-        message.guildID,
         monitor.userServerPermissions,
       ))
     ) {
@@ -66,7 +67,7 @@ botCache.eventHandlers.messageCreate = async function (message) {
     if (
       monitor.botChannelPermissions &&
       !(await botHasChannelPermissions(
-        message.guildID,
+        message.channelId,
         monitor.botChannelPermissions,
       ))
     ) {
@@ -76,7 +77,10 @@ botCache.eventHandlers.messageCreate = async function (message) {
     // Check if the bot has the necessary permissions to run this monitor
     if (
       monitor.botServerPermissions &&
-      !(await botHasPermission(message.guildID, monitor.botServerPermissions))
+      !(await botHasGuildPermissions(
+        message.guildId,
+        monitor.botServerPermissions,
+      ))
     ) {
       return;
     }

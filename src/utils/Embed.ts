@@ -1,4 +1,4 @@
-import type {
+import {
   EmbedAuthor,
   EmbedField,
   EmbedFooter,
@@ -61,8 +61,7 @@ export class Embed {
     const finalName = this.enforceLimits
       ? this.fitData(name, embedLimits.authorName)
       : name;
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    this.author = { name: finalName, icon_url: icon, url };
+    this.author = { name: finalName, iconUrl: icon, url };
 
     return this;
   }
@@ -111,10 +110,9 @@ export class Embed {
   }
 
   setFooter(text: string, icon?: string) {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     this.footer = {
       text: this.fitData(text, embedLimits.footerText),
-      icon_url: icon,
+      iconUrl: icon,
     };
 
     return this;

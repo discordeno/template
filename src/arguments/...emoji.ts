@@ -3,7 +3,7 @@ import { EMOJI_REGEX } from "../utils/constants/emoj_regex.ts";
 
 botCache.arguments.set("...emoji", {
   name: "...emoji",
-  execute: function (argument, parameters: string[]) {
+  execute: function (_argument, parameters: string[]) {
     if (!parameters.length) return;
 
     const text = parameters.join(" ");

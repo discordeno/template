@@ -22,13 +22,13 @@ createCommand({
   guildOnly: true,
   execute: async function (message, args: PurgeArgs) {
     try {
-      const messagesToDelete = await getMessages(message.channelID, {
+      const messagesToDelete = await getMessages(message.channelId, {
         limit: 100,
       });
       if (!messagesToDelete) return;
 
       await deleteMessages(
-        message.channelID,
+        message.channelId,
         // + 1 to include the message that triggered the command
         messagesToDelete.slice(0, args.count + 1).map((m) => m.id),
       );
@@ -36,7 +36,7 @@ createCommand({
       const embed = new Embed()
         .setColor("#FFA500")
         .setTitle("Purged messages")
-        .addField("Channel:", `<#${message.channelID}>`, true)
+        .addField("Channel:", `<#${message.channelId}>`, true)
         .addField("Total:", args.count.toString(), true)
         .addField("Reason:", args.reason)
         .setTimestamp();

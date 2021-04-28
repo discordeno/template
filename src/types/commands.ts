@@ -1,4 +1,9 @@
-import type { Collection, Guild, Message, Permission } from "../../deps.ts";
+import {
+  Collection,
+  DiscordenoMessage,
+  Guild,
+  PermissionStrings,
+} from "../../deps.ts";
 
 export interface Command {
   name: string;
@@ -9,14 +14,14 @@ export interface Command {
   permissionLevels?:
     | PermissionLevels[]
     | ((
-      message: Message,
+      message: DiscordenoMessage,
       command: Command,
       guild?: Guild,
     ) => boolean | Promise<boolean>);
-  botServerPermissions?: Permission[];
-  botChannelPermissions?: Permission[];
-  userServerPermissions?: Permission[];
-  userChannelPermissions?: Permission[];
+  botServerPermissions?: PermissionStrings[];
+  botChannelPermissions?: PermissionStrings[];
+  userServerPermissions?: PermissionStrings[];
+  userChannelPermissions?: PermissionStrings[];
   description?: string;
   cooldown?: {
     seconds: number;
@@ -25,7 +30,7 @@ export interface Command {
   arguments?: CommandArgument[];
   subcommands?: Collection<string, Command>;
   // deno-lint-ignore no-explicit-any
-  execute?: (message: Message, args: any, guild?: Guild) => unknown;
+  execute?: (message: DiscordenoMessage, args: any) => unknown;
 }
 
 export interface CommandArgument {
@@ -50,7 +55,7 @@ export interface CommandArgument {
     | "...snowflakes"
     | "guild";
   /** The function that runs if this argument is required and is missing. */
-  missing?: (message: Message) => unknown;
+  missing?: (message: DiscordenoMessage) => unknown;
   /** Whether or not this argument is required. Defaults to true. */
   required?: boolean;
   /** If the type is string, this will force this argument to be lowercase. */
@@ -66,7 +71,7 @@ export interface Argument {
   execute: (
     arg: CommandArgument,
     parameter: string[],
-    message: Message,
+    message: DiscordenoMessage,
     command: Command,
   ) => unknown;
 }

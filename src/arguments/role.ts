@@ -7,7 +7,7 @@ botCache.arguments.set("role", {
     const [id] = parameters;
     if (!id) return;
 
-    const guild = cache.guilds.get(message.guildID);
+    const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
     const roleID = id.startsWith("<@&") ? id.substring(3, id.length - 1) : id;
