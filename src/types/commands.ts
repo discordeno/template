@@ -1,7 +1,9 @@
 import {
   ApplicationCommandOption,
   Collection,
+  DiscordenoMember,
   DiscordenoMessage,
+  Interaction,
   PermissionStrings,
 } from "../../deps.ts";
 
@@ -44,6 +46,10 @@ export interface DiscordenoSlashCommand {
   advanced?: boolean;
   /** The slash command options for this command. */
   options?: ApplicationCommandOption[];
+  execute: (
+    data: Omit<Interaction, "member">,
+    member?: DiscordenoMember,
+  ) => unknown;
 }
 
 export interface CommandArgument {
