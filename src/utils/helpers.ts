@@ -10,6 +10,9 @@ import {
   DiscordenoMessage,
   DiscordMessageComponentTypes,
   editMessage,
+  editSlashResponse,
+  editWebhookMessage,
+  editWebhookWithToken,
   removeReaction, sendInteractionResponse,
   sendMessage,
 } from "../../deps.ts";
@@ -334,42 +337,49 @@ export async function createEmbedsButtonsPagination(
 
   let currentPage = defaultPage;
 
+  const createComponents = () => [
+    {
+      type: DiscordMessageComponentTypes.ActionRow,
+      components:
+          [
+            {
+              type: DiscordMessageComponentTypes.Button,
+              label: "Previous",
+              custom_id: `${messageId}-Previous`,
+              style: DiscordButtonStyles.Primary,
+              disabled: currentPage === 1,
+              emoji: {name: '⬅️'}
+            },
+            {
+              type: DiscordMessageComponentTypes.Button,
+              label: "Jump",
+              custom_id: `${messageId}-Jump`,
+              style: DiscordButtonStyles.Primary,
+              disabled: embeds.length <= 2,
+              emoji: {name: '↗️'}
+            },
+            {
+              type: DiscordMessageComponentTypes.Button,
+              label: "Next",
+              custom_id: `${messageId}-Next`,
+              style: DiscordButtonStyles.Primary,
+              disabled: currentPage >= embeds.length,
+              emoji: {name: '➡️'}
+            },
+            {
+              type: DiscordMessageComponentTypes.Button,
+              label: "Delete",
+              custom_id: `${messageId}-Delete`,
+              style: DiscordButtonStyles.Danger,
+              emoji: {name: '🗑️'}
+            }
+          ]
+    }
+  ];
+
   const embedMessage = await sendMessage(channelId, {
-    embed: embeds[currentPage - 1],
-    components: [
-      {
-        type: DiscordMessageComponentTypes.ActionRow,
-        components: [
-          {
-            type: DiscordMessageComponentTypes.Button,
-            label: "Previous",
-            customId: `${messageId}-Previous`,
-            style: DiscordButtonStyles.Primary,
-            disabled: currentPage === 1
-          },
-          {
-            type: DiscordMessageComponentTypes.Button,
-            label: "Jump",
-            customId: `${messageId}-Jump`,
-            style: DiscordButtonStyles.Primary,
-            disabled: embeds.length === 2
-          },
-          {
-            type: DiscordMessageComponentTypes.Button,
-            label: "Next",
-            customId: `${messageId}-Next`,
-            style: DiscordButtonStyles.Primary,
-            disabled: currentPage >= embeds.length
-          },
-          {
-            type: DiscordMessageComponentTypes.Button,
-            label: "Delete",
-            customId: `${messageId}-Delete`,
-            style: DiscordButtonStyles.Danger
-          }
-        ]
-      }
-    ]
+    embed: embeds[currentPage - 1], // @ts-ignore
+    components: createComponents()
   });
 
   if (!embedMessage) return;
@@ -418,7 +428,16 @@ export async function createEmbedsButtonsPagination(
         }
 
         currentPage = newPageNumber;
-        break
+
+        await embedMessage.edit(
+            {
+              embed: embeds[currentPage - 1], // @ts-ignore
+              components: createComponents(),
+            },
+        ).catch(
+            console.log,
+        )
+        continue;
       case 'Previous':
         currentPage -= 1;
         break
@@ -428,9 +447,6 @@ export async function createEmbedsButtonsPagination(
         break
     }
 
-    console.log(collectedButton.interaction);
-
-
     if (
         isEnded || !embedMessage ||
         !(await sendInteractionResponse(collectedButton.interaction.id, collectedButton.interaction.token, {
@@ -439,40 +455,7 @@ export async function createEmbedsButtonsPagination(
             embeds: [
               embeds[currentPage - 1]
             ], // @ts-ignore
-            components: [
-              {
-                type: DiscordMessageComponentTypes.ActionRow,
-                components: [
-                  {
-                    type: DiscordMessageComponentTypes.Button,
-                    label: "Previous",
-                    custom_id: `${messageId}-Previous`,
-                    style: DiscordButtonStyles.Primary,
-                    disabled: currentPage === 1
-                  },
-                  {
-                    type: DiscordMessageComponentTypes.Button,
-                    label: "Jump",
-                    custom_id: `${messageId}-Jump`,
-                    style: DiscordButtonStyles.Primary,
-                    disabled: embeds.length <= 2
-                  },
-                  {
-                    type: DiscordMessageComponentTypes.Button,
-                    label: "Next",
-                    custom_id: `${messageId}-Next`,
-                    style: DiscordButtonStyles.Primary,
-                    disabled: currentPage >= embeds.length
-                  },
-                  {
-                    type: DiscordMessageComponentTypes.Button,
-                    label: "Delete",
-                    custom_id: `${messageId}-Delete`,
-                    style: DiscordButtonStyles.Danger
-                  }
-                ]
-              }
-            ]
+            components: createComponents()
           }
         }).catch(
             console.log,
