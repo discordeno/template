@@ -1,0 +1,6 @@
+{
+    "SLASH_NAME": "avatar",
+    "SLASH_DESCRIPTION": "Shows the avatar of a user or yourself.",
+    "USER_NAME": "user",
+    "USER_DESCRIPTION": "Provide a @user to view their avatar."
+}

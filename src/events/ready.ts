@@ -52,18 +52,22 @@ bot.eventHandlers.ready = async function () {
 
   // GLOBAL COMMANDS CAN TAKE 1 HOUR TO UPDATE IN DISCORD
   if (globalCommands.length) {
+    console.log(
+      getTime(),
+      `Updating Global Slash Commands... Any changes will take up to 1 hour to update on discord.`,
+    );
     await upsertSlashCommands(globalCommands).catch(console.log);
   }
 
   // GUILD COMMANDS WILL UPDATE INSTANTLY
-  await Promise.all(cache.guilds.map((guild) =>
-    upsertSlashCommands(
+  await Promise.all(cache.guilds.map(async (guild) => {
+    await upsertSlashCommands(
       perGuildCommands.map((cmd) => {
         // USER OPTED TO USE BASIC VERSION ONLY
         if (cmd.slash?.advanced === false) {
           return {
             name: cmd.name,
-            description: cmd.description,
+            description: cmd.description || "No description available.",
             options: cmd.slash?.options,
           };
         }
@@ -78,7 +82,7 @@ bot.eventHandlers.ready = async function () {
         return {
           name: name === "SLASH_NAME" ? cmd.name : name,
           description: description === "SLASH_DESCRIPTION"
-            ? cmd.description
+            ? cmd.description || "No description available."
             : description,
           options: cmd.slash?.options?.map((option) => {
             const optionName = translate(guild.id, option.name);
@@ -90,14 +94,18 @@ bot.eventHandlers.ready = async function () {
             return {
               ...option,
               name: optionName,
-              description: optionDescription,
+              description: optionDescription || "No description available.",
             };
           }),
         };
       }),
       guild.id,
-    ).catch(console.log)
-  ));
+    ).catch(console.log);
+    console.log(
+      getTime(),
+      `Updated Guild ${guild.name} (${guild.id}) Slash Commands...`,
+    );
+  }));
 
-  console.log(getTime(), `Slash Commands loaded successfully!`);
+  console.log(getTime(), `[READY] Slash Commands loaded successfully!`);
 };

@@ -7,7 +7,7 @@ import {
   deleteMessages,
   DiscordenoMessage,
   editMessage,
-  removeUserReaction,
+  removeReaction,
   sendMessage,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
@@ -285,11 +285,11 @@ export async function createEmbedsPagination(
     if (!reaction) return;
 
     if (embedMessage.guildId) {
-      await removeUserReaction(
+      await removeReaction(
         embedMessage.channelId,
         embedMessage.id,
         reaction,
-        authorId,
+        { userId: authorId},
       ).catch(console.log);
     }
 
