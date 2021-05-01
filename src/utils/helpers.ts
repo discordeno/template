@@ -10,12 +10,11 @@ import {
   DiscordenoMessage,
   DiscordMessageComponentTypes,
   editMessage,
-  removeReaction,
-  sendInteractionResponse,
+  removeReaction, sendInteractionResponse,
   sendMessage,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
-import { needButton, needMessage, needReaction } from "./collectors.ts";
+import {needButton, needMessage, needReaction} from "./collectors.ts";
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -84,9 +83,9 @@ export function createCommand(command: Command) {
 }
 
 export function createSubcommand(
-  commandName: string,
-  subcommand: Command,
-  retries = 0,
+    commandName: string,
+    subcommand: Command,
+    retries = 0,
 ) {
   const names = commandName.split("-");
 
@@ -95,8 +94,8 @@ export function createSubcommand(
   if (names.length > 1) {
     for (const name of names) {
       const validCommand = command
-        ? command.subcommands?.get(name)
-        : bot.commands.get(name);
+          ? command.subcommands?.get(name)
+          : bot.commands.get(name);
       if (!validCommand) break;
 
       command = validCommand;
@@ -107,14 +106,14 @@ export function createSubcommand(
     // If 10 minutes have passed something must have been wrong
     if (retries === 600) {
       return console.error(
-        `Subcommand ${subcommand} unable to be created for ${commandName}`,
+          `Subcommand ${subcommand} unable to be created for ${commandName}`,
       );
     }
 
     // Try again in 3 seconds in case this command file just has not been loaded yet.
     setTimeout(
-      () => createSubcommand(commandName, subcommand, retries++),
-      1000,
+        () => createSubcommand(commandName, subcommand, retries++),
+        1000,
     );
     return;
   }
@@ -133,9 +132,9 @@ export function sendEmbed(channelId: string, embed: Embed, content?: string) {
 
 /** Use this function to edit an embed with ease. */
 export function editEmbed(
-  message: DiscordenoMessage,
-  embed: Embed,
-  content?: string,
+    message: DiscordenoMessage,
+    embed: Embed,
+    content?: string,
 ) {
   return editMessage(message, { content, embed });
 }
@@ -159,16 +158,16 @@ export async function importDirectory(path: string) {
     if (file.isFile) {
       if (!currentPath.endsWith(".ts")) continue;
       paths.push(
-        `import "${
-          Deno.mainModule.substring(
-            0,
-            Deno.mainModule.lastIndexOf("/"),
-          )
-        }/${
-          currentPath.substring(
-            currentPath.indexOf("src/"),
-          )
-        }#${uniqueFilePathCounter}";`,
+          `import "${
+              Deno.mainModule.substring(
+                  0,
+                  Deno.mainModule.lastIndexOf("/"),
+              )
+          }/${
+              currentPath.substring(
+                  currentPath.indexOf("src/"),
+              )
+          }#${uniqueFilePathCounter}";`,
       );
       continue;
     }
@@ -182,17 +181,17 @@ export async function importDirectory(path: string) {
 /** Imports all everything in fileloader.ts */
 export async function fileLoader() {
   await Deno.writeTextFile(
-    "fileloader.ts",
-    paths.join("\n").replaceAll("\\", "/"),
+      "fileloader.ts",
+      paths.join("\n").replaceAll("\\", "/"),
   );
   await import(
-    `${
-      Deno.mainModule.substring(
-        0,
-        Deno.mainModule.lastIndexOf("/"),
-      )
-    }/fileloader.ts#${uniqueFilePathCounter}`
-  );
+      `${
+          Deno.mainModule.substring(
+              0,
+              Deno.mainModule.lastIndexOf("/"),
+          )
+      }/fileloader.ts#${uniqueFilePathCounter}`
+      );
   paths = [];
 }
 
@@ -209,61 +208,61 @@ export function getTime() {
   }
 
   return `${hour >= 10 ? hour : `0${hour}`}:${
-    minute >= 10 ? minute : `0${minute}`
+      minute >= 10 ? minute : `0${minute}`
   } ${amOrPm}`;
 }
 
 export function getCurrentLanguage(guildID: string) {
   return bot.guildLanguages.get(guildID) ||
-    cache.guilds.get(guildID)?.preferredLocale || "en_US";
+      cache.guilds.get(guildID)?.preferredLocale || "en_US";
 }
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
 export async function createEmbedsPagination(
-  channelId: string,
-  authorId: string,
-  embeds: Embed[],
-  defaultPage = 1,
-  reactionTimeout = Milliseconds.SECOND * 30,
-  reactions: {
-    [emoji: string]: (
-      setPage: (newPage: number) => void,
-      currentPage: number,
-      pageCount: number,
-      deletePagination: () => void,
-    ) => Promise<unknown>;
-  } = {
-    // deno-lint-ignore require-await
-    "◀️": async (setPage, currentPage) => setPage(Math.max(currentPage - 1, 1)),
-    "↗️": async (setPage) => {
-      const question = await sendMessage(
-        channelId,
-        "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
-      );
-      const answer = await needMessage(authorId, channelId);
-      await deleteMessages(channelId, [question.id, answer.id]).catch(
-        console.log,
-      );
+    channelId: string,
+    authorId: string,
+    embeds: Embed[],
+    defaultPage = 1,
+    reactionTimeout = Milliseconds.SECOND * 30,
+    reactions: {
+      [emoji: string]: (
+          setPage: (newPage: number) => void,
+          currentPage: number,
+          pageCount: number,
+          deletePagination: () => void,
+      ) => Promise<unknown>;
+    } = {
+      // deno-lint-ignore require-await
+      "◀️": async (setPage, currentPage) => setPage(Math.max(currentPage - 1, 1)),
+      "↗️": async (setPage) => {
+        const question = await sendMessage(
+            channelId,
+            "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+        );
+        const answer = await needMessage(authorId, channelId);
+        await deleteMessages(channelId, [question.id, answer.id]).catch(
+            console.log,
+        );
 
-      const newPageNumber = Math.ceil(Number(answer.content));
+        const newPageNumber = Math.ceil(Number(answer.content));
 
-      if (isNaN(newPageNumber)) {
-        return await sendMessage(channelId, "This is not a valid number!");
-      }
+        if (isNaN(newPageNumber)) {
+          return await sendMessage(channelId, "This is not a valid number!");
+        }
 
-      if (newPageNumber < 1 || newPageNumber > embeds.length) {
-        return await sendMessage(channelId, `This is not a valid page!`);
-      }
+        if (newPageNumber < 1 || newPageNumber > embeds.length) {
+          return await sendMessage(channelId, `This is not a valid page!`);
+        }
 
-      setPage(newPageNumber);
+        setPage(newPageNumber);
+      },
+      // deno-lint-ignore require-await
+      "▶️": async (setPage, currentPage, pageCount) =>
+          setPage(Math.min(currentPage + 1, pageCount)),
+      // deno-lint-ignore require-await
+      "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) =>
+          deletePagination(),
     },
-    // deno-lint-ignore require-await
-    "▶️": async (setPage, currentPage, pageCount) =>
-      setPage(Math.min(currentPage + 1, pageCount)),
-    // deno-lint-ignore require-await
-    "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) =>
-      deletePagination(),
-  },
 ) {
   if (embeds.length === 0) return;
 
@@ -275,7 +274,7 @@ export async function createEmbedsPagination(
   if (embeds.length <= 1) return;
 
   await embedMessage.addReactions(Object.keys(reactions), true).catch(
-    console.log,
+      console.log,
   );
 
   let isEnded = false;
@@ -290,32 +289,32 @@ export async function createEmbedsPagination(
 
     if (embedMessage.guildId) {
       await removeReaction(
-        embedMessage.channelId,
-        embedMessage.id,
-        reaction,
-        { userId: authorId },
+          embedMessage.channelId,
+          embedMessage.id,
+          reaction,
+          { userId: authorId},
       ).catch(console.log);
     }
 
     if (reactions[reaction]) {
       await reactions[reaction](
-        (newPage) => {
-          currentPage = newPage;
-        },
-        currentPage,
-        embeds.length,
-        async () => {
-          isEnded = true;
-          await embedMessage.delete().catch(console.log);
-        },
+          (newPage) => {
+            currentPage = newPage;
+          },
+          currentPage,
+          embeds.length,
+          async () => {
+            isEnded = true;
+            await embedMessage.delete().catch(console.log);
+          },
       );
     }
 
     if (
-      isEnded || !embedMessage ||
-      !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
-        console.log,
-      ))
+        isEnded || !embedMessage ||
+        !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
+            console.log,
+        ))
     ) {
       return;
     }
@@ -324,12 +323,12 @@ export async function createEmbedsPagination(
 
 /** This function allows to create a pagination using embeds and buttons. **/
 export async function createEmbedsButtonsPagination(
-  messageId: string,
-  channelId: string,
-  authorId: string,
-  embeds: Embed[],
-  defaultPage = 1,
-  buttonTimeout = Milliseconds.SECOND * 30,
+    messageId: string,
+    channelId: string,
+    authorId: string,
+    embeds: Embed[],
+    defaultPage = 1,
+    buttonTimeout = Milliseconds.SECOND * 30
 ) {
   if (embeds.length === 0) return;
 
@@ -346,31 +345,31 @@ export async function createEmbedsButtonsPagination(
             label: "Previous",
             customId: `${messageId}-Previous`,
             style: DiscordButtonStyles.Primary,
-            disabled: currentPage === 1,
+            disabled: currentPage === 1
           },
           {
             type: DiscordMessageComponentTypes.Button,
             label: "Jump",
             customId: `${messageId}-Jump`,
             style: DiscordButtonStyles.Primary,
-            disabled: embeds.length === 2,
+            disabled: embeds.length === 2
           },
           {
             type: DiscordMessageComponentTypes.Button,
             label: "Next",
             customId: `${messageId}-Next`,
             style: DiscordButtonStyles.Primary,
-            disabled: currentPage >= embeds.length,
+            disabled: currentPage >= embeds.length
           },
           {
             type: DiscordMessageComponentTypes.Button,
             label: "Delete",
             customId: `${messageId}-Delete`,
-            style: DiscordButtonStyles.Danger,
-          },
-        ],
-      },
-    ],
+            style: DiscordButtonStyles.Danger
+          }
+        ]
+      }
+    ]
   });
 
   if (!embedMessage) return;
@@ -389,96 +388,95 @@ export async function createEmbedsButtonsPagination(
       duration: buttonTimeout,
     });
 
-    if (!collectedButton || !collectedButton.customId.startsWith(messageId)) {
-      return;
-    }
+    if (!collectedButton || !collectedButton.customId.startsWith(messageId)) return;
 
-    sendInteractionResponse(
-      collectedButton.interaction.id,
-      collectedButton.interaction.token,
-      {
-        type: 6,
-      },
-    );
-
-    const action = collectedButton.customId.split("-")[1];
+    const action = collectedButton.customId.split('-')[1];
 
     switch (action) {
-      case "Next":
+      case 'Next':
         currentPage += 1;
-        break;
-      case "Jump":
+        break
+      case 'Jump':
+        await sendInteractionResponse(collectedButton.interaction.id, collectedButton.interaction.token, {
+          type: 6,
+        });
+
         const question = await sendMessage(
-          channelId,
-          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+            channelId,
+            "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
         );
         const answer = await needMessage(authorId, channelId);
         await deleteMessages(channelId, [question.id, answer.id]).catch(
-          console.log,
+            console.log,
         );
 
         const newPageNumber = Math.ceil(Number(answer.content));
 
-        if (
-          isNaN(newPageNumber) || newPageNumber < 1 ||
-          newPageNumber > embeds.length
-        ) {
+        if (isNaN(newPageNumber) || newPageNumber < 1 || newPageNumber > embeds.length) {
           await sendMessage(channelId, "This is not a valid number!");
           continue;
         }
 
         currentPage = newPageNumber;
-        break;
-      case "Previous":
+        break
+      case 'Previous':
         currentPage -= 1;
-        break;
-      case "Delete":
+        break
+      case 'Delete':
         deleteMessage(channelId, embedMessage.id);
         isEnded = true;
-        break;
+        break
     }
 
+    console.log(collectedButton.interaction);
+
+
     if (
-      isEnded || !embedMessage ||
-      !(await embedMessage.edit({
-        embed: embeds[currentPage - 1], // @ts-ignore
-        components: [
-          {
-            type: DiscordMessageComponentTypes.ActionRow,
+        isEnded || !embedMessage ||
+        !(await sendInteractionResponse(collectedButton.interaction.id, collectedButton.interaction.token, {
+          type: 7,
+          data: {
+            embeds: [
+              embeds[currentPage - 1]
+            ], // @ts-ignore
             components: [
               {
-                type: DiscordMessageComponentTypes.Button,
-                label: "Previous",
-                custom_id: `${messageId}-Previous`,
-                style: DiscordButtonStyles.Primary,
-                disabled: currentPage === 1,
-              },
-              {
-                type: DiscordMessageComponentTypes.Button,
-                label: "Jump",
-                custom_id: `${messageId}-Jump`,
-                style: DiscordButtonStyles.Primary,
-                disabled: embeds.length <= 2,
-              },
-              {
-                type: DiscordMessageComponentTypes.Button,
-                label: "Next",
-                custom_id: `${messageId}-Next`,
-                style: DiscordButtonStyles.Primary,
-                disabled: currentPage >= embeds.length,
-              },
-              {
-                type: DiscordMessageComponentTypes.Button,
-                label: "Delete",
-                custom_id: `${messageId}-Delete`,
-                style: DiscordButtonStyles.Danger,
-              },
-            ],
-          },
-        ],
-      }).catch(
-        console.log,
-      ))
+                type: DiscordMessageComponentTypes.ActionRow,
+                components: [
+                  {
+                    type: DiscordMessageComponentTypes.Button,
+                    label: "Previous",
+                    custom_id: `${messageId}-Previous`,
+                    style: DiscordButtonStyles.Primary,
+                    disabled: currentPage === 1
+                  },
+                  {
+                    type: DiscordMessageComponentTypes.Button,
+                    label: "Jump",
+                    custom_id: `${messageId}-Jump`,
+                    style: DiscordButtonStyles.Primary,
+                    disabled: embeds.length <= 2
+                  },
+                  {
+                    type: DiscordMessageComponentTypes.Button,
+                    label: "Next",
+                    custom_id: `${messageId}-Next`,
+                    style: DiscordButtonStyles.Primary,
+                    disabled: currentPage >= embeds.length
+                  },
+                  {
+                    type: DiscordMessageComponentTypes.Button,
+                    label: "Delete",
+                    custom_id: `${messageId}-Delete`,
+                    style: DiscordButtonStyles.Danger
+                  }
+                ]
+              }
+            ]
+          }
+        }).catch(
+            console.log,
+        ))
     ) {
       return;
     }
