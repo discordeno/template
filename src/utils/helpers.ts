@@ -4,14 +4,18 @@ import {
   bot,
   cache,
   Collection,
+  deleteMessage,
   deleteMessages,
+  DiscordButtonStyles,
   DiscordenoMessage,
+  DiscordMessageComponentTypes,
   editMessage,
   removeReaction,
+  sendInteractionResponse,
   sendMessage,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
-import { needMessage, needReaction } from "./collectors.ts";
+import { needButton, needMessage, needReaction } from "./collectors.ts";
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -289,7 +293,7 @@ export async function createEmbedsPagination(
         embedMessage.channelId,
         embedMessage.id,
         reaction,
-        { userId: authorId},
+        { userId: authorId },
       ).catch(console.log);
     }
 
@@ -310,6 +314,169 @@ export async function createEmbedsPagination(
     if (
       isEnded || !embedMessage ||
       !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
+        console.log,
+      ))
+    ) {
+      return;
+    }
+  }
+}
+
+/** This function allows to create a pagination using embeds and buttons. **/
+export async function createEmbedsButtonsPagination(
+  messageId: string,
+  channelId: string,
+  authorId: string,
+  embeds: Embed[],
+  defaultPage = 1,
+  buttonTimeout = Milliseconds.SECOND * 30,
+) {
+  if (embeds.length === 0) return;
+
+  let currentPage = defaultPage;
+
+  const embedMessage = await sendMessage(channelId, {
+    embed: embeds[currentPage - 1],
+    components: [
+      {
+        type: DiscordMessageComponentTypes.ActionRow,
+        components: [
+          {
+            type: DiscordMessageComponentTypes.Button,
+            label: "Previous",
+            customId: `${messageId}-Previous`,
+            style: DiscordButtonStyles.Primary,
+            disabled: currentPage === 1,
+          },
+          {
+            type: DiscordMessageComponentTypes.Button,
+            label: "Jump",
+            customId: `${messageId}-Jump`,
+            style: DiscordButtonStyles.Primary,
+            disabled: embeds.length === 2,
+          },
+          {
+            type: DiscordMessageComponentTypes.Button,
+            label: "Next",
+            customId: `${messageId}-Next`,
+            style: DiscordButtonStyles.Primary,
+            disabled: currentPage >= embeds.length,
+          },
+          {
+            type: DiscordMessageComponentTypes.Button,
+            label: "Delete",
+            customId: `${messageId}-Delete`,
+            style: DiscordButtonStyles.Danger,
+          },
+        ],
+      },
+    ],
+  });
+
+  if (!embedMessage) return;
+
+  if (embeds.length <= 1) return;
+
+  let isEnded = false;
+
+  while (!isEnded) {
+    if (!embedMessage) {
+      isEnded = true;
+      break;
+    }
+
+    const collectedButton = await needButton(authorId, embedMessage.channelId, {
+      duration: buttonTimeout,
+    });
+
+    if (!collectedButton || !collectedButton.customId.startsWith(messageId)) {
+      return;
+    }
+
+    sendInteractionResponse(
+      collectedButton.interaction.id,
+      collectedButton.interaction.token,
+      {
+        type: 6,
+      },
+    );
+
+    const action = collectedButton.customId.split("-")[1];
+
+    switch (action) {
+      case "Next":
+        currentPage += 1;
+        break;
+      case "Jump":
+        const question = await sendMessage(
+          channelId,
+          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+        );
+        const answer = await needMessage(authorId, channelId);
+        await deleteMessages(channelId, [question.id, answer.id]).catch(
+          console.log,
+        );
+
+        const newPageNumber = Math.ceil(Number(answer.content));
+
+        if (
+          isNaN(newPageNumber) || newPageNumber < 1 ||
+          newPageNumber > embeds.length
+        ) {
+          await sendMessage(channelId, "This is not a valid number!");
+          continue;
+        }
+
+        currentPage = newPageNumber;
+        break;
+      case "Previous":
+        currentPage -= 1;
+        break;
+      case "Delete":
+        deleteMessage(channelId, embedMessage.id);
+        isEnded = true;
+        break;
+    }
+
+    if (
+      isEnded || !embedMessage ||
+      !(await embedMessage.edit({
+        embed: embeds[currentPage - 1], // @ts-ignore
+        components: [
+          {
+            type: DiscordMessageComponentTypes.ActionRow,
+            components: [
+              {
+                type: DiscordMessageComponentTypes.Button,
+                label: "Previous",
+                custom_id: `${messageId}-Previous`,
+                style: DiscordButtonStyles.Primary,
+                disabled: currentPage === 1,
+              },
+              {
+                type: DiscordMessageComponentTypes.Button,
+                label: "Jump",
+                custom_id: `${messageId}-Jump`,
+                style: DiscordButtonStyles.Primary,
+                disabled: embeds.length <= 2,
+              },
+              {
+                type: DiscordMessageComponentTypes.Button,
+                label: "Next",
+                custom_id: `${messageId}-Next`,
+                style: DiscordButtonStyles.Primary,
+                disabled: currentPage >= embeds.length,
+              },
+              {
+                type: DiscordMessageComponentTypes.Button,
+                label: "Delete",
+                custom_id: `${messageId}-Delete`,
+                style: DiscordButtonStyles.Danger,
+              },
+            ],
+          },
+        ],
+      }).catch(
         console.log,
       ))
     ) {

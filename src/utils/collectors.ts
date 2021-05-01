@@ -1,6 +1,7 @@
 import {
-ButtonCollectorOptions,
-CollectButtonOptions,
+  ButtonCollectorOptions,
+  ButtonCollectorReturn,
+  CollectButtonOptions,
   CollectMessagesOptions,
   CollectReactionsOptions,
   MessageCollectorOptions,
@@ -13,6 +14,7 @@ import {
   DiscordenoMessage,
   Emoji,
   Interaction,
+  sendInteractionResponse,
   structures,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
@@ -148,30 +150,31 @@ export function processReactionCollectors(
 
 // BUTTONS
 
-export async function needbutton(
+export async function needButton(
   memberId: string,
-  channelId: string,
+  messageID: string,
   options: ButtonCollectorOptions & { amount?: 1 },
-): Promise<string>;
-export async function needbutton(
+): Promise<ButtonCollectorReturn>;
+export async function needButton(
   memberId: string,
-  channelId: string,
+  messageID: string,
   options: ButtonCollectorOptions & { amount?: number },
-): Promise<string[]>;
-export async function needbutton(
+): Promise<ButtonCollectorReturn[]>;
+export async function needButton(
   memberId: string,
-  channelId: string,
-): Promise<string>;
-export async function needbutton(
+  messageID: string,
+): Promise<ButtonCollectorReturn>;
+export async function needButton(
   memberId: string,
   messageID: string,
   options?: ButtonCollectorOptions,
 ) {
-  const buttons = await collectbuttons({
+  const buttons = await collectButtons({
     key: memberId,
     messageID,
     createdAt: Date.now(),
-    filter: options?.filter || ((_msg, member) => member ? memberId === member.id : true),
+    filter: options?.filter ||
+      ((_msg, member) => member ? memberId === member.id : true),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
@@ -179,16 +182,16 @@ export async function needbutton(
   return (options?.amount || 1) > 1 ? buttons : buttons[0];
 }
 
-export function collectbuttons(
+export function collectButtons(
   options: CollectButtonOptions,
-): Promise<string[]> {
+): Promise<ButtonCollectorReturn[]> {
   return new Promise((resolve, reject) => {
     bot.buttonCollectors.get(options.key)?.reject(
       "A new collector began before the user responded to the previous one.",
     );
     bot.buttonCollectors.set(options.key, {
       ...options,
-      buttons: [] as string[],
+      buttons: [] as ButtonCollectorReturn[],
       resolve,
       reject,
     });
@@ -203,7 +206,9 @@ export async function processButtonCollectors(
   if (!data.message) return;
 
   // If this message is not pending a button response, we can ignore
-  const collector = bot.buttonCollectors.get(data.message.id);
+  const collector = bot.buttonCollectors.get(
+    member ? member.id : data.message.id,
+  );
   if (!collector) return;
 
   // This message is a response to a collector. Now running the filter function.
@@ -222,16 +227,25 @@ export async function processButtonCollectors(
     collector.amount === collector.buttons.length + 1
   ) {
     // Remove the collector
-    bot.buttonCollectors.delete(data.message.id);
+    bot.buttonCollectors.delete(member ? member.id : data.message.id);
     // Resolve the collector
     return collector.resolve([
       ...collector.buttons,
-      data.data?.customId || `No customId provided for this button.`,
+      {
+        customId: data.data?.customId ||
+          `No customId provided for this button.`,
+        interaction: data,
+        member,
+      },
     ]);
   }
 
   // More buttons still need to be collected
   collector.buttons.push(
-    data.data?.customId || `No customId provided for this button.`,
+    {
+      customId: data.data?.customId || `No customId provided for this button.`,
+      interaction: data,
+      member,
+    },
   );
 }
