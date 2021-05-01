@@ -1,18 +1,42 @@
 import {
+ButtonCollectorOptions,
+CollectButtonOptions,
   CollectMessagesOptions,
   CollectReactionsOptions,
   MessageCollectorOptions,
   ReactionCollectorOptions,
 } from "../types/collectors.ts";
-import { bot, botId, DiscordenoMessage, Emoji } from "../../deps.ts";
+import {
+  bot,
+  botId,
+  DiscordenoMember,
+  DiscordenoMessage,
+  Emoji,
+  Interaction,
+  structures,
+} from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 export async function needMessage(
   memberId: string,
   channelId: string,
+  options: MessageCollectorOptions & { amount?: 1 },
+): Promise<DiscordenoMessage>;
+export async function needMessage(
+  memberId: string,
+  channelId: string,
+  options: MessageCollectorOptions & { amount?: number },
+): Promise<DiscordenoMessage[]>;
+export async function needMessage(
+  memberId: string,
+  channelId: string,
+): Promise<DiscordenoMessage>;
+export async function needMessage(
+  memberId: string,
+  channelId: string,
   options?: MessageCollectorOptions,
 ) {
-  const [message] = await collectMessages({
+  const messages = await collectMessages({
     key: memberId,
     channelId,
     createdAt: Date.now(),
@@ -21,11 +45,10 @@ export async function needMessage(
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
 
-  return message;
+  return (options?.amount || 1) > 1 ? messages : messages[0];
 }
 
-// deno-lint-ignore require-await
-export async function collectMessages(
+export function collectMessages(
   options: CollectMessagesOptions,
 ): Promise<DiscordenoMessage[]> {
   return new Promise((resolve, reject) => {
@@ -44,10 +67,24 @@ export async function collectMessages(
 
 export async function needReaction(
   memberId: string,
+  channelId: string,
+  options: ReactionCollectorOptions & { amount?: 1 },
+): Promise<string>;
+export async function needReaction(
+  memberId: string,
+  channelId: string,
+  options: ReactionCollectorOptions & { amount?: number },
+): Promise<string[]>;
+export async function needReaction(
+  memberId: string,
+  channelId: string,
+): Promise<string>;
+export async function needReaction(
+  memberId: string,
   messageID: string,
   options?: ReactionCollectorOptions,
 ) {
-  const [reaction] = await collectReactions({
+  const reactions = await collectReactions({
     key: memberId,
     messageID,
     createdAt: Date.now(),
@@ -56,11 +93,10 @@ export async function needReaction(
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
 
-  return reaction;
+  return (options?.amount || 1) > 1 ? reactions : reactions[0];
 }
 
-// deno-lint-ignore require-await
-export async function collectReactions(
+export function collectReactions(
   options: CollectReactionsOptions,
 ): Promise<string[]> {
   return new Promise((resolve, reject) => {
@@ -108,4 +144,94 @@ export function processReactionCollectors(
 
   // More reactions still need to be collected
   collector.reactions.push(emojiName);
+}
+
+// BUTTONS
+
+export async function needbutton(
+  memberId: string,
+  channelId: string,
+  options: ButtonCollectorOptions & { amount?: 1 },
+): Promise<string>;
+export async function needbutton(
+  memberId: string,
+  channelId: string,
+  options: ButtonCollectorOptions & { amount?: number },
+): Promise<string[]>;
+export async function needbutton(
+  memberId: string,
+  channelId: string,
+): Promise<string>;
+export async function needbutton(
+  memberId: string,
+  messageID: string,
+  options?: ButtonCollectorOptions,
+) {
+  const buttons = await collectbuttons({
+    key: memberId,
+    messageID,
+    createdAt: Date.now(),
+    filter: options?.filter || ((_msg, member) => member ? memberId === member.id : true),
+    amount: options?.amount || 1,
+    duration: options?.duration || Milliseconds.MINUTE * 5,
+  });
+
+  return (options?.amount || 1) > 1 ? buttons : buttons[0];
+}
+
+export function collectbuttons(
+  options: CollectButtonOptions,
+): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    bot.buttonCollectors.get(options.key)?.reject(
+      "A new collector began before the user responded to the previous one.",
+    );
+    bot.buttonCollectors.set(options.key, {
+      ...options,
+      buttons: [] as string[],
+      resolve,
+      reject,
+    });
+  });
+}
+
+export async function processButtonCollectors(
+  data: Omit<Interaction, "member">,
+  member?: DiscordenoMember,
+) {
+  // All buttons will require a message
+  if (!data.message) return;
+
+  // If this message is not pending a button response, we can ignore
+  const collector = bot.buttonCollectors.get(data.message.id);
+  if (!collector) return;
+
+  // This message is a response to a collector. Now running the filter function.
+  if (
+    !collector.filter(
+      await structures.createDiscordenoMessage(data.message),
+      member,
+    )
+  ) {
+    return;
+  }
+
+  // If the necessary amount has been collected
+  if (
+    collector.amount === 1 ||
+    collector.amount === collector.buttons.length + 1
+  ) {
+    // Remove the collector
+    bot.buttonCollectors.delete(data.message.id);
+    // Resolve the collector
+    return collector.resolve([
+      ...collector.buttons,
+      data.data?.customId || `No customId provided for this button.`,
+    ]);
+  }
+
+  // More buttons still need to be collected
+  collector.buttons.push(
+    data.data?.customId || `No customId provided for this button.`,
+  );
 }

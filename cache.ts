@@ -1,5 +1,5 @@
 import { Collection, DiscordenoMessage } from "./deps.ts";
-import { MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
+import { ButtonCollector, MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
 import { Argument, Command, PermissionLevels } from "./src/types/commands.ts";
 import { CustomEvents } from "./src/types/events.ts";
 import { Monitor } from "./src/types/monitors.ts";
@@ -13,6 +13,7 @@ export const bot = {
   guildLanguages: new Collection<string, string>(),
   messageCollectors: new Collection<string, MessageCollector>(),
   reactionCollectors: new Collection<string, ReactionCollector>(),
+  buttonCollectors: new Collection<string, ButtonCollector>(),
   inhibitors: new Collection<
     string,
     (
