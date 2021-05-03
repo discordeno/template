@@ -35,7 +35,7 @@ createCommand({
   execute: async (message, args: BanArgs) => {
     try {
       const { guildId, channelId } = message;
-      const authorId = message.author.id;
+      const authorId = message.authorId;
       const memberId = args.member.id;
 
       const botHighestRoleId = (await highestRole(guildId, botId))!.id;

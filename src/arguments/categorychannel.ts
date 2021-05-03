@@ -1,9 +1,13 @@
-import { bot, cache, DiscordChannelTypes } from "../../deps.ts";
+import {
+  bot,
+  cache,
+  DiscordChannelTypes,
+  snowflakeToBigint,
+} from "../../deps.ts";
 
 bot.arguments.set("categorychannel", {
   name: "categorychannel",
-  // deno-lint-ignore require-await
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
 
@@ -14,7 +18,7 @@ bot.arguments.set("categorychannel", {
       ? id.substring(2, id.length - 1)
       : id.toLowerCase();
 
-    const channel = guild.channels.get(channelIDOrName) ||
+    const channel = guild.channels.get(snowflakeToBigint(channelIDOrName)) ||
       guild.channels.find((channel) => channel.name === channelIDOrName);
 
     if (channel?.type !== DiscordChannelTypes.GUILD_CATEGORY) return;

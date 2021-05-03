@@ -1,3 +1,4 @@
+import { snowflakeToBigint } from "../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -18,14 +19,14 @@ createCommand({
   botChannelPermissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
   execute: async (message, args: UnbanArgs) => {
     try {
-      await message.guild?.unban(args.memberId);
+      await message.guild?.unban(snowflakeToBigint(args.memberId));
 
       const embed = new Embed()
         .setColor("#43b581")
         .setTitle(`Unbanned User`)
         .setThumbnail(message.member!.avatarURL)
         .addField("User ID:", args.memberId, true)
-        .addField("Unbanned By:", `<@${message.author.id}>`, true)
+        .addField("Unbanned By:", `<@${message.authorId}>`, true)
         .setTimestamp();
 
       return sendEmbed(message.channelId, embed);

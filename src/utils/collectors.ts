@@ -13,34 +13,35 @@ import {
   DiscordenoMessage,
   Emoji,
   Interaction,
+  snowflakeToBigint,
   structures,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 export async function needMessage(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  channelId: bigint,
   options: MessageCollectorOptions & { amount?: 1 },
 ): Promise<DiscordenoMessage>;
 export async function needMessage(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  channelId: bigint,
   options: MessageCollectorOptions & { amount?: number },
 ): Promise<DiscordenoMessage[]>;
 export async function needMessage(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  channelId: bigint,
 ): Promise<DiscordenoMessage>;
 export async function needMessage(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  channelId: bigint,
   options?: MessageCollectorOptions,
 ) {
   const messages = await collectMessages({
     key: memberId,
     channelId,
     createdAt: Date.now(),
-    filter: options?.filter || ((msg) => memberId === msg.author.id),
+    filter: options?.filter || ((msg) => memberId === msg.authorId),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
@@ -66,22 +67,22 @@ export function collectMessages(
 }
 
 export async function needReaction(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  messageID: bigint,
   options: ReactionCollectorOptions & { amount?: 1 },
 ): Promise<string>;
 export async function needReaction(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  messageID: bigint,
   options: ReactionCollectorOptions & { amount?: number },
 ): Promise<string[]>;
 export async function needReaction(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  messageID: bigint,
 ): Promise<string>;
 export async function needReaction(
-  memberId: string,
-  messageID: string,
+  memberId: bigint,
+  messageID: bigint,
   options?: ReactionCollectorOptions,
 ) {
   const reactions = await collectReactions({
@@ -115,7 +116,7 @@ export function collectReactions(
 export function processReactionCollectors(
   message: DiscordenoMessage | { id: string },
   emoji: Partial<Emoji>,
-  userID: string,
+  userID: bigint,
 ) {
   // Ignore bot reactions
   if (userID === botId) return;
@@ -149,22 +150,22 @@ export function processReactionCollectors(
 // BUTTONS
 
 export async function needbutton(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  messageID: bigint,
   options: ButtonCollectorOptions & { amount?: 1 },
 ): Promise<string>;
 export async function needbutton(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  messageID: bigint,
   options: ButtonCollectorOptions & { amount?: number },
 ): Promise<string[]>;
 export async function needbutton(
-  memberId: string,
-  channelId: string,
+  memberId: bigint,
+  messageID: bigint,
 ): Promise<string>;
 export async function needbutton(
-  memberId: string,
-  messageID: string,
+  memberId: bigint,
+  messageID: bigint,
   options?: ButtonCollectorOptions,
 ) {
   const buttons = await collectbuttons({
@@ -204,7 +205,9 @@ export async function processButtonCollectors(
   if (!data.message) return;
 
   // If this message is not pending a button response, we can ignore
-  const collector = bot.buttonCollectors.get(data.message.id);
+  const collector = bot.buttonCollectors.get(
+    snowflakeToBigint(data.message.id),
+  );
   if (!collector) return;
 
   // This message is a response to a collector. Now running the filter function.
@@ -223,7 +226,7 @@ export async function processButtonCollectors(
     collector.amount === collector.buttons.length + 1
   ) {
     // Remove the collector
-    bot.buttonCollectors.delete(data.message.id);
+    bot.buttonCollectors.delete(snowflakeToBigint(data.message.id));
     // Resolve the collector
     return collector.resolve([
       ...collector.buttons,

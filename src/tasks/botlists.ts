@@ -6,8 +6,7 @@ bot.tasks.set(`botlists`, {
   name: `botlists`,
   // Runs this function once an hour
   interval: Milliseconds.HOUR,
-  // deno-lint-ignore require-await
-  execute: async function () {
+  execute: function () {
     // Only run when the bot is fully ready. In case guilds are still loading dont want to send wrong stats.
     if (!cache.isReady) return;
 

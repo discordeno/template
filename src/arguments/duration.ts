@@ -3,8 +3,7 @@ import { stringToMilliseconds } from "../utils/helpers.ts";
 
 bot.arguments.set("duration", {
   name: "duration",
-  // deno-lint-ignore require-await
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     const [time] = parameters;
     if (!time) return;
 

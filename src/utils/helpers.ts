@@ -123,7 +123,7 @@ export function createSubcommand(
 }
 
 /** Use this function to send an embed with ease. */
-export function sendEmbed(channelId: string, embed: Embed, content?: string) {
+export function sendEmbed(channelId: bigint, embed: Embed, content?: string) {
   return sendMessage(channelId, { content, embed });
 }
 
@@ -209,15 +209,15 @@ export function getTime() {
   } ${amOrPm}`;
 }
 
-export function getCurrentLanguage(guildID: string) {
+export function getCurrentLanguage(guildID: bigint) {
   return bot.guildLanguages.get(guildID) ||
     cache.guilds.get(guildID)?.preferredLocale || "en_US";
 }
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
 export async function createEmbedsPagination(
-  channelId: string,
-  authorId: string,
+  channelId: bigint,
+  authorId: bigint,
   embeds: Embed[],
   defaultPage = 1,
   reactionTimeout = Milliseconds.SECOND * 30,

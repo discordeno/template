@@ -1,12 +1,11 @@
-import { bot, cache } from "../../deps.ts";
+import { bot, cache, snowflakeToBigint } from "../../deps.ts";
 
 bot.arguments.set("guild", {
   name: "guild",
-  // deno-lint-ignore require-await
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     const [id] = parameters;
     if (!id) return;
 
-    return cache.guilds.get(id);
+    return cache.guilds.get(snowflakeToBigint(id));
   },
 });

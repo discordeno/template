@@ -1,10 +1,9 @@
-import { bot } from "../../deps.ts";
+import { bot, snowflakeToBigint } from "../../deps.ts";
 import { cache, DiscordChannelTypes } from "../../deps.ts";
 
 bot.arguments.set("textchannel", {
   name: "textchannel",
-  // deno-lint-ignore require-await
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
 
@@ -15,7 +14,7 @@ bot.arguments.set("textchannel", {
       ? id.substring(2, id.length - 1)
       : id.toLowerCase();
 
-    const channel = guild.channels.get(channelIDOrName) ||
+    const channel = guild.channels.get(snowflakeToBigint(channelIDOrName)) ||
       guild.channels.find((channel) => channel.name === channelIDOrName);
 
     if (channel?.type !== DiscordChannelTypes.GUILD_TEXT) return;

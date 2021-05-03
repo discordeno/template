@@ -7,8 +7,7 @@ const MEMBER_LIFETIME = Milliseconds.MINUTE * 30;
 bot.tasks.set(`sweeper`, {
   name: `sweeper`,
   interval: Milliseconds.MINUTE * 5,
-  // deno-lint-ignore require-await
-  execute: async function () {
+  execute: function () {
     const now = Date.now();
     // Delete presences from the bots cache.
     cacheHandlers.clear("presences");

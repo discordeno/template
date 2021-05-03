@@ -1,10 +1,10 @@
-import { bot, cache, sendMessage } from "../../deps.ts";
+import { bot, cache, executeWebhook, snowflakeToBigint } from "../../deps.ts";
 import i18next from "https://deno.land/x/i18next@v20.2.2/index.js";
 import Backend from "https://deno.land/x/i18next_fs_backend@v1.1.1/index.js";
 import { configs } from "../../configs.ts";
 
 /** This function helps translate the string to the specific guilds needs. */
-export function translate(guildID: string, key: string, options?: unknown) {
+export function translate(guildID: bigint, key: string, options?: unknown) {
   const guild = cache.guilds.get(guildID);
   const language = bot.guildLanguages.get(guildID) ||
     guild?.preferredLocale || "en_US";
@@ -60,7 +60,7 @@ export async function loadLanguages() {
       lng: "en_US",
       saveMissing: true,
       // Log to discord/console that a string is missing somewhere.
-      missingKeyHandler: function (
+      missingKeyHandler: async function (
         lng: string,
         ns: string,
         key: string,
@@ -70,17 +70,15 @@ export async function loadLanguages() {
           `Missing translation key: ${lng}/${ns}:${key}. Instead using: ${fallbackValue}`;
         console.warn(response);
 
-        if (!configs.channelIDs.missingTranslation) return;
+        if (!configs.webhooks.missingTranslation.id) return;
 
-        const channel = cache.channels.get(
-          configs.channelIDs.missingTranslation,
-        );
-        if (!channel) return;
-
-        sendMessage(
-          channel.id,
-          response,
-        );
+        await executeWebhook(
+          snowflakeToBigint(configs.webhooks.missingTranslation.id),
+          configs.webhooks.missingTranslation.token,
+          // deno-lint-ignore ban-ts-comment
+          // @ts-ignore
+          { content: response },
+        ).catch(console.error);
       },
       preload: languageFolder.map(
         (file) => file.isDirectory ? file.name : undefined,

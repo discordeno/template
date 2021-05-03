@@ -10,11 +10,11 @@ import {
 
 // deno-lint-ignore require-await
 bot.eventHandlers.messageCreate = async function (message) {
-  bot.memberLastActive.set(message.author.id, message.timestamp);
+  bot.memberLastActive.set(message.authorId, message.timestamp);
 
   bot.monitors.forEach(async (monitor) => {
     // The !== false is important because when not provided we default to true
-    if (monitor.ignoreBots !== false && message.author.bot) return;
+    if (monitor.ignoreBots !== false && message.isBot) return;
 
     if (
       monitor.ignoreDM !== false &&
@@ -24,7 +24,7 @@ bot.eventHandlers.messageCreate = async function (message) {
     }
 
     if (monitor.ignoreEdits && message.editedTimestamp) return;
-    if (monitor.ignoreOthers && message.author.id !== botId) return;
+    if (monitor.ignoreOthers && message.authorId !== botId) return;
 
     // Permission checks
 
@@ -45,7 +45,7 @@ bot.eventHandlers.messageCreate = async function (message) {
     if (monitor.userChannelPermissions) {
       const results = await Promise.all(
         monitor.userChannelPermissions.map((perm) =>
-          hasChannelPermissions(message.channelId, message.author.id, [perm])
+          hasChannelPermissions(message.channelId, message.authorId, [perm])
         ),
       );
       if (results.includes(false)) return;
@@ -56,7 +56,7 @@ bot.eventHandlers.messageCreate = async function (message) {
       monitor.userServerPermissions &&
       !(await hasGuildPermissions(
         message.guildId,
-        message.author.id,
+        message.authorId,
         monitor.userServerPermissions,
       ))
     ) {

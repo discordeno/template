@@ -48,7 +48,7 @@ createSubcommand("prefix", {
 
     const oldPrefix = parsePrefix(message.guildId);
     bot.guildPrefixes.set(message.guildId, args.prefix);
-    db.guilds.update(message.guildId, { prefix: args.prefix });
+    db.guilds.update(message.guildId.toString(), { prefix: args.prefix });
 
     const embed = new Embed()
       .setTitle("Success, prefix was changed")

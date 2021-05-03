@@ -7,7 +7,7 @@ bot.permissionLevels.set(
   (message) =>
     hasGuildPermissions(
       message.guildId,
-      message.author.id,
+      message.authorId,
       ["MANAGE_GUILD"],
     ),
 );

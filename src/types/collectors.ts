@@ -19,7 +19,7 @@ export interface MessageCollectorOptions extends BaseCollectorOptions {
 export interface ReactionCollectorOptions extends BaseCollectorOptions {
   /** Function that will filter messages to determine whether to collect this message. Defaults to making sure the message is sent by the same member. */
   filter?: (
-    userID: string,
+    userID: bigint,
     reaction: string,
     message: DiscordenoMessage | { id: string },
   ) => boolean;
@@ -27,7 +27,7 @@ export interface ReactionCollectorOptions extends BaseCollectorOptions {
 
 export interface BaseCollectorCreateOptions {
   /** The unique key that will be used to get responses for this. Ideally, meant to be for member id. */
-  key: string;
+  key: bigint;
   /** The amount of messages to collect before resolving. */
   amount: number;
   /** The timestamp when this collector was created */
@@ -38,17 +38,17 @@ export interface BaseCollectorCreateOptions {
 
 export interface CollectMessagesOptions extends BaseCollectorCreateOptions {
   /** The channel ID where this is listening to */
-  channelId: string;
+  channelId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (message: DiscordenoMessage) => boolean;
 }
 
 export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
   /** The message ID where this is listening to */
-  messageID: string;
+  messageID: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (
-    userID: string,
+    userID: bigint,
     reaction: string,
     message: DiscordenoMessage | { id: string },
   ) => boolean;
@@ -74,7 +74,7 @@ export interface ReactionCollector extends CollectReactionsOptions {
 
 export interface CollectButtonOptions extends BaseCollectorCreateOptions {
   /** The message ID where this is listening to */
-  messageID: string;
+  messageID: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (
     message: DiscordenoMessage,

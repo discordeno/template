@@ -11,7 +11,7 @@ export interface Cooldown {
 bot.inhibitors.set("cooldown", function (message, command) {
   if (!command.cooldown) return false;
 
-  const key = `${message.author.id}-${command.name}`;
+  const key = `${message.authorId}-${command.name}`;
   const cooldown = membersInCooldown.get(key);
   if (cooldown) {
     if (cooldown.used >= (command.cooldown.allowedUses || 1)) {

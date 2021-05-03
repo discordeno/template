@@ -17,7 +17,7 @@ import {
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 
-export const parsePrefix = (guildID?: string) => {
+export const parsePrefix = (guildID?: bigint) => {
   const prefix = guildID ? bot.guildPrefixes.get(guildID) : configs.prefix;
   return prefix || configs.prefix;
 };
@@ -50,7 +50,7 @@ export const logCommand = (
 
   const user = bgGreen(
     black(
-      `${message.author.username}#${message.author.discriminator}(${message.author.id})`,
+      `${message.tag}(${message.authorId})`,
     ),
   );
   const guild = bgMagenta(
@@ -133,7 +133,7 @@ async function commandAllowed(
       logCommand(message, message.guild?.name || "DM", "Failure", command.name);
       // Logs the exact inhibitors that failed
       console.log(
-        `[Inhibitor] ${name} on ${command.name} for ${message.author.username}#${message.author.discriminator}`,
+        `[Inhibitor] ${name} on ${command.name} for ${message.tag}`,
       );
     }
   }
@@ -206,10 +206,9 @@ bot.monitors.set("commandHandler", {
   name: "commandHandler",
   ignoreDM: false,
   /** The main code that will be run when this monitor is triggered. */
-  // deno-lint-ignore require-await
-  execute: async function (message: DiscordenoMessage) {
+  execute: function (message: DiscordenoMessage) {
     // If the message was sent by a bot we can just ignore it
-    if (message.author.bot) return;
+    if (message.isBot) return;
 
     let prefix = parsePrefix(message.guildId);
     const botMention = `<@!${botId}>`;

@@ -1,9 +1,8 @@
-import { bot, cache } from "../../deps.ts";
+import { bot, cache, snowflakeToBigint } from "../../deps.ts";
 
 bot.arguments.set("role", {
   name: "role",
-  // deno-lint-ignore require-await
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
 
@@ -13,7 +12,7 @@ bot.arguments.set("role", {
     const roleID = id.startsWith("<@&") ? id.substring(3, id.length - 1) : id;
 
     const name = id.toLowerCase();
-    const role = guild.roles.get(roleID) ||
+    const role = guild.roles.get(snowflakeToBigint(roleID)) ||
       guild.roles.find((r) => r.name.toLowerCase() === name);
     if (role) return role;
 

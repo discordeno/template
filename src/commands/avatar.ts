@@ -3,6 +3,7 @@ import {
   DiscordApplicationCommandOptionTypes,
   DiscordInteractionResponseTypes,
   sendInteractionResponse,
+snowflakeToBigint,
 } from "../../deps.ts";
 import { createCommand } from "../utils/helpers.ts";
 
@@ -29,13 +30,13 @@ createCommand({
         if (!targetUser) return;
 
         const url = avatarURL(
-          targetUser.id,
-          targetUser.discriminator,
+          snowflakeToBigint(targetUser.id),
+          snowflakeToBigint(targetUser.discriminator),
           targetUser.avatar,
           2048,
         );
 
-        return await sendInteractionResponse(data.id, data.token, {
+        return await sendInteractionResponse(snowflakeToBigint(data.id), data.token, {
           private: false,
           type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
           data: {
@@ -56,7 +57,7 @@ createCommand({
 
       if (!member) return;
 
-      return await sendInteractionResponse(data.id, data.token, {
+      return await sendInteractionResponse(snowflakeToBigint(data.id), data.token, {
         type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
         data: {
           embeds: [
@@ -77,7 +78,7 @@ createCommand({
   execute: (message) => {
     const mentioned = message.mentions?.[0];
     const member = message.guild?.members.get(
-      mentioned?.id || message.author.id,
+      mentioned?.id ? snowflakeToBigint(mentioned.id)  : message.authorId,
     );
     if (!member) return;
 

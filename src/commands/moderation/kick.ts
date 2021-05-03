@@ -33,7 +33,7 @@ createCommand({
         .setColor("#FFA500")
         .setTitle(`Kicked User`)
         .addField("User:", args.member.mention, true)
-        .addField("Kicked By:", `<@${message.author.id}>`, true)
+        .addField("Kicked By:", `<@${message.authorId}>`, true)
         .addField("Reason:", args.reason)
         .setTimestamp();
 

@@ -13,11 +13,11 @@ export const bot = {
   arguments: new Collection<string, Argument>(),
   commands: new Collection<string, Command>(),
   eventHandlers: {} as CustomEvents,
-  guildPrefixes: new Collection<string, string>(),
-  guildLanguages: new Collection<string, string>(),
-  messageCollectors: new Collection<string, MessageCollector>(),
-  reactionCollectors: new Collection<string, ReactionCollector>(),
-  buttonCollectors: new Collection<string, ButtonCollector>(),
+  guildPrefixes: new Collection<bigint, string>(),
+  guildLanguages: new Collection<bigint, string>(),
+  messageCollectors: new Collection<bigint, MessageCollector>(),
+  reactionCollectors: new Collection<bigint, ReactionCollector>(),
+  buttonCollectors: new Collection<bigint, ButtonCollector>(),
   inhibitors: new Collection<
     string,
     (
@@ -35,5 +35,5 @@ export const bot = {
   >(),
   tasks: new Collection<string, Task>(),
   runningTasks: [] as number[],
-  memberLastActive: new Collection<string, number>(),
+  memberLastActive: new Collection<bigint, number>(),
 };

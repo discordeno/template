@@ -56,7 +56,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
     for (const perm of command.userChannelPermissions) {
       const hasPerm = await hasChannelPermissions(
         message.channelId,
-        message.author.id,
+        message.authorId,
         [perm],
       );
       if (!hasPerm) missingPermissions.push(perm);
@@ -72,7 +72,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
     }
   }
 
-  const member = message.guild.members.get(message.author.id);
+  const member = message.guild.members.get(message.authorId);
 
   // Check if the message author has the necessary permissions to run this command
   if (member && command.userServerPermissions?.length) {
@@ -80,7 +80,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
     for (const perm of command.userServerPermissions) {
       const hasPerm = await hasGuildPermissions(
         message.guildId,
-        message.author.id,
+        message.authorId,
         [perm],
       );
       if (!hasPerm) missingPermissions.push(perm);

@@ -6,8 +6,7 @@ bot.tasks.set(`collectors`, {
   name: `collectors`,
   // Runs this function once a minute
   interval: Milliseconds.MINUTE,
-  // deno-lint-ignore require-await
-  execute: async function () {
+  execute: function () {
     const now = Date.now();
 
     bot.messageCollectors.forEach((collector, key) => {

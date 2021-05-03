@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot, snowflakeToBigint } from "../../deps.ts";
 import { db } from "../database/database.ts";
 
 export async function loadLanguages() {
@@ -7,6 +7,6 @@ export async function loadLanguages() {
   if (!guilds) return;
   for (const guild of guilds) {
     if (!guild.language) continue;
-    bot.guildLanguages.set(guild.id, guild.language);
+    bot.guildLanguages.set(snowflakeToBigint(guild.id), guild.language);
   }
 }
