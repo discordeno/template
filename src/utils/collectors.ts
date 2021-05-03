@@ -1,6 +1,6 @@
 import {
-ButtonCollectorOptions,
-CollectButtonOptions,
+  ButtonCollectorOptions,
+  CollectButtonOptions,
   CollectMessagesOptions,
   CollectReactionsOptions,
   MessageCollectorOptions,
@@ -171,7 +171,8 @@ export async function needbutton(
     key: memberId,
     messageID,
     createdAt: Date.now(),
-    filter: options?.filter || ((_msg, member) => member ? memberId === member.id : true),
+    filter: options?.filter ||
+      ((_msg, member) => member ? memberId === member.id : true),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });

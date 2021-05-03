@@ -289,7 +289,7 @@ export async function createEmbedsPagination(
         embedMessage.channelId,
         embedMessage.id,
         reaction,
-        { userId: authorId},
+        { userId: authorId },
       ).catch(console.log);
     }
 

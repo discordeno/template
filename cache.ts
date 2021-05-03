@@ -1,5 +1,9 @@
 import { Collection, DiscordenoMessage } from "./deps.ts";
-import { ButtonCollector, MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
+import {
+  ButtonCollector,
+  MessageCollector,
+  ReactionCollector,
+} from "./src/types/collectors.ts";
 import { Argument, Command, PermissionLevels } from "./src/types/commands.ts";
 import { CustomEvents } from "./src/types/events.ts";
 import { Monitor } from "./src/types/monitors.ts";
