@@ -21,7 +21,7 @@ bot.arguments.set("categorychannel", {
     const channel = guild.channels.get(snowflakeToBigint(channelIDOrName)) ||
       guild.channels.find((channel) => channel.name === channelIDOrName);
 
-    if (channel?.type !== DiscordChannelTypes.GUILD_CATEGORY) return;
+    if (channel?.type !== DiscordChannelTypes.GuildCategory) return;
 
     return channel;
   },

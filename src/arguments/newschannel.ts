@@ -1,4 +1,9 @@
-import { bot, cache, DiscordChannelTypes, snowflakeToBigint } from "../../deps.ts";
+import {
+  bot,
+  cache,
+  DiscordChannelTypes,
+  snowflakeToBigint,
+} from "../../deps.ts";
 
 bot.arguments.set("newschannel", {
   name: "newschannel",
@@ -16,7 +21,7 @@ bot.arguments.set("newschannel", {
     const channel = guild.channels.get(snowflakeToBigint(channelIDOrName)) ||
       guild.channels.find((channel) => channel.name === channelIDOrName);
 
-    if (channel?.type !== DiscordChannelTypes.GUILD_NEWS) return;
+    if (channel?.type !== DiscordChannelTypes.GuildNews) return;
 
     return channel;
   },

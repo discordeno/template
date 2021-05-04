@@ -21,7 +21,7 @@ bot.arguments.set("voicechannel", {
     const channel = guild.channels.get(snowflakeToBigint(channelIDOrName)) ||
       guild.channels.find((channel) => channel.name === channelIDOrName);
 
-    if (channel?.type !== DiscordChannelTypes.GUILD_VOICE) return;
+    if (channel?.type !== DiscordChannelTypes.GuildVoice) return;
 
     return channel;
   },

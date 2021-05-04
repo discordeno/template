@@ -1,5 +1,6 @@
 import {
   ButtonCollectorOptions,
+  ButtonCollectorReturn,
   CollectButtonOptions,
   CollectMessagesOptions,
   CollectReactionsOptions,
@@ -68,26 +69,26 @@ export function collectMessages(
 
 export async function needReaction(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
   options: ReactionCollectorOptions & { amount?: 1 },
 ): Promise<string>;
 export async function needReaction(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
   options: ReactionCollectorOptions & { amount?: number },
 ): Promise<string[]>;
 export async function needReaction(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
 ): Promise<string>;
 export async function needReaction(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
   options?: ReactionCollectorOptions,
 ) {
   const reactions = await collectReactions({
     key: memberId,
-    messageID,
+    messageId,
     createdAt: Date.now(),
     filter: options?.filter || ((userID) => memberId === userID),
     amount: options?.amount || 1,
@@ -128,7 +129,7 @@ export function processReactionCollectors(
   if (!collector) return;
 
   // This user has no collectors pending or the message is in a different channel
-  if (!collector || (message.id !== collector.messageID)) return;
+  if (!collector || (message.id !== collector.messageId)) return;
   // This message is a response to a collector. Now running the filter function.
   if (!collector.filter(userID, emojiName, message)) return;
 
@@ -149,28 +150,28 @@ export function processReactionCollectors(
 
 // BUTTONS
 
-export async function needbutton(
+export async function needButton(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
   options: ButtonCollectorOptions & { amount?: 1 },
-): Promise<string>;
-export async function needbutton(
+): Promise<ButtonCollectorReturn>;
+export async function needButton(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
   options: ButtonCollectorOptions & { amount?: number },
-): Promise<string[]>;
-export async function needbutton(
+): Promise<ButtonCollectorReturn[]>;
+export async function needButton(
   memberId: bigint,
-  messageID: bigint,
-): Promise<string>;
-export async function needbutton(
+  messageId: bigint,
+): Promise<ButtonCollectorReturn>;
+export async function needButton(
   memberId: bigint,
-  messageID: bigint,
+  messageId: bigint,
   options?: ButtonCollectorOptions,
 ) {
-  const buttons = await collectbuttons({
+  const buttons = await collectButtons({
     key: memberId,
-    messageID,
+    messageId,
     createdAt: Date.now(),
     filter: options?.filter ||
       ((_msg, member) => member ? memberId === member.id : true),
@@ -181,16 +182,16 @@ export async function needbutton(
   return (options?.amount || 1) > 1 ? buttons : buttons[0];
 }
 
-export function collectbuttons(
+export function collectButtons(
   options: CollectButtonOptions,
-): Promise<string[]> {
+): Promise<ButtonCollectorReturn[]> {
   return new Promise((resolve, reject) => {
     bot.buttonCollectors.get(options.key)?.reject(
       "A new collector began before the user responded to the previous one.",
     );
     bot.buttonCollectors.set(options.key, {
       ...options,
-      buttons: [] as string[],
+      buttons: [] as ButtonCollectorReturn[],
       resolve,
       reject,
     });
@@ -206,7 +207,7 @@ export async function processButtonCollectors(
 
   // If this message is not pending a button response, we can ignore
   const collector = bot.buttonCollectors.get(
-    snowflakeToBigint(data.message.id),
+    member ? member.id : snowflakeToBigint(data.message.id),
   );
   if (!collector) return;
 
@@ -230,12 +231,22 @@ export async function processButtonCollectors(
     // Resolve the collector
     return collector.resolve([
       ...collector.buttons,
-      data.data?.customId || `No customId provided for this button.`,
+      {
+        customId: data.data?.customId ||
+          `No customId provided for this button.`,
+        interaction: data,
+        member,
+      },
     ]);
   }
 
   // More buttons still need to be collected
   collector.buttons.push(
-    data.data?.customId || `No customId provided for this button.`,
+    {
+      customId: data.data?.customId ||
+        `No customId provided for this button.`,
+      interaction: data,
+      member,
+    },
   );
 }

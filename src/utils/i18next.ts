@@ -1,4 +1,4 @@
-import { bot, cache, executeWebhook, snowflakeToBigint } from "../../deps.ts";
+import { bot, cache, sendWebhook, snowflakeToBigint } from "../../deps.ts";
 import i18next from "https://deno.land/x/i18next@v20.2.2/index.js";
 import Backend from "https://deno.land/x/i18next_fs_backend@v1.1.1/index.js";
 import { configs } from "../../configs.ts";
@@ -72,7 +72,7 @@ export async function loadLanguages() {
 
         if (!configs.webhooks.missingTranslation.id) return;
 
-        await executeWebhook(
+        await sendWebhook(
           snowflakeToBigint(configs.webhooks.missingTranslation.id),
           configs.webhooks.missingTranslation.token,
           // deno-lint-ignore ban-ts-comment
