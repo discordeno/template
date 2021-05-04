@@ -18,7 +18,7 @@ bot.eventHandlers.messageCreate = async function (message) {
 
     if (
       monitor.ignoreDM !== false &&
-      message.channel?.type === DiscordChannelTypes.DM
+      message.channel?.type === DiscordChannelTypes.Dm
     ) {
       return;
     }

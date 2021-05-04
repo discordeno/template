@@ -1,4 +1,4 @@
-import { DiscordenoMember, DiscordenoMessage } from "../../deps.ts";
+import { DiscordenoMember, DiscordenoMessage, Interaction } from "../../deps.ts";
 
 export interface BaseCollectorOptions {
   /** The amount of messages to collect before resolving. Defaults to 1 */
@@ -45,7 +45,7 @@ export interface CollectMessagesOptions extends BaseCollectorCreateOptions {
 
 export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
   /** The message ID where this is listening to */
-  messageID: bigint;
+  messageId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (
     userID: bigint,
@@ -74,7 +74,7 @@ export interface ReactionCollector extends CollectReactionsOptions {
 
 export interface CollectButtonOptions extends BaseCollectorCreateOptions {
   /** The message ID where this is listening to */
-  messageID: bigint;
+  messageId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (
     message: DiscordenoMessage,
@@ -83,11 +83,11 @@ export interface CollectButtonOptions extends BaseCollectorCreateOptions {
 }
 
 export interface ButtonCollector extends CollectButtonOptions {
-  resolve: (value: string[] | PromiseLike<string[]>) => void;
+  resolve: (value: ButtonCollectorReturn[] | PromiseLike<ButtonCollectorReturn[]>) => void;
   // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the buttons are stored if the amount to collect is more than 1. */
-  buttons: string[];
+  buttons: ButtonCollectorReturn[];
 }
 
 export interface ButtonCollectorOptions extends BaseCollectorOptions {
@@ -96,4 +96,10 @@ export interface ButtonCollectorOptions extends BaseCollectorOptions {
     message: DiscordenoMessage,
     member?: DiscordenoMember,
   ) => boolean;
+}
+
+export interface ButtonCollectorReturn {
+  customId: string;
+  interaction: Omit<Interaction, "member">;
+  member?: DiscordenoMember;
 }
