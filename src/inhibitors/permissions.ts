@@ -1,11 +1,11 @@
+import { getMissingGuildPermissions } from "https://raw.githubusercontent.com/discordeno/discordeno/main/src/util/permissions.ts";
 import {
   bot,
   botHasChannelPermissions,
   botHasGuildPermissions,
   DiscordenoMessage,
-  hasChannelPermissions,
-  hasGuildPermissions,
   PermissionStrings,
+  getMissingChannelPermissions,
 } from "../../deps.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
@@ -52,15 +52,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
 
   // Check if the message author has the necessary channel permissions to run this command
   if (command.userChannelPermissions?.length) {
-    const missingPermissions: PermissionStrings[] = [];
-    for (const perm of command.userChannelPermissions) {
-      const hasPerm = await hasChannelPermissions(
-        message.channelId,
-        message.authorId,
-        [perm],
-      );
-      if (!hasPerm) missingPermissions.push(perm);
-    }
+    const missingPermissions = await getMissingChannelPermissions(message.channelId, message.authorId, command.userChannelPermissions)
 
     if (missingPermissions.length) {
       missingCommandPermission(
@@ -76,15 +68,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
 
   // Check if the message author has the necessary permissions to run this command
   if (member && command.userServerPermissions?.length) {
-    const missingPermissions: PermissionStrings[] = [];
-    for (const perm of command.userServerPermissions) {
-      const hasPerm = await hasGuildPermissions(
-        message.guildId,
-        message.authorId,
-        [perm],
-      );
-      if (!hasPerm) missingPermissions.push(perm);
-    }
+    const missingPermissions = await getMissingGuildPermissions(message.guildId, message.authorId, command.userServerPermissions)
 
     if (missingPermissions.length) {
       missingCommandPermission(
@@ -98,11 +82,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
 
   // Check if the bot has the necessary channel permissions to run this command in this channel.
   if (command.botChannelPermissions?.length) {
-    const missingPermissions: PermissionStrings[] = [];
-    for (const perm of command.botChannelPermissions) {
-      const hasPerm = await botHasChannelPermissions(message.channelId, [perm]);
-      if (!hasPerm) missingPermissions.push(perm);
-    }
+    const missingPermissions = await getMissingChannelPermissions(message.channelId, message.authorId, command.botChannelPermissions)
 
     if (missingPermissions.length) {
       missingCommandPermission(
@@ -116,11 +96,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
 
   // Check if the bot has the necessary permissions to run this command
   if (command.botServerPermissions?.length) {
-    const missingPermissions: PermissionStrings[] = [];
-    for (const perm of command.botServerPermissions) {
-      const hasPerm = await botHasGuildPermissions(message.guildId, [perm]);
-      if (!hasPerm) missingPermissions.push(perm);
-    }
+    const missingPermissions = await getMissingGuildPermissions(message.guildId, message.authorId, command.botServerPermissions)
 
     if (missingPermissions.length) {
       missingCommandPermission(
