@@ -85,7 +85,9 @@ createSubcommand("language", {
       message.send({ embed });
     } else {
       bot.guildLanguages.set(message.guildId, newLanguage.id);
-      await db.guilds.update(message.guildId.toString(), { language: newLanguage.id })
+      await db.guilds.update(message.guildId.toString(), {
+        language: newLanguage.id,
+      })
         .catch(console.log);
 
       const embed = new Embed()

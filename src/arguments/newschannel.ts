@@ -1,4 +1,9 @@
-import { bot, cache, DiscordChannelTypes, snowflakeToBigint } from "../../deps.ts";
+import {
+  bot,
+  cache,
+  DiscordChannelTypes,
+  snowflakeToBigint,
+} from "../../deps.ts";
 
 bot.arguments.set("newschannel", {
   name: "newschannel",
