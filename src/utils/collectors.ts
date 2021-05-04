@@ -207,7 +207,7 @@ export async function processButtonCollectors(
 
   // If this message is not pending a button response, we can ignore
   const collector = bot.buttonCollectors.get(
-      member ? member.id : snowflakeToBigint(data.message.id),
+    member ? member.id : snowflakeToBigint(data.message.id),
   );
   if (!collector) return;
 
@@ -233,7 +233,7 @@ export async function processButtonCollectors(
       ...collector.buttons,
       {
         customId: data.data?.customId ||
-            `No customId provided for this button.`,
+          `No customId provided for this button.`,
         interaction: data,
         member,
       },
@@ -242,11 +242,11 @@ export async function processButtonCollectors(
 
   // More buttons still need to be collected
   collector.buttons.push(
-      {
-        customId: data.data?.customId ||
-            `No customId provided for this button.`,
-        interaction: data,
-        member,
-      },
+    {
+      customId: data.data?.customId ||
+        `No customId provided for this button.`,
+      interaction: data,
+      member,
+    },
   );
 }

@@ -3,7 +3,7 @@ import {
   DiscordApplicationCommandOptionTypes,
   DiscordInteractionResponseTypes,
   sendInteractionResponse,
-snowflakeToBigint,
+  snowflakeToBigint,
 } from "../../deps.ts";
 import { createCommand } from "../utils/helpers.ts";
 
@@ -36,49 +36,57 @@ createCommand({
           2048,
         );
 
-        return await sendInteractionResponse(snowflakeToBigint(data.id), data.token, {
-          private: false,
+        return await sendInteractionResponse(
+          snowflakeToBigint(data.id),
+          data.token,
+          {
+            private: false,
+            type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
+            data: {
+              embeds: [
+                {
+                  author: {
+                    name: `${targetUser.username}#${targetUser?.discriminator}`,
+                    iconUrl: url,
+                  },
+                  image: {
+                    url,
+                  },
+                },
+              ],
+            },
+          },
+        ).catch(console.error);
+      }
+
+      if (!member) return;
+
+      return await sendInteractionResponse(
+        snowflakeToBigint(data.id),
+        data.token,
+        {
           type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
           data: {
             embeds: [
               {
                 author: {
-                  name: `${targetUser.username}#${targetUser?.discriminator}`,
-                  iconUrl: url,
+                  name: member.tag,
+                  iconUrl: member.avatarURL,
                 },
                 image: {
-                  url,
+                  url: member.makeAvatarURL({ size: 2048 }),
                 },
               },
             ],
           },
-        }).catch(console.error);
-      }
-
-      if (!member) return;
-
-      return await sendInteractionResponse(snowflakeToBigint(data.id), data.token, {
-        type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
-        data: {
-          embeds: [
-            {
-              author: {
-                name: member.tag,
-                iconUrl: member.avatarURL,
-              },
-              image: {
-                url: member.makeAvatarURL({ size: 2048 }),
-              },
-            },
-          ],
         },
-      }).catch(console.error);
+      ).catch(console.error);
     },
   },
   execute: (message) => {
     const mentioned = message.mentions?.[0];
     const member = message.guild?.members.get(
-      mentioned?.id ? snowflakeToBigint(mentioned.id)  : message.authorId,
+      mentioned?.id ? snowflakeToBigint(mentioned.id) : message.authorId,
     );
     if (!member) return;
 

@@ -17,7 +17,7 @@ import {
   snowflakeToBigint,
 } from "../../deps.ts";
 import { Milliseconds } from "./constants/time.ts";
-import {needButton, needMessage, needReaction } from "./collectors.ts";
+import { needButton, needMessage, needReaction } from "./collectors.ts";
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -326,12 +326,12 @@ export async function createEmbedsPagination(
 
 /** This function allows to create a pagination using embeds and buttons. **/
 export async function createEmbedsButtonsPagination(
-    messageId: bigint,
-    channelId: bigint,
-    authorId: bigint,
-    embeds: Embed[],
-    defaultPage = 1,
-    buttonTimeout = Milliseconds.SECOND * 30
+  messageId: bigint,
+  channelId: bigint,
+  authorId: bigint,
+  embeds: Embed[],
+  defaultPage = 1,
+  buttonTimeout = Milliseconds.SECOND * 30,
 ) {
   if (embeds.length === 0) return;
 
@@ -340,46 +340,45 @@ export async function createEmbedsButtonsPagination(
   const createComponents = () => [
     {
       type: DiscordMessageComponentTypes.ActionRow,
-      components:
-          [
-            {
-              type: DiscordMessageComponentTypes.Button,
-              label: "Previous",
-              custom_id: `${messageId}-Previous`,
-              style: DiscordButtonStyles.Primary,
-              disabled: currentPage === 1,
-              emoji: {name: '⬅️'}
-            },
-            {
-              type: DiscordMessageComponentTypes.Button,
-              label: "Jump",
-              custom_id: `${messageId}-Jump`,
-              style: DiscordButtonStyles.Primary,
-              disabled: embeds.length <= 2,
-              emoji: {name: '↗️'}
-            },
-            {
-              type: DiscordMessageComponentTypes.Button,
-              label: "Next",
-              custom_id: `${messageId}-Next`,
-              style: DiscordButtonStyles.Primary,
-              disabled: currentPage >= embeds.length,
-              emoji: {name: '➡️'}
-            },
-            {
-              type: DiscordMessageComponentTypes.Button,
-              label: "Delete",
-              custom_id: `${messageId}-Delete`,
-              style: DiscordButtonStyles.Danger,
-              emoji: {name: '🗑️'}
-            }
-          ]
-    }
+      components: [
+        {
+          type: DiscordMessageComponentTypes.Button,
+          label: "Previous",
+          custom_id: `${messageId}-Previous`,
+          style: DiscordButtonStyles.Primary,
+          disabled: currentPage === 1,
+          emoji: { name: "⬅️" },
+        },
+        {
+          type: DiscordMessageComponentTypes.Button,
+          label: "Jump",
+          custom_id: `${messageId}-Jump`,
+          style: DiscordButtonStyles.Primary,
+          disabled: embeds.length <= 2,
+          emoji: { name: "↗️" },
+        },
+        {
+          type: DiscordMessageComponentTypes.Button,
+          label: "Next",
+          custom_id: `${messageId}-Next`,
+          style: DiscordButtonStyles.Primary,
+          disabled: currentPage >= embeds.length,
+          emoji: { name: "➡️" },
+        },
+        {
+          type: DiscordMessageComponentTypes.Button,
+          label: "Delete",
+          custom_id: `${messageId}-Delete`,
+          style: DiscordButtonStyles.Danger,
+          emoji: { name: "🗑️" },
+        },
+      ],
+    },
   ];
 
   const embedMessage = await sendMessage(channelId, {
     embed: embeds[currentPage - 1], // @ts-ignore
-    components: createComponents()
+    components: createComponents(),
   });
 
   if (!embedMessage) return;
@@ -400,69 +399,88 @@ export async function createEmbedsButtonsPagination(
 
     console.log(collectedButton);
 
-    if (!collectedButton || !collectedButton.customId.startsWith(messageId.toString())) return;
+    if (
+      !collectedButton ||
+      !collectedButton.customId.startsWith(messageId.toString())
+    ) {
+      return;
+    }
 
-    const action = collectedButton.customId.split('-')[1];
+    const action = collectedButton.customId.split("-")[1];
 
     switch (action) {
-      case 'Next':
+      case "Next":
         currentPage += 1;
-        break
-      case 'Jump':
-        await sendInteractionResponse(snowflakeToBigint(collectedButton.interaction.id), collectedButton.interaction.token, {
-          type: 6,
-        });
+        break;
+      case "Jump":
+        await sendInteractionResponse(
+          snowflakeToBigint(collectedButton.interaction.id),
+          collectedButton.interaction.token,
+          {
+            type: 6,
+          },
+        );
 
         const question = await sendMessage(
-            channelId,
-            "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+          channelId,
+          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
         );
         const answer = await needMessage(authorId, channelId);
         await deleteMessages(channelId, [question.id, answer.id]).catch(
-            console.log,
+          console.log,
         );
 
         const newPageNumber = Math.ceil(Number(answer.content));
 
-        if (isNaN(newPageNumber) || newPageNumber < 1 || newPageNumber > embeds.length) {
+        if (
+          isNaN(newPageNumber) || newPageNumber < 1 ||
+          newPageNumber > embeds.length
+        ) {
           await sendMessage(channelId, "This is not a valid number!");
           continue;
         }
 
         currentPage = newPageNumber;
 
-        editWebhookMessage(snowflakeToBigint(collectedButton.interaction.applicationId), collectedButton.interaction.token, embedMessage.id,
-            {
-              embeds: [
-                embeds[currentPage - 1]
-              ], // @ts-ignore
-              components: createComponents()
-            }
+        editWebhookMessage(
+          snowflakeToBigint(collectedButton.interaction.applicationId),
+          collectedButton.interaction.token,
+          embedMessage.id,
+          {
+            embeds: [
+              embeds[currentPage - 1],
+            ], // @ts-ignore
+            components: createComponents(),
+          },
         );
 
         continue;
-      case 'Previous':
+      case "Previous":
         currentPage -= 1;
-        break
-      case 'Delete':
+        break;
+      case "Delete":
         deleteMessage(channelId, embedMessage.id);
         isEnded = true;
-        break
+        break;
     }
 
     if (
-        isEnded || !embedMessage ||
-        !(await sendInteractionResponse(snowflakeToBigint(collectedButton.interaction.id), collectedButton.interaction.token, {
+      isEnded || !embedMessage ||
+      !(await sendInteractionResponse(
+        snowflakeToBigint(collectedButton.interaction.id),
+        collectedButton.interaction.token,
+        {
           type: 7,
           data: {
             embeds: [
-              embeds[currentPage - 1]
+              embeds[currentPage - 1],
             ], // @ts-ignore
-            components: createComponents()
-          }
-        }).catch(
-            console.log,
-        ))
+            components: createComponents(),
+          },
+        },
+      ).catch(
+        console.log,
+      ))
     ) {
       return;
     }

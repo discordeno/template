@@ -1,4 +1,8 @@
-import { DiscordenoMember, DiscordenoMessage, Interaction } from "../../deps.ts";
+import {
+  DiscordenoMember,
+  DiscordenoMessage,
+  Interaction,
+} from "../../deps.ts";
 
 export interface BaseCollectorOptions {
   /** The amount of messages to collect before resolving. Defaults to 1 */
@@ -83,7 +87,9 @@ export interface CollectButtonOptions extends BaseCollectorCreateOptions {
 }
 
 export interface ButtonCollector extends CollectButtonOptions {
-  resolve: (value: ButtonCollectorReturn[] | PromiseLike<ButtonCollectorReturn[]>) => void;
+  resolve: (
+    value: ButtonCollectorReturn[] | PromiseLike<ButtonCollectorReturn[]>,
+  ) => void;
   // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the buttons are stored if the amount to collect is more than 1. */

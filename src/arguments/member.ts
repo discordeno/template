@@ -9,9 +9,11 @@ bot.arguments.set("member", {
     const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
-    const userID = snowflakeToBigint(id.startsWith("<@")
-      ? id.substring(id.startsWith("<@!") ? 3 : 2, id.length - 1)
-      : id);
+    const userID = snowflakeToBigint(
+      id.startsWith("<@")
+        ? id.substring(id.startsWith("<@!") ? 3 : 2, id.length - 1)
+        : id,
+    );
 
     const cachedMember = guild.members.get(userID);
     if (cachedMember) return cachedMember;
