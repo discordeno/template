@@ -3,14 +3,16 @@ import { createCommand } from "../../utils/helpers.ts";
 import { checkIfUserInMusicChannel } from "../../utils/voice.ts";
 
 createCommand({
-  name: "resume",
+  name: "skip",
+  aliases: ["next", "s"],
   guildOnly: true,
   async execute(message) {
     const player = bot.lavadenoManager.players.get(
       message.guildId.toString(),
     );
+    const queue = bot.musicQueues.get(message.guildId);
 
-    if (!player) {
+    if (!player || !queue) {
       return message.reply(
         `The bot is not playing right now`,
       );
@@ -22,8 +24,8 @@ createCommand({
       );
     }
 
-    await player.resume();
+    await player.stop();
 
-    return message.reply(`The music has now resumed.`);
+    return message.reply(`${queue[0].info.title} has been skipped!`);
   },
 });
