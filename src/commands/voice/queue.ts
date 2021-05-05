@@ -4,10 +4,9 @@ import { createCommand } from "../../utils/helpers.ts";
 import { getMusicLength } from "../../utils/voice.ts";
 
 createCommand({
-  name: "playing",
-  aliases: ["np", "nowplaying"],
+  name: "queue",
   guildOnly: true,
-  async execute(message, args) {
+  async execute(message) {
     const player = bot.lavadenoManager.players.get(
       message.guildId.toString(),
     );
@@ -22,21 +21,24 @@ createCommand({
         "Isekai Music",
         "https://cdn.discordapp.com/avatars/833417537449754657/097a32a4f7bb5821f5383c4ddeb69aa8.png?size=256",
       )
-      .setTitle(
-        player.playing && queue
-          ? `Now Playing - ${queue[0].info.title}`
-          : `Not playing anything`,
-        player.playing && queue ? queue[0].info.uri : "",
-      )
+      .setTitle("Music Queue")
       .setDescription(
-        player.playing && queue
-          ? `**Progress:** ${getMusicLength(player.position)}/${
+        queue?.length > 0
+          ? `Now Playing${
+            bot.loopingMusics.has(message.guildId) ? ` 🔁 ` : ""
+          }: [${queue[0].info.title}](${queue[0].info.uri}) | ${
             getMusicLength(queue[0].info.length)
-          }`
-          : `You're not playing any music, add a music using im!play (music)`,
+          }\n${
+            queue.slice(1).map((track, i) => {
+              return `${i + 1} - [${track.info.title}](${track.info.uri}) | ${
+                getMusicLength(track.info.length)
+              }`;
+            }).join("\n")
+          }`.slice(0, 2048)
+          : `The queue is empty, add a music first.`,
       )
       .setTimestamp(player.timestamp);
 
-    return message.send({ embed });
+    return message.reply({ embed });
   },
 });
