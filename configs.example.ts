@@ -42,4 +42,13 @@ export const configs = {
     // The user ids who have complete 100% access to your bot
     botOwners: [] as string[],
   },
+  // Lavadeno nodes
+  nodes: [
+    {
+      id: "main",
+      host: "localhost",
+      port: 2333,
+      password: "youshallnotpass",
+    },
+  ],
 };
