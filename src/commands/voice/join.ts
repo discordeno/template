@@ -5,7 +5,7 @@ createCommand({
   name: "join",
   guildOnly: true,
   async execute(message) {
-    const player = await bot.lavadenoManager.players.get(
+    const player = bot.lavadenoManager.players.get(
       message.guildId.toString(),
     );
 
@@ -22,7 +22,7 @@ createCommand({
     }
 
     const newPlayer = bot.lavadenoManager.create(message.guildId.toString());
-    await newPlayer.connect(voiceState.channelId.toString(), {
+    newPlayer.connect(voiceState.channelId.toString(), {
       selfDeaf: true,
     });
 
