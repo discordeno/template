@@ -5,7 +5,11 @@ createCommand({
   name: "loop",
   guildOnly: true,
   async execute(message) {
-    bot.loopingMusics.set(message.guildId, true);
+    if (bot.loopingMusics.has(message.guildId)) {
+      bot.loopingMusics.delete(message.guildId);
+    } else {
+      bot.loopingMusics.set(message.guildId, true);
+    }
 
     return message.reply(
       `The current music will ${
