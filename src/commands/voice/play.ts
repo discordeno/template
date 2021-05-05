@@ -8,6 +8,7 @@ import {
 
 createCommand({
   name: "play",
+  aliases: ["p"],
   guildOnly: true,
   arguments: [{ type: "...string", name: "query", required: true }],
   async execute(message, args) {
