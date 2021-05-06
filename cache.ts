@@ -1,4 +1,13 @@
-import { Collection, DiscordenoMessage } from "./deps.ts";
+// TODO: change import
+import { sendShardMessage } from "https://raw.githubusercontent.com/discordeno/discordeno/main/src/ws/send_shard_message.ts";
+import { configs } from "./configs.ts";
+import {
+  botId,
+  Collection,
+  DiscordenoMessage,
+  Manager,
+  Track,
+} from "./deps.ts";
 import {
   ButtonCollector,
   MessageCollector,
@@ -36,4 +45,12 @@ export const bot = {
   tasks: new Collection<string, Task>(),
   runningTasks: [] as number[],
   memberLastActive: new Collection<bigint, number>(),
+  musicQueues: new Collection<bigint, Track[]>(),
+  loopingMusics: new Collection<bigint, boolean>(),
+  lavadenoManager: new Manager(configs.nodes, {
+    userId: botId.toString(),
+    send(id, payload) {
+      sendShardMessage(Number(id), payload);
+    },
+  }),
 };
