@@ -11,7 +11,7 @@ import { Task } from "./src/types/tasks.ts";
 
 export const bot = {
   arguments: new Collection<string, Argument>(),
-  commands: new Collection<string, Command>(),
+  commands: new Collection<string, Command<any>>(),
   eventHandlers: {} as CustomEvents,
   guildPrefixes: new Collection<bigint, string>(),
   guildLanguages: new Collection<bigint, string>(),
@@ -22,7 +22,7 @@ export const bot = {
     string,
     (
       message: DiscordenoMessage,
-      command: Command,
+      command: Command<any>,
     ) => Promise<boolean> | boolean
   >(),
   monitors: new Collection<string, Monitor>(),
@@ -30,7 +30,7 @@ export const bot = {
     PermissionLevels,
     (
       message: DiscordenoMessage,
-      command: Command,
+      command: Command<any>,
     ) => Promise<boolean> | boolean
   >(),
   tasks: new Collection<string, Task>(),
