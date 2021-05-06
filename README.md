@@ -43,21 +43,21 @@ export const configs = {
     DISCORD_BOTS_GROUP: "",
   },
   // This is the server id for your bot's main server where users can get help/support
-  supportServerID: "",
+  supportServerId: "",
   // These are channel ids that will enable some functionality
-  channelIDs: {
+  channelIds: {
     // When a translation is missing this is the channel you will be alerted in.
     missingTranslation: "",
     // When an error occurs, we will try and log it to this channel
-    errorChannelID: "",
+    errorChannelId: "",
   },
   // These are the role ids that will enable some functionality.
-  roleIDs: {
+  roleIds: {
     // If you have a patreon set up you can add the patreon vip role id here.
-    patreonVIPRoleID: "",
+    patreonVIPRoleId: "",
   },
   // These are the user ids that will enable some functionality.
-  userIDs: {
+  userIds: {
     // You can delete the `as string[]` when you add atleast 1 id in them.
     // The user ids for the support team
     botSupporters: [] as string[],
