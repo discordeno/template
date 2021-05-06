@@ -2,7 +2,7 @@ import { bot } from "../../deps.ts";
 
 bot.arguments.set("command", {
   name: "command",
-  execute: function (_argument, parameters) {
+  execute: async function (_argument, parameters) {
     const [name] = parameters;
     if (!name) return;
 

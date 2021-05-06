@@ -2,13 +2,13 @@ import { bot } from "../../deps.ts";
 
 bot.arguments.set("string", {
   name: "string",
-  execute: function (argument, parameters) {
+  execute: async function (argument, parameters) {
     const [text] = parameters;
 
     const valid =
       // If the argument required literals and some string was provided by user
       argument.literals?.length && text
-        ? argument.literals.includes(text.toLowerCase()) ? text : undefined
+        ? (argument.literals.includes(text.toLowerCase()) ? text : undefined)
         : text;
 
     if (valid) {
