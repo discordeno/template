@@ -42,6 +42,13 @@ export const configs = {
     // The user ids who have complete 100% access to your bot
     botOwners: [] as string[],
   },
+  webhooks: {
+    // the webhook to use when the bot finds a missing translation
+    missingTranslation: {
+      id: "",
+      token: "",
+    },
+  },
   // Lavadeno nodes
   nodes: [
     {

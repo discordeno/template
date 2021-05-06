@@ -29,9 +29,9 @@ bot.arguments.set("member", {
 
     console.log("Fetching a member with Id from gateway", userId);
 
-    // TODO: fix this
-    const member = await fetchMembers(guild.id, {
+    const member = await fetchMembers(guild.id, guild.shardId, {
       userIds: [userId],
+      limit: 1,
     }).catch(console.log);
     if (!member) return;
 

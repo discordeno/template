@@ -1,10 +1,12 @@
 import {
+  ApplicationCommandOption,
   Collection,
   DiscordenoChannel,
   DiscordenoGuild,
   DiscordenoMember,
   DiscordenoMessage,
   DiscordenoRole,
+  Interaction,
   Permission,
 } from "../../deps.ts";
 
@@ -15,7 +17,7 @@ type Identity<T> = { [P in keyof T]: T[P] };
 
 // Define each of the types here
 type BaseDefinition = {
-  missing?: (message: DiscordenoMessage) => unknown
+  missing?: (message: DiscordenoMessage) => unknown;
   lowercase?: boolean;
   minimum?: number;
   maximum?: number;
@@ -282,6 +284,8 @@ export interface Command<T extends readonly ArgumentDefinition[]> {
   arguments?: T;
   /** The subcommands for this command */
   subcommands?: Collection<string, Command<T>>;
+  /** The slash command functionality for this command */
+  slash?: DiscordenoSlashCommand;
   /** The function which will be executed by the command */
   execute?: (
     message: DiscordenoMessage,
@@ -352,4 +356,21 @@ export enum PermissionLevels {
   BOT_SUPPORT,
   BOT_DEVS,
   BOT_OWNER,
+}
+
+export interface DiscordenoSlashCommand {
+  /** Whether or not this slash command should be enabled right now. Defaults to true. */
+  enabled?: boolean;
+  /** Whether this slash command should be created per guild. Defaults to true. */
+  guild?: boolean;
+  /** Whether this slash command should be created once globally and allowed in DMs. Defaults to false. */
+  global?: boolean;
+  /** Whether or not to use the Advanced mode. Defaults to true. */
+  advanced?: boolean;
+  /** The slash command options for this command. */
+  options?: ApplicationCommandOption[];
+  execute: (
+    data: Omit<Interaction, "member">,
+    member?: DiscordenoMember,
+  ) => unknown;
 }

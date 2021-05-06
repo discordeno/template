@@ -10,6 +10,7 @@ import {
   editMessage,
   editWebhookMessage,
   Emoji,
+  MessageComponents,
   removeReaction,
   sendInteractionResponse,
   sendMessage,
@@ -400,14 +401,14 @@ export async function createEmbedsButtonsPagination(
 
   let currentPage = defaultPage;
 
-  const createComponents = () => [
+  const createComponents = (): MessageComponents => [
     {
       type: DiscordMessageComponentTypes.ActionRow,
       components: [
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Previous",
-          custom_id: `${messageId}-Previous`,
+          customId: `${messageId}-Previous`,
           style: DiscordButtonStyles.Primary,
           disabled: currentPage === 1,
           emoji: { name: "⬅️" },
@@ -415,7 +416,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Jump",
-          custom_id: `${messageId}-Jump`,
+          customId: `${messageId}-Jump`,
           style: DiscordButtonStyles.Primary,
           disabled: embeds.length <= 2,
           emoji: { name: "↗️" },
@@ -423,7 +424,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Next",
-          custom_id: `${messageId}-Next`,
+          customId: `${messageId}-Next`,
           style: DiscordButtonStyles.Primary,
           disabled: currentPage >= embeds.length,
           emoji: { name: "➡️" },
@@ -431,7 +432,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Delete",
-          custom_id: `${messageId}-Delete`,
+          customId: `${messageId}-Delete`,
           style: DiscordButtonStyles.Danger,
           emoji: { name: "🗑️" },
         },
@@ -508,11 +509,11 @@ export async function createEmbedsButtonsPagination(
         editWebhookMessage(
           snowflakeToBigint(collectedButton.interaction.applicationId),
           collectedButton.interaction.token,
-          embedMessage.id,
           {
+            messageId: embedMessage.id,
             embeds: [
               embeds[currentPage - 1],
-            ], // @ts-ignore
+            ],
             components: createComponents(),
           },
         );
