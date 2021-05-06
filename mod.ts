@@ -32,7 +32,7 @@ await import("./src/database/database.ts");
 startBot({
   token: configs.token,
   // Pick the intents you wish to have for your bot.
-  // For instance, to work with guild message reactions, you will have to pass the Intents.GUILD_MESSAGE_REACTIONS intent to the array.
+  // For instance, to work with guild message reactions, you will have to pass the "GuildMessageReactions" intent to the array.
   intents: ["Guilds", "GuildMessages", "GuildVoiceStates"],
   // These are all your event handler functions. Imported from the events folder
   eventHandlers: bot.eventHandlers,

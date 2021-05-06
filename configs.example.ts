@@ -20,13 +20,6 @@ export const configs = {
   },
   // This is the server id for your bot's main server where users can get help/support
   supportServerId: "",
-  // These are channel ids that will enable some functionality
-  channelIds: {
-    // When a translation is missing this is the channel you will be alerted in.
-    missingTranslation: "",
-    // When an error occurs, we will try and log it to this channel
-    errorChannelId: "",
-  },
   // These are the role ids that will enable some functionality.
   roleIds: {
     // If you have a patreon set up you can add the patreon vip role id here.

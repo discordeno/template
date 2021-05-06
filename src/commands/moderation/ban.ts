@@ -77,8 +77,7 @@ createCommand({
 
       const banned = await args.member.ban(guildId, {
         reason: args.reason,
-        // @ts-ignore
-        deleteMessageDays: args.days,
+        deleteMessageDays: args.days as BanDeleteMessageDays,
       }).catch(
         (console.error),
       );
@@ -100,3 +99,5 @@ createCommand({
     }
   },
 });
+
+type BanDeleteMessageDays = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
