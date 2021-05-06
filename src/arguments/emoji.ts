@@ -1,15 +1,34 @@
-import { bot } from "../../cache.ts";
-import { EMOJI_REGEX } from "../utils/constants/emoj_regex.ts";
+import { bot, cache } from "../../deps.ts";
+import { defaultEmojis } from "../utils/constants/default_emojis.ts";
+import { emojiUnicode } from "../utils/helpers.ts";
 
 bot.arguments.set("emoji", {
   name: "emoji",
-  execute: function (_argument, parameters) {
-    const [text] = parameters;
+  execute: async function (_argument, parameters, message) {
+    let [id] = parameters;
+    if (!id) return;
 
-    const match = text?.match(EMOJI_REGEX);
+    if (defaultEmojis.has(id)) return id;
 
-    if (match && match.length > 0) {
-      return match.join("");
+    if (id.startsWith("<:") || id.startsWith("<a:")) {
+      id = id.substring(id.lastIndexOf(":") + 1, id.length - 1);
     }
+
+    let emoji = cache.guilds.get(message.guildId)?.emojis.find((e) =>
+      e.id === id
+    );
+    if (!emoji) {
+      for (const guild of cache.guilds.values()) {
+        const globalemoji = guild.emojis.find((e) => e.id === id);
+        if (!globalemoji) continue;
+
+        emoji = globalemoji;
+        break;
+      }
+
+      if (!emoji) return;
+    }
+
+    return emojiUnicode(emoji);
   },
 });

@@ -1,5 +1,3 @@
-import { Command } from "../types/commands.ts";
-import { Embed } from "./Embed.ts";
 import {
   bot,
   cache,
@@ -11,13 +9,17 @@ import {
   DiscordMessageComponentTypes,
   editMessage,
   editWebhookMessage,
+  Emoji,
+  MessageComponents,
   removeReaction,
   sendInteractionResponse,
   sendMessage,
   snowflakeToBigint,
 } from "../../deps.ts";
-import { Milliseconds } from "./constants/time.ts";
+import { ArgumentDefinition, Command } from "../types/commands.ts";
 import { needButton, needMessage, needReaction } from "./collectors.ts";
+import { Milliseconds } from "./constants/time.ts";
+import { Embed } from "./Embed.ts";
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -81,25 +83,43 @@ export function stringToMilliseconds(text: string) {
   return total;
 }
 
-export function createCommand(command: Command) {
-  bot.commands.set(command.name, command);
+export function createCommand<T extends readonly ArgumentDefinition[]>(
+  command: Command<T>,
+) {
+  command.botChannelPermissions = [
+    "ADD_REACTIONS",
+    "USE_EXTERNAL_EMOJIS",
+    "READ_MESSAGE_HISTORY",
+    "VIEW_CHANNEL",
+    "SEND_MESSAGES",
+    "EMBED_LINKS",
+    ...(command.botChannelPermissions ?? []),
+  ], bot.commands.set(command.name, command);
 }
 
-export function createSubcommand(
+export function createSubcommand<T extends readonly ArgumentDefinition[]>(
   commandName: string,
-  subcommand: Command,
+  subcommand: Command<T>,
   retries = 0,
 ) {
   const names = commandName.split("-");
 
-  let command = bot.commands.get(commandName);
+  let command: Command<T> = bot.commands.get(commandName)!;
 
   if (names.length > 1) {
     for (const name of names) {
       const validCommand = command
         ? command.subcommands?.get(name)
         : bot.commands.get(name);
-      if (!validCommand) break;
+
+      if (!validCommand) {
+        if (retries === 20) break;
+        setTimeout(
+          () => createSubcommand(commandName, subcommand, retries++),
+          Milliseconds.SECOND * 10,
+        );
+        return;
+      }
 
       command = validCommand;
     }
@@ -107,16 +127,16 @@ export function createSubcommand(
 
   if (!command) {
     // If 10 minutes have passed something must have been wrong
-    if (retries === 600) {
-      return console.error(
+    if (retries === 20) {
+      return console.log(
         `Subcommand ${subcommand} unable to be created for ${commandName}`,
       );
     }
 
-    // Try again in 3 seconds in case this command file just has not been loaded yet.
+    // Try again in 10 seconds in case this command file just has not been loaded yet.
     setTimeout(
       () => createSubcommand(commandName, subcommand, retries++),
-      1000,
+      Milliseconds.SECOND * 10,
     );
     return;
   }
@@ -125,8 +145,52 @@ export function createSubcommand(
     command.subcommands = new Collection();
   }
 
+  // console.log("Creating subcommand", command.name, subcommand.name);
   command.subcommands.set(subcommand.name, subcommand);
 }
+
+// export function createSubcommand(
+//   commandName: string,
+//   subcommand: Command,
+//   retries = 0,
+// ) {
+//   const names = commandName.split("-");
+
+//   let command = bot.commands.get(commandName);
+
+//   if (names.length > 1) {
+//     for (const name of names) {
+//       const validCommand = command
+//         ? command.subcommands?.get(name)
+//         : bot.commands.get(name);
+//       if (!validCommand) break;
+
+//       command = validCommand;
+//     }
+//   }
+
+//   if (!command) {
+//     // If 10 minutes have passed something must have been wrong
+//     if (retries === 600) {
+//       return console.error(
+//         `Subcommand ${subcommand} unable to be created for ${commandName}`,
+//       );
+//     }
+
+//     // Try again in 3 seconds in case this command file just has not been loaded yet.
+//     setTimeout(
+//       () => createSubcommand(commandName, subcommand, retries++),
+//       1000,
+//     );
+//     return;
+//   }
+
+//   if (!command.subcommands) {
+//     command.subcommands = new Collection();
+//   }
+
+//   command.subcommands.set(subcommand.name, subcommand);
+// }
 
 /** Use this function to send an embed with ease. */
 export function sendEmbed(channelId: bigint, embed: Embed, content?: string) {
@@ -215,9 +279,9 @@ export function getTime() {
   } ${amOrPm}`;
 }
 
-export function getCurrentLanguage(guildID: bigint) {
-  return bot.guildLanguages.get(guildID) ||
-    cache.guilds.get(guildID)?.preferredLocale || "en_US";
+export function getCurrentLanguage(guildId: bigint) {
+  return bot.guildLanguages.get(guildId) ||
+    cache.guilds.get(guildId)?.preferredLocale || "en_US";
 }
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
@@ -337,14 +401,14 @@ export async function createEmbedsButtonsPagination(
 
   let currentPage = defaultPage;
 
-  const createComponents = () => [
+  const createComponents = (): MessageComponents => [
     {
       type: DiscordMessageComponentTypes.ActionRow,
       components: [
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Previous",
-          custom_id: `${messageId}-Previous`,
+          customId: `${messageId}-Previous`,
           style: DiscordButtonStyles.Primary,
           disabled: currentPage === 1,
           emoji: { name: "⬅️" },
@@ -352,7 +416,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Jump",
-          custom_id: `${messageId}-Jump`,
+          customId: `${messageId}-Jump`,
           style: DiscordButtonStyles.Primary,
           disabled: embeds.length <= 2,
           emoji: { name: "↗️" },
@@ -360,7 +424,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Next",
-          custom_id: `${messageId}-Next`,
+          customId: `${messageId}-Next`,
           style: DiscordButtonStyles.Primary,
           disabled: currentPage >= embeds.length,
           emoji: { name: "➡️" },
@@ -368,7 +432,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: DiscordMessageComponentTypes.Button,
           label: "Delete",
-          custom_id: `${messageId}-Delete`,
+          customId: `${messageId}-Delete`,
           style: DiscordButtonStyles.Danger,
           emoji: { name: "🗑️" },
         },
@@ -445,11 +509,11 @@ export async function createEmbedsButtonsPagination(
         editWebhookMessage(
           snowflakeToBigint(collectedButton.interaction.applicationId),
           collectedButton.interaction.token,
-          embedMessage.id,
           {
+            messageId: embedMessage.id,
             embeds: [
               embeds[currentPage - 1],
-            ], // @ts-ignore
+            ],
             components: createComponents(),
           },
         );
@@ -485,4 +549,10 @@ export async function createEmbedsButtonsPagination(
       return;
     }
   }
+}
+
+export function emojiUnicode(emoji: Emoji) {
+  return emoji.animated || emoji.id
+    ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>`
+    : emoji.name || "";
 }

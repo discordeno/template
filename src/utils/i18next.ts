@@ -1,12 +1,12 @@
-import { bot, cache, sendWebhook, snowflakeToBigint } from "../../deps.ts";
 import i18next from "https://deno.land/x/i18next@v20.2.2/index.js";
 import Backend from "https://deno.land/x/i18next_fs_backend@v1.1.1/index.js";
 import { configs } from "../../configs.ts";
+import { bot, cache, sendWebhook, snowflakeToBigint } from "../../deps.ts";
 
 /** This function helps translate the string to the specific guilds needs. */
-export function translate(guildID: bigint, key: string, options?: unknown) {
-  const guild = cache.guilds.get(guildID);
-  const language = bot.guildLanguages.get(guildID) ||
+export function translate(guildId: bigint, key: string, options?: unknown) {
+  const guild = cache.guilds.get(guildId);
+  const language = bot.guildLanguages.get(guildId) ||
     guild?.preferredLocale || "en_US";
 
   // undefined is silly bug cause i18next dont have proper typings

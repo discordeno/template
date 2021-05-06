@@ -1,0 +1,5 @@
+{
+  "MISSING_REQUIRED_ARG": "You were missing the **{{name}}** argument which is required in that command. Please provide the **{{type}}** now.",
+  "NEED_VALID_ROLE": "A valid role was not found using the name **{{name}}**.",
+  "POSSIBLE_ROLES": "A few possible roles that you may wish to use were found. Listed below are the role names and ids. Try using the id of the role you wish to use."
+}

@@ -40,7 +40,7 @@ bot.eventHandlers.ready = async function () {
   console.log(getTime(), `Preparing Slash Commands...`);
 
   const globalCommands = [];
-  const perGuildCommands: Command[] = [];
+  const perGuildCommands: Command<any>[] = [];
 
   for (const command of bot.commands.values()) {
     if (!command.slash?.enabled) continue;

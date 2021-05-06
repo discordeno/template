@@ -10,7 +10,7 @@ createCommand({
   name: "play",
   aliases: ["p"],
   guildOnly: true,
-  arguments: [{ type: "...string", name: "query", required: true }],
+  arguments: [{ type: "...strings", name: "query", required: true }],
   async execute(message, args) {
     const player = bot.lavadenoManager.players.get(
       message.guildId.toString(),
@@ -22,15 +22,17 @@ createCommand({
         return message.reply(`You first need to join a voice channel!`);
       }
 
-      if(player) {
-          player.connect(voiceState.channelId.toString(), {
-              selfDeaf: true,
-          });
+      if (player) {
+        player.connect(voiceState.channelId.toString(), {
+          selfDeaf: true,
+        });
       } else {
-          const newPlayer = bot.lavadenoManager.create(message.guildId.toString());
-          newPlayer.connect(voiceState.channelId.toString(), {
-              selfDeaf: true,
-          });
+        const newPlayer = bot.lavadenoManager.create(
+          message.guildId.toString(),
+        );
+        newPlayer.connect(voiceState.channelId.toString(), {
+          selfDeaf: true,
+        });
       }
 
       await message.reply(`Successfully joined the channel!`);

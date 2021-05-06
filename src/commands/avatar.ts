@@ -20,13 +20,13 @@ createCommand({
         required: false,
         name: "commands/avatar:USER_NAME",
         description: "commands/avatar:USER_DESCRIPTION",
-        type: DiscordApplicationCommandOptionTypes.USER,
+        type: DiscordApplicationCommandOptionTypes.User,
       },
     ],
     async execute(data, member) {
       const arg = data.data?.options?.[0];
       if (arg?.value) {
-        const targetUser = data.data?.resolved?.users?.[arg.value];
+        const targetUser = data.data?.resolved?.users?.[arg.value as string];
         if (!targetUser) return;
 
         const url = avatarURL(

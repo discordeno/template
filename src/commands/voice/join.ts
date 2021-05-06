@@ -21,16 +21,16 @@ createCommand({
       return message.reply(`You first need to join a voice channel!`);
     }
 
-if(player) {
-    player.connect(voiceState.channelId.toString(), {
+    if (player) {
+      player.connect(voiceState.channelId.toString(), {
         selfDeaf: true,
-    });
-} else {
-    const newPlayer = bot.lavadenoManager.create(message.guildId.toString());
-    newPlayer.connect(voiceState.channelId.toString(), {
+      });
+    } else {
+      const newPlayer = bot.lavadenoManager.create(message.guildId.toString());
+      newPlayer.connect(voiceState.channelId.toString(), {
         selfDeaf: true,
-    });
-}
+      });
+    }
 
     return message.reply(`Successfully joined the channel!`);
   },

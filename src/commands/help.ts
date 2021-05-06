@@ -12,8 +12,8 @@ createCommand({
       lowercase: true,
       required: false,
     },
-  ],
-  execute: function (message, args: HelpArgs) {
+  ] as const,
+  execute: function (message, args) {
     if (!args.command) {
       return message.send(`No command provided.`);
     }
@@ -41,7 +41,3 @@ createCommand({
     return message.send({ embed });
   },
 });
-
-interface HelpArgs {
-  command?: string;
-}

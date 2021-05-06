@@ -14,7 +14,7 @@ createCommand({
       type: "subcommand",
       required: false,
     },
-  ],
+  ] as const,
   guildOnly: true,
   permissionLevels: [PermissionLevels.MEMBER],
   execute: (message) => {
@@ -39,7 +39,7 @@ createSubcommand("prefix", {
         message.reply(`Please provide a prefix`);
       },
     },
-  ],
+  ] as const,
   permissionLevels: [PermissionLevels.ADMIN],
   execute: (message, args) => {
     if (args.prefix.length > 3) {

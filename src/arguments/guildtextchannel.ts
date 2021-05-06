@@ -1,7 +1,7 @@
 import { bot, cache, ChannelTypes, snowflakeToBigint } from "../../deps.ts";
 
-bot.arguments.set("voicechannel", {
-  name: "voicechannel",
+bot.arguments.set("guildtextchannel", {
+  name: "guildtextchannel",
   execute: async function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
@@ -18,7 +18,13 @@ bot.arguments.set("voicechannel", {
         channel.name === channelIdOrName && channel.guildId === guild.id
       );
 
-    if (channel?.type !== ChannelTypes.GuildVoice) return;
+    // TODO: support all new text channels
+    if (
+      channel?.type !== ChannelTypes.GuildText &&
+      channel?.type !== ChannelTypes.GuildNews
+    ) {
+      return;
+    }
 
     return channel;
   },

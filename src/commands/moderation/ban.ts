@@ -1,9 +1,4 @@
-import {
-  botId,
-  DiscordenoMember,
-  higherRolePosition,
-  highestRole,
-} from "../../../deps.ts";
+import { botId, higherRolePosition, highestRole } from "../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -21,18 +16,20 @@ createCommand({
     {
       name: "days",
       type: "number",
+      maximum: 7,
+      minimum: 0,
       defaultValue: 0,
     },
     {
       name: "reason",
-      type: "...string",
+      type: "...strings",
       defaultValue: "No reason given",
     },
-  ],
+  ] as const,
   userServerPermissions: ["BAN_MEMBERS"],
   botServerPermissions: ["BAN_MEMBERS"],
   botChannelPermissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"],
-  execute: async (message, args: BanArgs) => {
+  execute: async (message, args) => {
     try {
       const { guildId, channelId } = message;
       const authorId = message.authorId;
@@ -80,7 +77,7 @@ createCommand({
 
       const banned = await args.member.ban(guildId, {
         reason: args.reason,
-        deleteMessageDays: args.days,
+        deleteMessageDays: args.days as BanDeleteMessageDays,
       }).catch(
         (console.error),
       );
@@ -103,8 +100,4 @@ createCommand({
   },
 });
 
-interface BanArgs {
-  member: DiscordenoMember;
-  reason: string;
-  days: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-}
+type BanDeleteMessageDays = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;

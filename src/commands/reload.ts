@@ -38,8 +38,8 @@ createCommand({
       ],
       required: false,
     },
-  ],
-  execute: async function (message, args: ReloadArgs) {
+  ] as const,
+  execute: async function (message, args) {
     // Reload a specific folder
     if (args.folder) {
       const path = folderPaths.get(args.folder);
@@ -88,14 +88,3 @@ createCommand({
     return message.reply("Reloaded everything.");
   },
 });
-
-interface ReloadArgs {
-  folder?:
-    | "arguments"
-    | "commands"
-    | "events"
-    | "inhibitors"
-    | "monitors"
-    | "tasks"
-    | "languages";
-}
