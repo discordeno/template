@@ -19,6 +19,10 @@ import { Monitor } from "./src/types/monitors.ts";
 import { Task } from "./src/types/tasks.ts";
 
 export const bot = {
+  fullyReady: false,
+  activeGuildIDs: new Set<bigint>(),
+  dispatchedGuildIDs: new Set<bigint>(),
+  dispatchedChannelIDs: new Set<bigint>(),
   arguments: new Collection<string, Argument>(),
   commands: new Collection<string, Command<any>>(),
   eventHandlers: {} as CustomEvents,
@@ -31,7 +35,7 @@ export const bot = {
     string,
     (
       message: DiscordenoMessage,
-      command: Command<any>,
+      command: Command<any>
     ) => Promise<boolean> | boolean
   >(),
   monitors: new Collection<string, Monitor>(),
@@ -39,11 +43,11 @@ export const bot = {
     PermissionLevels,
     (
       message: DiscordenoMessage,
-      command: Command<any>,
+      command: Command<any>
     ) => Promise<boolean> | boolean
   >(),
   tasks: new Collection<string, Task>(),
-  runningTasks: [] as number[],
+  runningTasks: { initialTimeouts: [] as number[], intervals: [] as number[] },
   memberLastActive: new Collection<bigint, number>(),
   musicQueues: new Collection<bigint, Track[]>(),
   loopingMusics: new Collection<bigint, boolean>(),

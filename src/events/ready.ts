@@ -34,6 +34,8 @@ bot.eventHandlers.ready = async function () {
 
   await bot.lavadenoManager.init();
 
+  bot.fullyReady = true;
+
   console.log(
     getTime(),
     `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`,
