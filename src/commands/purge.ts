@@ -16,11 +16,11 @@ createCommand({
       type: "...strings",
       defaultValue: "No reason given",
     },
-  ],
+  ] as const,
   userChannelPermissions: ["MANAGE_MESSAGES"],
   botChannelPermissions: ["MANAGE_MESSAGES"],
   guildOnly: true,
-  execute: async function (message, args: PurgeArgs) {
+  execute: async function (message, args) {
     try {
       const messagesToDelete = await getMessages(message.channelId, {
         limit: 100,
@@ -49,8 +49,3 @@ createCommand({
     }
   },
 });
-
-interface PurgeArgs {
-  count: number;
-  reason: string;
-}

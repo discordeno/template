@@ -25,7 +25,7 @@ createCommand({
       type: "subcommand",
       required: false,
     },
-  ],
+  ] as const,
   guildOnly: true,
   permissionLevels: [PermissionLevels.MEMBER],
   execute: function (message) {
@@ -58,9 +58,9 @@ createSubcommand("language", {
         message.send({ embed });
       },
     },
-  ],
+  ] as const,
   permissionLevels: [PermissionLevels.ADMIN],
-  execute: async function (message, args: LanguageSetArgs) {
+  execute: async function (message, args) {
     //Old
     const oldLanguageId = getCurrentLanguage(message.guildId);
     const oldLanguage = allowedLanguages.find((item) =>
@@ -102,9 +102,3 @@ createSubcommand("language", {
     }
   },
 });
-
-interface LanguageSetArgs {
-  language?:
-    | "Czech"
-    | "English";
-}

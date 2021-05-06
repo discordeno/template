@@ -15,6 +15,7 @@ type Identity<T> = { [P in keyof T]: T[P] };
 
 // Define each of the types here
 type BaseDefinition = {
+  missing?: (message: DiscordenoMessage) => unknown
   lowercase?: boolean;
   minimum?: number;
   maximum?: number;
