@@ -9,6 +9,7 @@ import {
   DiscordMessageComponentTypes,
   editMessage,
   editWebhookMessage,
+  Emoji,
   removeReaction,
   sendInteractionResponse,
   sendMessage,
@@ -547,4 +548,10 @@ export async function createEmbedsButtonsPagination(
       return;
     }
   }
+}
+
+export function emojiUnicode(emoji: Emoji) {
+  return emoji.animated || emoji.id
+    ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>`
+    : emoji.name || "";
 }

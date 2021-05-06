@@ -1,5 +1,6 @@
 import { bot, cache } from "../../deps.ts";
 import { defaultEmojis } from "../utils/constants/default_emojis.ts";
+import { emojiUnicode } from "../utils/helpers.ts";
 
 bot.arguments.set("emoji", {
   name: "emoji",
@@ -28,7 +29,6 @@ bot.arguments.set("emoji", {
       if (!emoji) return;
     }
 
-    // @ts-ignore
-    return bot.helpers.emojiUnicode(emoji);
+    return emojiUnicode(emoji);
   },
 });

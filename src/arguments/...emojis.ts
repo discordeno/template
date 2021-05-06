@@ -1,5 +1,6 @@
 import { bot, cache } from "../../deps.ts";
 import { defaultEmojis } from "../utils/constants/default_emojis.ts";
+import { emojiUnicode } from "../utils/helpers.ts";
 
 bot.arguments.set("...emojis", {
   name: "...emojis",
@@ -29,8 +30,9 @@ bot.arguments.set("...emojis", {
           }
         }
 
-        // @ts-ignore
-        return bot.helpers.emojiUnicode(guildEmoji);
+        if (!guildEmoji) return;
+
+        return emojiUnicode(guildEmoji);
       })
       .filter((e) => e);
   },
