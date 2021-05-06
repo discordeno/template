@@ -45,6 +45,7 @@ export const configs = {
   // Lavadeno nodes
   nodes: [
     {
+      // Id of the client which is connecting to the lavalink
       id: "main",
       host: "localhost",
       port: 2333,
