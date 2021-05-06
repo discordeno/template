@@ -1,9 +1,4 @@
-import {
-  botId,
-  DiscordenoMember,
-  higherRolePosition,
-  highestRole,
-} from "../../../deps.ts";
+import { botId, higherRolePosition, highestRole } from "../../../deps.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -21,6 +16,8 @@ createCommand({
     {
       name: "days",
       type: "number",
+      maximum: 7,
+      minimum: 0,
       defaultValue: 0,
     },
     {
@@ -80,6 +77,7 @@ createCommand({
 
       const banned = await args.member.ban(guildId, {
         reason: args.reason,
+        // @ts-ignore
         deleteMessageDays: args.days,
       }).catch(
         (console.error),
