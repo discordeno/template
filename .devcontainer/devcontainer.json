@@ -26,7 +26,7 @@
     "typescript.updateImportsOnFileMove.enabled": "always",
     "javascript.updateImportsOnFileMove.enabled": "always"
   },
-  // Add the IDs of extensions you want installed when the container is created.
+  // Add the Ids of extensions you want installed when the container is created.
   "extensions": [
     "denoland.vscode-deno",
     "pkief.material-icon-theme",
