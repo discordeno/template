@@ -25,7 +25,7 @@ createCommand({
     },
     {
       name: "reason",
-      type: "...string",
+      type: "...strings",
       defaultValue: "No reason given",
     },
   ],

@@ -1,7 +1,7 @@
 import { bot } from "../../deps.ts";
 
-bot.arguments.set("...string", {
-  name: "...string",
+bot.arguments.set("...strings", {
+  name: "...strings",
   execute: async function (argument, parameters) {
     if (!parameters.length) return;
 

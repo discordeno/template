@@ -94,7 +94,7 @@ async function parseArguments(
       // This will use up all args so immediately exist the loop.
       if (
         argument.type &&
-        ["subcommands", "...string", "...roles", "...emojis", "...snowflakes"]
+        ["subcommands", "...strings", "...roles", "...emojis", "...snowflakes"]
           .includes(argument.type)
       ) {
         break;

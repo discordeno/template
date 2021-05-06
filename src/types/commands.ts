@@ -33,13 +33,13 @@ type BooleanOptionalArgumentDefinition<N extends string = string> =
   };
 type StringArgumentDefinition<N extends string = string> = BaseDefinition & {
   name: N;
-  type: "string" | "...string" | "subcommand" | "snowflake";
+  type: "string" | "...strings" | "subcommand" | "snowflake";
 };
 type StringOptionalArgumentDefinition<N extends string = string> =
   & BaseDefinition
   & {
     name: N;
-    type: "string" | "...string" | "subcommand" | "snowflake";
+    type: "string" | "...strings" | "subcommand" | "snowflake";
     required: false;
   };
 type MultiStringArgumentDefinition<N extends string = string> =
@@ -308,7 +308,7 @@ export interface CommandArgument {
     | "emoji"
     | "...emojis"
     | "string"
-    | "...string"
+    | "...strings"
     | "boolean"
     | "subcommand"
     | "member"
