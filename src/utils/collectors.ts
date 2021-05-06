@@ -1,13 +1,4 @@
 import {
-  ButtonCollectorOptions,
-  ButtonCollectorReturn,
-  CollectButtonOptions,
-  CollectMessagesOptions,
-  CollectReactionsOptions,
-  MessageCollectorOptions,
-  ReactionCollectorOptions,
-} from "../types/collectors.ts";
-import {
   bot,
   botId,
   DiscordenoMember,
@@ -17,6 +8,15 @@ import {
   snowflakeToBigint,
   structures,
 } from "../../deps.ts";
+import {
+  ButtonCollectorOptions,
+  ButtonCollectorReturn,
+  CollectButtonOptions,
+  CollectMessagesOptions,
+  CollectReactionsOptions,
+  MessageCollectorOptions,
+  ReactionCollectorOptions,
+} from "../types/collectors.ts";
 import { Milliseconds } from "./constants/time.ts";
 
 export async function needMessage(
@@ -90,7 +90,7 @@ export async function needReaction(
     key: memberId,
     messageId,
     createdAt: Date.now(),
-    filter: options?.filter || ((userID) => memberId === userID),
+    filter: options?.filter || ((userId) => memberId === userId),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
@@ -117,21 +117,21 @@ export function collectReactions(
 export function processReactionCollectors(
   message: DiscordenoMessage | { id: string },
   emoji: Partial<Emoji>,
-  userID: bigint,
+  userId: bigint,
 ) {
   // Ignore bot reactions
-  if (userID === botId) return;
+  if (userId === botId) return;
 
   const emojiName = emoji.id || emoji.name;
   if (!emojiName) return;
 
-  const collector = bot.reactionCollectors.get(userID);
+  const collector = bot.reactionCollectors.get(userId);
   if (!collector) return;
 
   // This user has no collectors pending or the message is in a different channel
   if (!collector || (message.id !== collector.messageId)) return;
   // This message is a response to a collector. Now running the filter function.
-  if (!collector.filter(userID, emojiName, message)) return;
+  if (!collector.filter(userId, emojiName, message)) return;
 
   // If the necessary amount has been collected
   if (
@@ -139,7 +139,7 @@ export function processReactionCollectors(
     collector.amount === collector.reactions.length + 1
   ) {
     // Remove the collector
-    bot.reactionCollectors.delete(userID);
+    bot.reactionCollectors.delete(userId);
     // Resolve the collector
     return collector.resolve([...collector.reactions, emojiName]);
   }

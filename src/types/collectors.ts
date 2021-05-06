@@ -23,7 +23,7 @@ export interface MessageCollectorOptions extends BaseCollectorOptions {
 export interface ReactionCollectorOptions extends BaseCollectorOptions {
   /** Function that will filter messages to determine whether to collect this message. Defaults to making sure the message is sent by the same member. */
   filter?: (
-    userID: bigint,
+    userId: bigint,
     reaction: string,
     message: DiscordenoMessage | { id: string },
   ) => boolean;
@@ -41,18 +41,18 @@ export interface BaseCollectorCreateOptions {
 }
 
 export interface CollectMessagesOptions extends BaseCollectorCreateOptions {
-  /** The channel ID where this is listening to */
+  /** The channel Id where this is listening to */
   channelId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (message: DiscordenoMessage) => boolean;
 }
 
 export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
-  /** The message ID where this is listening to */
+  /** The message Id where this is listening to */
   messageId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (
-    userID: bigint,
+    userId: bigint,
     reaction: string,
     message: DiscordenoMessage | { id: string },
   ) => boolean;
@@ -77,7 +77,7 @@ export interface ReactionCollector extends CollectReactionsOptions {
 }
 
 export interface CollectButtonOptions extends BaseCollectorCreateOptions {
-  /** The message ID where this is listening to */
+  /** The message Id where this is listening to */
   messageId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
   filter: (
