@@ -437,7 +437,7 @@ export async function createEmbedsButtonsPagination(
   ];
 
   const embedMessage = await sendMessage(channelId, {
-    embed: embeds[currentPage - 1], // @ts-ignore
+    embed: embeds[currentPage - 1],
     components: createComponents(),
   });
 
@@ -472,6 +472,7 @@ export async function createEmbedsButtonsPagination(
       case "Next":
         currentPage += 1;
         break;
+      // deno-lint-ignore no-case-declarations
       case "Jump":
         await sendInteractionResponse(
           snowflakeToBigint(collectedButton.interaction.id),
@@ -532,7 +533,7 @@ export async function createEmbedsButtonsPagination(
         {
           type: 7,
           data: {
-            embeds: [embeds[currentPage - 1]], // @ts-ignore
+            embeds: [embeds[currentPage - 1]],
             components: createComponents(),
           },
         }

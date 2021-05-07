@@ -32,8 +32,7 @@ createCommand({
         const url = avatarURL(
           snowflakeToBigint(targetUser.id),
           snowflakeToBigint(targetUser.discriminator),
-          targetUser.avatar,
-          2048,
+          { avatar: targetUser.avatar ?? undefined, size: 2048 }
         );
 
         return await sendInteractionResponse(
@@ -55,7 +54,7 @@ createCommand({
                 },
               ],
             },
-          },
+          }
         ).catch(console.error);
       }
 
@@ -79,14 +78,14 @@ createCommand({
               },
             ],
           },
-        },
+        }
       ).catch(console.error);
     },
   },
   execute: (message) => {
     const mentioned = message.mentions?.[0];
     const member = message.guild?.members.get(
-      mentioned?.id ? snowflakeToBigint(mentioned.id) : message.authorId,
+      mentioned?.id ? snowflakeToBigint(mentioned.id) : message.authorId
     );
     if (!member) return;
 

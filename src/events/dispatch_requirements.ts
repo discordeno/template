@@ -7,10 +7,11 @@ import {
   getGuild,
   getMember,
   Guild,
+  snowflakeToBigint,
   structures,
 } from "../../deps.ts";
 
-const processing = new Set<string>();
+const processing = new Set<bigint>();
 
 bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   if (!bot.fullyReady) return;
@@ -18,21 +19,22 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   // DELETE MEANS WE DONT NEED TO FETCH. CREATE SHOULD HAVE DATA TO CACHE
   if (data.t && ["GUILD_CREATE", "GUILD_DELETE"].includes(data.t)) return;
 
-  const id =
+  const id = snowflakeToBigint(
     data.t && ["GUILD_UPDATE"].includes(data.t)
       ? // deno-lint-ignore no-explicit-any
         (data.d as any)?.id
       : // deno-lint-ignore no-explicit-any
-        (data.d as any)?.guild_id;
-
+        (data.d as any)?.guild_id
+  );
+  console.log(1);
   if (!id || bot.activeGuildIDs.has(id)) return;
-
+  console.log(2);
   // If this guild is in cache, it has not been swept and we can cancel
   if (cache.guilds.has(id)) {
     bot.activeGuildIDs.add(id);
     return;
   }
-
+  console.log(4);
   if (processing.has(id)) {
     console.log(
       `[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`
@@ -83,6 +85,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
     );
   }
 
+  console.log({ ...rawGuild, roles: undefined, emojis: undefined });
   const guild = await structures.createDiscordenoGuild(rawGuild, shardID);
 
   // Add to cache
