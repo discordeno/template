@@ -1,10 +1,9 @@
-import { bot } from "../../deps.ts";
-
+import { bot } from "../../cache.ts";
 const SNOWFLAKE_REGEX = /[0-9]{17,19}/;
 
 bot.arguments.set("...snowflakes", {
   name: "...snowflakes",
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     const cleaned = parameters.map((p) => {
       // If its just a normal id number
       if (!p.startsWith("<")) return p;

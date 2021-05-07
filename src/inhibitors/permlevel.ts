@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.inhibitors.set("permlevel", async function (message, command) {
   // This command doesnt require a perm level so allow the command.

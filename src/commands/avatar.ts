@@ -32,8 +32,7 @@ createCommand({
         const url = avatarURL(
           snowflakeToBigint(targetUser.id),
           snowflakeToBigint(targetUser.discriminator),
-          targetUser.avatar,
-          2048,
+          { avatar: targetUser.avatar ?? undefined, size: 2048 },
         );
 
         return await sendInteractionResponse(

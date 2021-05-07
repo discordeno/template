@@ -1,5 +1,6 @@
-import { bot, cache, snowflakeToBigint } from "../../deps.ts";
+import { cache, snowflakeToBigint } from "../../deps.ts";
 import { translate } from "../utils/i18next.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("role", {
   name: "role",

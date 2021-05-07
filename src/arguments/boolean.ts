@@ -1,25 +1,12 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("boolean", {
   name: "boolean",
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     const [boolean] = parameters;
 
-    if (
-      [
-        "true",
-        "false",
-        "on",
-        "off",
-        "enable",
-        "disable",
-      ].includes(boolean)
-    ) {
-      return [
-        "true",
-        "on",
-        "enable",
-      ].includes(boolean);
+    if (["true", "false", "on", "off", "enable", "disable"].includes(boolean)) {
+      return ["true", "on", "enable"].includes(boolean);
     }
   },
 });

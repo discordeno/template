@@ -1,10 +1,10 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 const SNOWFLAKE_REGEX = /[0-9]{17,19}/;
 
 bot.arguments.set("snowflake", {
   name: "snowflake",
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     let [text] = parameters;
     if (!text) return;
     // If its a nickname mention or role mention

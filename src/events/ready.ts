@@ -1,23 +1,27 @@
 import {
-  bot,
   cache,
   DiscordActivityTypes,
   editBotStatus,
   upsertSlashCommands,
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
+import { Milliseconds } from "../utils/constants/time.ts";
 import { getTime } from "../utils/helpers.ts";
 import { translate } from "../utils/i18next.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
+import { sweepInactiveGuildsCache } from "./dispatch_requirements.ts";
+import { bot } from "../../cache.ts";
 
 bot.eventHandlers.ready = async function () {
   editBotStatus({
     status: "dnd",
-    activities: [{
-      name: "Discordeno Best Lib",
-      type: DiscordActivityTypes.Game,
-      createdAt: Date.now(),
-    }],
+    activities: [
+      {
+        name: "Discordeno Best Lib",
+        type: DiscordActivityTypes.Game,
+        createdAt: Date.now(),
+      },
+    ],
   });
 
   console.log(getTime(), `Loaded ${bot.arguments.size} Argument(s)`);
@@ -30,7 +34,14 @@ bot.eventHandlers.ready = async function () {
   console.log(getTime(), `Loaded ${bot.monitors.size} Monitor(s)`);
   console.log(getTime(), `Loaded ${bot.tasks.size} Task(s)`);
 
+  // Special task which should only run every hour AFTER STARTUP
+  setInterval(sweepInactiveGuildsCache, Milliseconds.HOUR);
+
   registerTasks();
+
+  await bot.lavadenoManager.init();
+
+  bot.fullyReady = true;
 
   console.log(
     getTime(),
@@ -40,6 +51,7 @@ bot.eventHandlers.ready = async function () {
   console.log(getTime(), `Preparing Slash Commands...`);
 
   const globalCommands = [];
+  // deno-lint-ignore no-explicit-any
   const perGuildCommands: Command<any>[] = [];
 
   for (const command of bot.commands.values()) {
@@ -60,52 +72,51 @@ bot.eventHandlers.ready = async function () {
   }
 
   // GUILD COMMANDS WILL UPDATE INSTANTLY
-  await Promise.all(cache.guilds.map(async (guild) => {
-    await upsertSlashCommands(
-      perGuildCommands.map((cmd) => {
-        // USER OPTED TO USE BASIC VERSION ONLY
-        if (cmd.slash?.advanced === false) {
-          return {
-            name: cmd.name,
-            description: cmd.description || "No description available.",
-            options: cmd.slash?.options,
-          };
-        }
-
-        // ADVANCED VERSION WILL ALLOW TRANSLATION
-        const name = translate(guild.id, `commands/${cmd.name}:SLASH_NAME`);
-        const description = translate(
-          guild.id,
-          `commands/${cmd.name}:SLASH_DESCRIPTION`,
-        );
-
-        return {
-          name: name === "SLASH_NAME" ? cmd.name : name,
-          description: description === "SLASH_DESCRIPTION"
-            ? cmd.description || "No description available."
-            : description,
-          options: cmd.slash?.options?.map((option) => {
-            const optionName = translate(guild.id, option.name);
-            const optionDescription = translate(
-              guild.id,
-              option.description,
-            );
-
+  await Promise.all(
+    cache.guilds.map(async (guild) => {
+      await upsertSlashCommands(
+        perGuildCommands.map((cmd) => {
+          // USER OPTED TO USE BASIC VERSION ONLY
+          if (cmd.slash?.advanced === false) {
             return {
-              ...option,
-              name: optionName,
-              description: optionDescription || "No description available.",
+              name: cmd.name,
+              description: cmd.description || "No description available.",
+              options: cmd.slash?.options,
             };
-          }),
-        };
-      }),
-      guild.id,
-    ).catch(console.log);
-    console.log(
-      getTime(),
-      `Updated Guild ${guild.name} (${guild.id}) Slash Commands...`,
-    );
-  }));
+          }
+
+          // ADVANCED VERSION WILL ALLOW TRANSLATION
+          const name = translate(guild.id, `commands/${cmd.name}:SLASH_NAME`);
+          const description = translate(
+            guild.id,
+            `commands/${cmd.name}:SLASH_DESCRIPTION`,
+          );
+
+          return {
+            name: name === "SLASH_NAME" ? cmd.name : name,
+            description: description === "SLASH_DESCRIPTION"
+              ? cmd.description || "No description available."
+              : description,
+            options: cmd.slash?.options?.map((option) => {
+              const optionName = translate(guild.id, option.name);
+              const optionDescription = translate(guild.id, option.description);
+
+              return {
+                ...option,
+                name: optionName,
+                description: optionDescription || "No description available.",
+              };
+            }),
+          };
+        }),
+        guild.id,
+      ).catch(console.log);
+      console.log(
+        getTime(),
+        `Updated Guild ${guild.name} (${guild.id}) Slash Commands...`,
+      );
+    }),
+  );
 
   console.log(getTime(), `[READY] Slash Commands loaded successfully!`);
 };

@@ -5,7 +5,4 @@ export {
   Manager,
   Player,
 } from "https://raw.githubusercontent.com/discordeno/lavadeno/master/mod.ts";
-export type {
-  Track,
-} from "https://raw.githubusercontent.com/discordeno/lavadeno/master/mod.ts";
-export * from "./cache.ts";
+export type { Track } from "https://raw.githubusercontent.com/discordeno/lavadeno/master/mod.ts";

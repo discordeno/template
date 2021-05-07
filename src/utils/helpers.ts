@@ -1,5 +1,5 @@
+import { bot } from "../../cache.ts";
 import {
-  bot,
   cache,
   Collection,
   deleteMessage,
@@ -86,7 +86,7 @@ export function stringToMilliseconds(text: string) {
 export function createCommand<T extends readonly ArgumentDefinition[]>(
   command: Command<T>,
 ) {
-  command.botChannelPermissions = [
+  (command.botChannelPermissions = [
     "ADD_REACTIONS",
     "USE_EXTERNAL_EMOJIS",
     "READ_MESSAGE_HISTORY",
@@ -94,7 +94,7 @@ export function createCommand<T extends readonly ArgumentDefinition[]>(
     "SEND_MESSAGES",
     "EMBED_LINKS",
     ...(command.botChannelPermissions ?? []),
-  ], bot.commands.set(command.name, command);
+  ]), bot.commands.set(command.name, command);
 }
 
 export function createSubcommand<T extends readonly ArgumentDefinition[]>(
@@ -280,8 +280,11 @@ export function getTime() {
 }
 
 export function getCurrentLanguage(guildId: bigint) {
-  return bot.guildLanguages.get(guildId) ||
-    cache.guilds.get(guildId)?.preferredLocale || "en_US";
+  return (
+    bot.guildLanguages.get(guildId) ||
+    cache.guilds.get(guildId)?.preferredLocale ||
+    "en_US"
+  );
 }
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
@@ -340,9 +343,9 @@ export async function createEmbedsPagination(
 
   if (embeds.length <= 1) return;
 
-  await embedMessage.addReactions(Object.keys(reactions), true).catch(
-    console.log,
-  );
+  await embedMessage
+    .addReactions(Object.keys(reactions), true)
+    .catch(console.log);
 
   let isEnded = false;
 
@@ -355,12 +358,9 @@ export async function createEmbedsPagination(
     if (!reaction) return;
 
     if (embedMessage.guildId) {
-      await removeReaction(
-        embedMessage.channelId,
-        embedMessage.id,
-        reaction,
-        { userId: authorId },
-      ).catch(console.log);
+      await removeReaction(embedMessage.channelId, embedMessage.id, reaction, {
+        userId: authorId,
+      }).catch(console.log);
     }
 
     if (reactions[reaction]) {
@@ -378,7 +378,8 @@ export async function createEmbedsPagination(
     }
 
     if (
-      isEnded || !embedMessage ||
+      isEnded ||
+      !embedMessage ||
       !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
         console.log,
       ))
@@ -441,7 +442,7 @@ export async function createEmbedsButtonsPagination(
   ];
 
   const embedMessage = await sendMessage(channelId, {
-    embed: embeds[currentPage - 1], // @ts-ignore
+    embed: embeds[currentPage - 1],
     components: createComponents(),
   });
 
@@ -476,6 +477,7 @@ export async function createEmbedsButtonsPagination(
       case "Next":
         currentPage += 1;
         break;
+      // deno-lint-ignore no-case-declarations
       case "Jump":
         await sendInteractionResponse(
           snowflakeToBigint(collectedButton.interaction.id),
@@ -497,7 +499,8 @@ export async function createEmbedsButtonsPagination(
         const newPageNumber = Math.ceil(Number(answer.content));
 
         if (
-          isNaN(newPageNumber) || newPageNumber < 1 ||
+          isNaN(newPageNumber) ||
+          newPageNumber < 1 ||
           newPageNumber > embeds.length
         ) {
           await sendMessage(channelId, "This is not a valid number!");
@@ -511,9 +514,7 @@ export async function createEmbedsButtonsPagination(
           collectedButton.interaction.token,
           {
             messageId: embedMessage.id,
-            embeds: [
-              embeds[currentPage - 1],
-            ],
+            embeds: [embeds[currentPage - 1]],
             components: createComponents(),
           },
         );
@@ -529,22 +530,19 @@ export async function createEmbedsButtonsPagination(
     }
 
     if (
-      isEnded || !embedMessage ||
+      isEnded ||
+      !embedMessage ||
       !(await sendInteractionResponse(
         snowflakeToBigint(collectedButton.interaction.id),
         collectedButton.interaction.token,
         {
           type: 7,
           data: {
-            embeds: [
-              embeds[currentPage - 1],
-            ], // @ts-ignore
+            embeds: [embeds[currentPage - 1]],
             components: createComponents(),
           },
         },
-      ).catch(
-        console.log,
-      ))
+      ).catch(console.log))
     ) {
       return;
     }

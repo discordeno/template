@@ -1,5 +1,5 @@
+import { bot } from "../../cache.ts";
 import {
-  bot,
   botId,
   DiscordenoMember,
   DiscordenoMessage,
@@ -54,9 +54,11 @@ export function collectMessages(
   options: CollectMessagesOptions,
 ): Promise<DiscordenoMessage[]> {
   return new Promise((resolve, reject) => {
-    bot.messageCollectors.get(options.key)?.reject(
-      "A new collector began before the user responded to the previous one.",
-    );
+    bot.messageCollectors
+      .get(options.key)
+      ?.reject(
+        "A new collector began before the user responded to the previous one.",
+      );
 
     bot.messageCollectors.set(options.key, {
       ...options,
@@ -102,9 +104,11 @@ export function collectReactions(
   options: CollectReactionsOptions,
 ): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    bot.reactionCollectors.get(options.key)?.reject(
-      "A new collector began before the user responded to the previous one.",
-    );
+    bot.reactionCollectors
+      .get(options.key)
+      ?.reject(
+        "A new collector began before the user responded to the previous one.",
+      );
     bot.reactionCollectors.set(options.key, {
       ...options,
       reactions: [] as string[],
@@ -129,7 +133,7 @@ export function processReactionCollectors(
   if (!collector) return;
 
   // This user has no collectors pending or the message is in a different channel
-  if (!collector || (message.id !== collector.messageId)) return;
+  if (!collector || message.id !== collector.messageId) return;
   // This message is a response to a collector. Now running the filter function.
   if (!collector.filter(userId, emojiName, message)) return;
 
@@ -174,7 +178,7 @@ export async function needButton(
     messageId,
     createdAt: Date.now(),
     filter: options?.filter ||
-      ((_msg, member) => member ? memberId === member.id : true),
+      ((_msg, member) => (member ? memberId === member.id : true)),
     amount: options?.amount || 1,
     duration: options?.duration || Milliseconds.MINUTE * 5,
   });
@@ -186,9 +190,11 @@ export function collectButtons(
   options: CollectButtonOptions,
 ): Promise<ButtonCollectorReturn[]> {
   return new Promise((resolve, reject) => {
-    bot.buttonCollectors.get(options.key)?.reject(
-      "A new collector began before the user responded to the previous one.",
-    );
+    bot.buttonCollectors
+      .get(options.key)
+      ?.reject(
+        "A new collector began before the user responded to the previous one.",
+      );
     bot.buttonCollectors.set(options.key, {
       ...options,
       buttons: [] as ButtonCollectorReturn[],
@@ -241,12 +247,9 @@ export async function processButtonCollectors(
   }
 
   // More buttons still need to be collected
-  collector.buttons.push(
-    {
-      customId: data.data?.customId ||
-        `No customId provided for this button.`,
-      interaction: data,
-      member,
-    },
-  );
+  collector.buttons.push({
+    customId: data.data?.customId || `No customId provided for this button.`,
+    interaction: data,
+    member,
+  });
 }

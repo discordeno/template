@@ -1,4 +1,5 @@
-import { bot, DiscordenoMessage } from "../../deps.ts";
+import { DiscordenoMessage } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.monitors.set("messageCollector", {
   name: "messageCollector",

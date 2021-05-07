@@ -1,12 +1,10 @@
-import { getMissingGuildPermissions } from "https://raw.githubusercontent.com/discordeno/discordeno/main/src/util/permissions.ts";
 import {
-  bot,
-  botHasChannelPermissions,
-  botHasGuildPermissions,
   DiscordenoMessage,
   getMissingChannelPermissions,
+  getMissingGuildPermissions,
   PermissionStrings,
 } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
@@ -28,8 +26,8 @@ function missingCommandPermission(
     : `You are missing the following permissions in this server from your roles: **${perms}**`;
 
   if (
-    missingPermissions.find((perm) =>
-      perm === "SEND_MESSAGES" || perm === "VIEW_CHANNEL"
+    missingPermissions.find(
+      (perm) => perm === "SEND_MESSAGES" || perm === "VIEW_CHANNEL",
     )
   ) {
     return;

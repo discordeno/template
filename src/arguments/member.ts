@@ -1,4 +1,5 @@
-import { bot, cache, fetchMembers, snowflakeToBigint } from "../../deps.ts";
+import { cache, fetchMembers, snowflakeToBigint } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("member", {
   name: "member",

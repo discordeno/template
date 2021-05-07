@@ -1,12 +1,14 @@
-import { bot, cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
+import { cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
+import { bot } from "../../cache.ts";
+
 /** Convert milliseconds to MM:SS */
 export function getMusicLength(milliseconds: number) {
   return milliseconds > 3600000
-    ? (new Date(milliseconds).toISOString().substr(11, 8))
-    : (new Date(milliseconds).toISOString().substr(14, 5));
+    ? new Date(milliseconds).toISOString().substr(11, 8)
+    : new Date(milliseconds).toISOString().substr(14, 5);
 }
 
-async function execQueue(message: DiscordenoMessage, player: Player) {
+function execQueue(message: DiscordenoMessage, player: Player) {
   if (!message.guildId) return;
 
   const queue = bot.musicQueues.get(message.guildId);
@@ -27,9 +29,7 @@ async function execQueue(message: DiscordenoMessage, player: Player) {
     } else {
       await bot.lavadenoManager.destroy(message.guildId.toString());
       bot.musicQueues.delete(message.guildId);
-      await message.send(
-        `Queue is now empty! Leaving the voice channel.`,
-      );
+      await message.send(`Queue is now empty! Leaving the voice channel.`);
     }
   });
 }
@@ -40,9 +40,7 @@ export async function addSoundToQueue(
 ) {
   if (!message.guildId) return;
 
-  const player = bot.lavadenoManager.players.get(
-    message.guildId.toString(),
-  );
+  const player = bot.lavadenoManager.players.get(message.guildId.toString());
   if (bot.musicQueues.has(message.guildId)) {
     bot.musicQueues.get(message.guildId)?.push(track);
     await message.reply(

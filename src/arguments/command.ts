@@ -1,8 +1,8 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("command", {
   name: "command",
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     const [name] = parameters;
     if (!name) return;
 

@@ -1,5 +1,6 @@
-import { bot, DiscordInteractionTypes } from "../../deps.ts";
+import { DiscordInteractionTypes } from "../../deps.ts";
 import { processButtonCollectors } from "../utils/collectors.ts";
+import { bot } from "../../cache.ts";
 
 bot.eventHandlers.interactionCreate = function (data, member) {
   // A SLASH COMMAND WAS USED

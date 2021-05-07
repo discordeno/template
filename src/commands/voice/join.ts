@@ -4,10 +4,8 @@ import { createCommand } from "../../utils/helpers.ts";
 createCommand({
   name: "join",
   guildOnly: true,
-  async execute(message) {
-    const player = bot.lavadenoManager.players.get(
-      message.guildId.toString(),
-    );
+  execute(message) {
+    const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
     if (player?.connected) {
       return message.reply(

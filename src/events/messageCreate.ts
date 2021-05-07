@@ -1,5 +1,4 @@
 import {
-  bot,
   botHasChannelPermissions,
   botHasGuildPermissions,
   botId,
@@ -7,6 +6,7 @@ import {
   hasChannelPermissions,
   hasGuildPermissions,
 } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 // deno-lint-ignore require-await
 bot.eventHandlers.messageCreate = async function (message) {

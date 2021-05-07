@@ -1,14 +1,14 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("string", {
   name: "string",
-  execute: async function (argument, parameters) {
+  execute: function (argument, parameters) {
     const [text] = parameters;
 
     const valid =
       // If the argument required literals and some string was provided by user
       argument.literals?.length && text
-        ? (argument.literals.includes(text.toLowerCase()) ? text : undefined)
+        ? argument.literals.includes(text.toLowerCase()) ? text : undefined
         : text;
 
     if (valid) {

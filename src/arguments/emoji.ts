@@ -1,10 +1,11 @@
-import { bot, cache } from "../../deps.ts";
+import { cache } from "../../deps.ts";
 import { defaultEmojis } from "../utils/constants/default_emojis.ts";
 import { emojiUnicode } from "../utils/helpers.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("emoji", {
   name: "emoji",
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     let [id] = parameters;
     if (!id) return;
 
@@ -14,9 +15,9 @@ bot.arguments.set("emoji", {
       id = id.substring(id.lastIndexOf(":") + 1, id.length - 1);
     }
 
-    let emoji = cache.guilds.get(message.guildId)?.emojis.find((e) =>
-      e.id === id
-    );
+    let emoji = cache.guilds
+      .get(message.guildId)
+      ?.emojis.find((e) => e.id === id);
     if (!emoji) {
       for (const guild of cache.guilds.values()) {
         const globalemoji = guild.emojis.find((e) => e.id === id);

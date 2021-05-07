@@ -1,13 +1,14 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 import { Command } from "../types/commands.ts";
 
 bot.arguments.set("nestedcommand", {
   name: "nestedcommand",
-  execute: async function (_argument, parameters) {
+  execute: function (_argument, parameters) {
     let command = bot.commands.get(parameters.join("\n").toLowerCase());
     if (command) return command;
 
     for (const word of parameters) {
+      // deno-lint-ignore no-explicit-any
       const isCommand: Command<any> | undefined = command
         ? // IF A COMMAND WAS FOUND WE SEARCH FOR ITS SUBCOMMANDS
           command.subcommands?.get(word)

@@ -1,5 +1,3 @@
-// TODO: change import
-import { sendShardMessage } from "https://raw.githubusercontent.com/discordeno/discordeno/main/src/ws/send_shard_message.ts";
 import { configs } from "./configs.ts";
 import {
   botId,
@@ -7,6 +5,7 @@ import {
   DiscordenoMessage,
   Manager,
   Track,
+  ws,
 } from "./deps.ts";
 import {
   ButtonCollector,
@@ -19,7 +18,12 @@ import { Monitor } from "./src/types/monitors.ts";
 import { Task } from "./src/types/tasks.ts";
 
 export const bot = {
+  fullyReady: false,
+  activeGuildIDs: new Set<bigint>(),
+  dispatchedGuildIDs: new Set<bigint>(),
+  dispatchedChannelIDs: new Set<bigint>(),
   arguments: new Collection<string, Argument>(),
+  // deno-lint-ignore no-explicit-any
   commands: new Collection<string, Command<any>>(),
   eventHandlers: {} as CustomEvents,
   guildPrefixes: new Collection<bigint, string>(),
@@ -31,6 +35,7 @@ export const bot = {
     string,
     (
       message: DiscordenoMessage,
+      // deno-lint-ignore no-explicit-any
       command: Command<any>,
     ) => Promise<boolean> | boolean
   >(),
@@ -39,18 +44,19 @@ export const bot = {
     PermissionLevels,
     (
       message: DiscordenoMessage,
+      // deno-lint-ignore no-explicit-any
       command: Command<any>,
     ) => Promise<boolean> | boolean
   >(),
   tasks: new Collection<string, Task>(),
-  runningTasks: [] as number[],
+  runningTasks: { initialTimeouts: [] as number[], intervals: [] as number[] },
   memberLastActive: new Collection<bigint, number>(),
   musicQueues: new Collection<bigint, Track[]>(),
   loopingMusics: new Collection<bigint, boolean>(),
   lavadenoManager: new Manager(configs.nodes, {
     userId: botId.toString(),
     send(id, payload) {
-      sendShardMessage(Number(id), payload);
+      ws.sendShardMessage(Number(id), payload);
     },
   }),
 };

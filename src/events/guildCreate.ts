@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.eventHandlers.guildCreate = function (guild) {
   console.log(

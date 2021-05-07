@@ -7,10 +7,8 @@ createCommand({
   name: "playing",
   aliases: ["np", "nowplaying"],
   guildOnly: true,
-  async execute(message, args) {
-    const player = bot.lavadenoManager.players.get(
-      message.guildId.toString(),
-    );
+  execute(message) {
+    const player = bot.lavadenoManager.players.get(message.guildId.toString());
     const queue = bot.musicQueues.get(message.guildId);
 
     if (!player || !queue) {
@@ -31,7 +29,9 @@ createCommand({
       .setDescription(
         player.playing && queue
           ? `**Progress:** ${getMusicLength(player.position)}/${
-            getMusicLength(queue[0].info.length)
+            getMusicLength(
+              queue[0].info.length,
+            )
           }`
           : `You're not playing any music, add a music using im!play (music)`,
       )

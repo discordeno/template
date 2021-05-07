@@ -1,8 +1,16 @@
-import { bot, cache, ChannelTypes, snowflakeToBigint } from "../../deps.ts";
+import { cache, ChannelTypes, snowflakeToBigint } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
+const textChannelTypes = [
+  ChannelTypes.GuildText,
+  ChannelTypes.GuildNews,
+  ChannelTypes.GuildNewsThread,
+  ChannelTypes.GuildPivateThread,
+  ChannelTypes.GuildPublicThread,
+];
 bot.arguments.set("guildtextchannel", {
   name: "guildtextchannel",
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
 
@@ -14,15 +22,12 @@ bot.arguments.set("guildtextchannel", {
       : id.toLowerCase();
 
     const channel = cache.channels.get(snowflakeToBigint(channelIdOrName)) ||
-      cache.channels.find((channel) =>
-        channel.name === channelIdOrName && channel.guildId === guild.id
+      cache.channels.find(
+        (channel) =>
+          channel.name === channelIdOrName && channel.guildId === guild.id,
       );
 
-    // TODO: support all new text channels
-    if (
-      channel?.type !== ChannelTypes.GuildText &&
-      channel?.type !== ChannelTypes.GuildNews
-    ) {
+    if (!channel?.type || !textChannelTypes.includes(channel.type)) {
       return;
     }
 

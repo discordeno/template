@@ -1,5 +1,6 @@
+import { bot } from "./cache.ts";
 import { configs } from "./configs.ts";
-import { bot, startBot } from "./deps.ts";
+import { startBot } from "./deps.ts";
 import { fileLoader, getTime, importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
 
@@ -19,9 +20,7 @@ await Promise.all(
     "./src/tasks",
     "./src/permissionLevels",
     "./src/events",
-  ].map(
-    (path) => importDirectory(Deno.realPathSync(path)),
-  ),
+  ].map((path) => importDirectory(Deno.realPathSync(path))),
 );
 await fileLoader();
 

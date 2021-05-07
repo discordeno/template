@@ -1,4 +1,5 @@
 import { configs } from "../../configs.ts";
+import { bot } from "../../cache.ts";
 import {
   bgBlack,
   bgBlue,
@@ -6,7 +7,6 @@ import {
   bgMagenta,
   bgYellow,
   black,
-  bot,
   botId,
   cache,
   deleteMessages,
@@ -43,7 +43,11 @@ export function logCommand(
   type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing" | "Inhibit",
   commandName: string,
 ) {
-  const command = `[COMMAND: ${bgYellow(black(commandName || "Unknown"))} - ${
+  const command = `[COMMAND: ${
+    bgYellow(
+      black(commandName || "Unknown"),
+    )
+  } - ${
     bgBlack(
       ["Failure", "Slowmode", "Missing"].includes(type)
         ? red(type)
@@ -53,18 +57,16 @@ export function logCommand(
     )
   }]`;
 
-  const user = bgGreen(
-    black(
-      `${message.tag}(${message.authorId})`,
-    ),
-  );
+  const user = bgGreen(black(`${message.tag}(${message.authorId})`));
   const guild = bgMagenta(
     black(`${guildName}${message.guildId ? `(${message.guildId})` : ""}`),
   );
 
   console.log(
     `${
-      bgBlue(`[${getTime()}]`)
+      bgBlue(
+        `[${getTime()}]`,
+      )
     } => ${command} by ${user} in ${guild} with MessageID: ${message.id}`,
   );
 } /** Parses all the arguments for the command based on the message sent by the user. */
@@ -94,8 +96,13 @@ async function parseArguments(
       // This will use up all args so immediately exist the loop.
       if (
         argument.type &&
-        ["subcommands", "...strings", "...roles", "...emojis", "...snowflakes"]
-          .includes(argument.type)
+        [
+          "subcommands",
+          "...strings",
+          "...roles",
+          "...emojis",
+          "...snowflakes",
+        ].includes(argument.type)
       ) {
         break;
       }
@@ -127,8 +134,10 @@ async function parseArguments(
         )
         .catch(console.log);
       if (question) {
-        const response = await needMessage(message.authorId, message.channelId)
-          .catch(console.log);
+        const response = await needMessage(
+          message.authorId,
+          message.channelId,
+        ).catch(console.log);
         if (response) {
           const responseArg = await resolver.execute(
             argument,
@@ -139,8 +148,10 @@ async function parseArguments(
           if (responseArg) {
             args[argument.name] = responseArg;
             params.shift();
-            await deleteMessages(message.channelId, [question.id, response.id])
-              .catch(console.log);
+            await deleteMessages(message.channelId, [
+              question.id,
+              response.id,
+            ]).catch(console.log);
             continue;
           }
         }
@@ -245,9 +256,9 @@ bot.monitors.set("commandHandler", {
     } else if (!message.content.startsWith(prefix)) return;
 
     // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
-    const [commandName, ...parameters] = message.content.substring(
-      prefix.length,
-    ).split(" ");
+    const [commandName, ...parameters] = message.content
+      .substring(prefix.length)
+      .split(" ");
 
     // Check if this is a valid command
     const command = parseCommand(commandName);

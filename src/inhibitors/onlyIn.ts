@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.inhibitors.set("onlyIn", function (message, command) {
   console.log(message);
