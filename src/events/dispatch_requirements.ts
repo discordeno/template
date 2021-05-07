@@ -26,15 +26,15 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
       : // deno-lint-ignore no-explicit-any
         (data.d as any)?.guild_id,
   );
-  console.log(1);
+
   if (!id || bot.activeGuildIDs.has(id)) return;
-  console.log(2);
+
   // If this guild is in cache, it has not been swept and we can cancel
   if (cache.guilds.has(id)) {
     bot.activeGuildIDs.add(id);
     return;
   }
-  console.log(4);
+
   if (processing.has(id)) {
     console.log(
       `[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`,
