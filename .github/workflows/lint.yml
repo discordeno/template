@@ -1,3 +1,16 @@
+# name: Lint
+# on: [push, pull_request]
+# jobs:
+#   lint:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: denolib/setup-deno@v2
+#       - name: Run fmt check script
+#         run: deno fmt *.ts src/** --check
+#     # - name: Run lint script
+#     #   run: deno lint *.ts src/** --unstable --ignore=./src/types/
+
 name: Lint
 on: [push, pull_request]
 jobs:
@@ -5,8 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: denolib/setup-deno@v2
-      - name: Run fmt check script
-        run: deno fmt *.ts src/** --check
-    # - name: Run lint script
-    #   run: deno lint *.ts src/** --unstable --ignore=./src/types/
+      - uses: denoland/setup-deno@main
+      - name: Run fmt script
+        run: deno fmt
+      - name: Commit formatted files
+        uses: EndBug/add-and-commit@v7
+      - name: Run lint script
+        run: deno lint src/** --unstable --ignore=./src/types
