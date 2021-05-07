@@ -73,6 +73,7 @@ export function logCommand(
 
 async function parseArguments(
   message: DiscordenoMessage,
+  // deno-lint-ignore no-explicit-any
   command: Command<any>,
   parameters: string[],
 ) {
@@ -171,6 +172,7 @@ async function parseArguments(
 /** Runs the inhibitors to see if a command is allowed to run. */
 async function commandAllowed(
   message: DiscordenoMessage,
+  // deno-lint-ignore no-explicit-any
   command: Command<any>,
 ) {
   const inhibitorResults = await Promise.all(
@@ -189,6 +191,7 @@ async function commandAllowed(
 
 async function executeCommand(
   message: DiscordenoMessage,
+  // deno-lint-ignore no-explicit-any
   command: Command<any>,
   parameters: string[],
   guild?: Guild,
@@ -206,14 +209,15 @@ async function executeCommand(
     // If no subcommand execute the command
     const [argument] = command.arguments || [];
     const subcommand = argument
-      ? (args[argument.name] as Command<any>)
+      ? // deno-lint-ignore no-explicit-any
+        (args[argument.name] as Command<any>)
       : undefined;
 
     if (!argument || argument.type !== "subcommand" || !subcommand) {
       // Check subcommand permissions and options
       if (!(await commandAllowed(message, command))) return;
 
-      // @ts-ignore
+      // @ts-ignore - a comment to satisfy lint
       await command.execute?.(message, args, guild);
       return logCommand(message, guild?.name || "DM", "Success", command.name);
     }
@@ -239,6 +243,7 @@ bot.monitors.set("commandHandler", {
   name: "commandHandler",
   ignoreDM: false,
   /** The main code that will be run when this monitor is triggered. */
+  // deno-lint-ignore require-await
   execute: async function (message) {
     // If the message was sent by a bot we can just ignore it
     if (message.isBot) return;
