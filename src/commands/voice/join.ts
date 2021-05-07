@@ -9,7 +9,7 @@ createCommand({
 
     if (player?.connected) {
       return message.reply(
-        `The bot is already connected to a channel in this guild!`
+        `The bot is already connected to a channel in this guild!`,
       );
     }
 

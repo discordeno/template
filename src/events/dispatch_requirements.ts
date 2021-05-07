@@ -24,7 +24,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
       ? // deno-lint-ignore no-explicit-any
         (data.d as any)?.id
       : // deno-lint-ignore no-explicit-any
-        (data.d as any)?.guild_id
+        (data.d as any)?.guild_id,
   );
   console.log(1);
   if (!id || bot.activeGuildIDs.has(id)) return;
@@ -37,7 +37,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   console.log(4);
   if (processing.has(id)) {
     console.log(
-      `[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`
+      `[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`,
     );
 
     let runs = 0;
@@ -49,7 +49,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
     if (!processing.has(id)) return;
 
     return console.log(
-      `[DISPATCH] Already processed guild was not successfully fetched:  ${id} in ${data.t} event`
+      `[DISPATCH] Already processed guild was not successfully fetched:  ${id} in ${data.t} event`,
     );
   }
 
@@ -81,7 +81,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   if (!botMember || !channels) {
     processing.delete(id);
     return console.log(
-      `[DISPATCH] Guild ID ${id} Name: ${rawGuild.name} failed. Unable to get botMember or channels`
+      `[DISPATCH] Guild ID ${id} Name: ${rawGuild.name} failed. Unable to get botMember or channels`,
     );
   }
 
@@ -99,7 +99,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   processing.delete(id);
 
   console.log(
-    `[DISPATCH] Guild ID ${id} Name: ${guild.name} completely loaded.`
+    `[DISPATCH] Guild ID ${id} Name: ${guild.name} completely loaded.`,
   );
 };
 

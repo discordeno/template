@@ -15,8 +15,7 @@ bot.arguments.set("...roles", {
         : word;
 
       const name = word.toLowerCase();
-      const role =
-        guild.roles.get(snowflakeToBigint(roleId)) ||
+      const role = guild.roles.get(snowflakeToBigint(roleId)) ||
         guild.roles.find((r) => r.name.toLowerCase() === name);
       if (role) return role;
     });

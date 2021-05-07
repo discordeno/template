@@ -16,7 +16,7 @@ createCommand({
         bot.loopingMusics.has(message.guildId)
           ? "now be looped 🔁"
           : `no longed be looped`
-      }.`
+      }.`,
     );
   },
 });

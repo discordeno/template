@@ -14,8 +14,7 @@ bot.arguments.set("role", {
     const roleId = id.startsWith("<@&") ? id.substring(3, id.length - 1) : id;
 
     const name = id.toLowerCase();
-    const role =
-      guild.roles.get(snowflakeToBigint(roleId)) ||
+    const role = guild.roles.get(snowflakeToBigint(roleId)) ||
       guild.roles.find((r) => r.name.toLowerCase() === name);
     if (role) return role;
 
@@ -31,7 +30,7 @@ bot.arguments.set("role", {
         translate(message.guildId, "strings:POSSIBLE_ROLES"),
         "",
         possibleRoles.map((r) => `**${r.name}** ${r.id}`).join("\n"),
-      ].join("\n")
+      ].join("\n"),
     );
   },
 });

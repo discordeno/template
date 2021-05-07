@@ -14,11 +14,10 @@ bot.arguments.set("categorychannel", {
       ? id.substring(2, id.length - 1)
       : id.toLowerCase();
 
-    const channel =
-      cache.channels.get(snowflakeToBigint(channelIdOrName)) ||
+    const channel = cache.channels.get(snowflakeToBigint(channelIdOrName)) ||
       cache.channels.find(
         (channel) =>
-          channel.name === channelIdOrName && channel.guildId === guild.id
+          channel.name === channelIdOrName && channel.guildId === guild.id,
       );
 
     if (channel?.type !== ChannelTypes.GuildCategory) return;

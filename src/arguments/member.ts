@@ -20,7 +20,7 @@ bot.arguments.set("member", {
     const cached = cache.members.find(
       (member) =>
         member.guilds.has(message.guildId) &&
-        member.tag.toLowerCase().startsWith(userId.toLowerCase())
+        member.tag.toLowerCase().startsWith(userId.toLowerCase()),
     );
     if (cached) return cached;
 

@@ -85,7 +85,7 @@ bot.tasks.set(`botlists`, {
       })
         .then(() => {
           console.log(
-            `Update Bot Lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`
+            `Update Bot Lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`,
           );
         })
         .catch((err) => {

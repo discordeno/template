@@ -8,7 +8,7 @@ bot.eventHandlers.reactionAdd = function (data, message) {
     processReactionCollectors(
       message,
       data.emoji,
-      snowflakeToBigint(data.userId)
+      snowflakeToBigint(data.userId),
     );
   }
 };

@@ -36,7 +36,7 @@ export const bot = {
     (
       message: DiscordenoMessage,
       // deno-lint-ignore no-explicit-any
-      command: Command<any>
+      command: Command<any>,
     ) => Promise<boolean> | boolean
   >(),
   monitors: new Collection<string, Monitor>(),
@@ -45,7 +45,7 @@ export const bot = {
     (
       message: DiscordenoMessage,
       // deno-lint-ignore no-explicit-any
-      command: Command<any>
+      command: Command<any>,
     ) => Promise<boolean> | boolean
   >(),
   tasks: new Collection<string, Task>(),

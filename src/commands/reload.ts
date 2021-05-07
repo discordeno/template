@@ -46,7 +46,7 @@ createCommand({
       const path = folderPaths.get(args.folder);
       if (!path) {
         return message.reply(
-          "The folder you provided did not have a path available."
+          "The folder you provided did not have a path available.",
         );
       }
 
@@ -73,7 +73,7 @@ createCommand({
     await Promise.all(
       [...folderPaths.values()].map((path) =>
         importDirectory(Deno.realPathSync(path))
-      )
+      ),
     );
     await fileLoader();
     registerTasks();

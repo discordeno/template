@@ -30,13 +30,14 @@ createCommand({
   permissionLevels: [PermissionLevels.MEMBER],
   execute: function (message) {
     const currentLanguageId = getCurrentLanguage(message.guildId);
-    const currentLanguage =
-      allowedLanguages.find((item) => item.id === currentLanguageId) ||
+    const currentLanguage = allowedLanguages.find((item) =>
+      item.id === currentLanguageId
+    ) ||
       allowedLanguages[0];
     const embed = new Embed()
       .setTitle("Language Information")
       .setDescription(
-        `**Current Language**: ${currentLanguage.flag} - \`${currentLanguage.name}\``
+        `**Current Language**: ${currentLanguage.flag} - \`${currentLanguage.name}\``,
       )
       .setTimestamp();
 
@@ -63,14 +64,15 @@ createSubcommand("language", {
   execute: async function (message, args) {
     //Old
     const oldLanguageId = getCurrentLanguage(message.guildId);
-    const oldLanguage =
-      allowedLanguages.find((item) => item.id === oldLanguageId) ||
+    const oldLanguage = allowedLanguages.find((item) =>
+      item.id === oldLanguageId
+    ) ||
       allowedLanguages[0];
 
     //New
     const newLanguageName = args.language;
     const newLanguage = allowedLanguages.find(
-      (item) => item.name === newLanguageName
+      (item) => item.name === newLanguageName,
     );
 
     //Handle
@@ -78,7 +80,7 @@ createSubcommand("language", {
       const embed = new Embed()
         .setTitle("Error")
         .setDescription(
-          "Check list of languages by running command `language set`."
+          "Check list of languages by running command `language set`.",
         )
         .addField("Error", `\`${args.language}\` is not a valid language.`);
 

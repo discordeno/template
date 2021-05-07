@@ -25,17 +25,17 @@ createCommand({
 
     const description = translate(
       message.guildId!,
-      `commands/${args.command}:DESCRIPTION`
+      `commands/${args.command}:DESCRIPTION`,
     );
 
     const embed = new Embed()
       .setAuthor(
         translate(message.guildId!, `commands/help:AUTHOR`, {
           name: args.command,
-        })
+        }),
       )
       .setDescription(
-        description === "DESCRIPTION" ? command.description : description
+        description === "DESCRIPTION" ? command.description : description,
       );
 
     return message.send({ embed });

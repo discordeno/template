@@ -41,34 +41,40 @@ export function logCommand(
   message: DiscordenoMessage,
   guildName: string,
   type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing" | "Inhibit",
-  commandName: string
+  commandName: string,
 ) {
-  const command = `[COMMAND: ${bgYellow(
-    black(commandName || "Unknown")
-  )} - ${bgBlack(
-    ["Failure", "Slowmode", "Missing"].includes(type)
-      ? red(type)
-      : type === "Success"
-      ? green(type)
-      : white(type)
-  )}]`;
+  const command = `[COMMAND: ${
+    bgYellow(
+      black(commandName || "Unknown"),
+    )
+  } - ${
+    bgBlack(
+      ["Failure", "Slowmode", "Missing"].includes(type)
+        ? red(type)
+        : type === "Success"
+        ? green(type)
+        : white(type),
+    )
+  }]`;
 
   const user = bgGreen(black(`${message.tag}(${message.authorId})`));
   const guild = bgMagenta(
-    black(`${guildName}${message.guildId ? `(${message.guildId})` : ""}`)
+    black(`${guildName}${message.guildId ? `(${message.guildId})` : ""}`),
   );
 
   console.log(
-    `${bgBlue(
-      `[${getTime()}]`
-    )} => ${command} by ${user} in ${guild} with MessageID: ${message.id}`
+    `${
+      bgBlue(
+        `[${getTime()}]`,
+      )
+    } => ${command} by ${user} in ${guild} with MessageID: ${message.id}`,
   );
 } /** Parses all the arguments for the command based on the message sent by the user. */
 
 async function parseArguments(
   message: DiscordenoMessage,
   command: Command<any>,
-  parameters: string[]
+  parameters: string[],
 ) {
   const args: { [key: string]: unknown } = {};
   if (!command.arguments) return args;
@@ -120,25 +126,24 @@ async function parseArguments(
         .reply(
           translate(message.guildId, "strings:MISSING_REQUIRED_ARG", {
             name: argument.name,
-            type:
-              argument.type === "subcommand"
-                ? command.subcommands?.map((sub) => sub.name).join(", ") ||
-                  "subcommand"
-                : argument.type,
-          })
+            type: argument.type === "subcommand"
+              ? command.subcommands?.map((sub) => sub.name).join(", ") ||
+                "subcommand"
+              : argument.type,
+          }),
         )
         .catch(console.log);
       if (question) {
         const response = await needMessage(
           message.authorId,
-          message.channelId
+          message.channelId,
         ).catch(console.log);
         if (response) {
           const responseArg = await resolver.execute(
             argument,
             [response.content],
             message,
-            command
+            command,
           );
           if (responseArg) {
             args[argument.name] = responseArg;
@@ -166,10 +171,12 @@ async function parseArguments(
 /** Runs the inhibitors to see if a command is allowed to run. */
 async function commandAllowed(
   message: DiscordenoMessage,
-  command: Command<any>
+  command: Command<any>,
 ) {
   const inhibitorResults = await Promise.all(
-    [...bot.inhibitors.values()].map((inhibitor) => inhibitor(message, command))
+    [...bot.inhibitors.values()].map((inhibitor) =>
+      inhibitor(message, command)
+    ),
   );
 
   if (inhibitorResults.includes(true)) {
@@ -184,7 +191,7 @@ async function executeCommand(
   message: DiscordenoMessage,
   command: Command<any>,
   parameters: string[],
-  guild?: Guild
+  guild?: Guild,
 ) {
   try {
     // bot.slowmode.set(message.author.id, message.timestamp);

@@ -8,7 +8,7 @@ bot.arguments.set("subcommand", {
     const sub = command.subcommands?.find(
       (sub) =>
         sub.name === subcommandName ||
-        Boolean(sub.aliases?.includes(subcommandName))
+        Boolean(sub.aliases?.includes(subcommandName)),
     );
     if (sub) return sub;
 

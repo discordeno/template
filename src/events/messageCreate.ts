@@ -46,7 +46,7 @@ bot.eventHandlers.messageCreate = async function (message) {
       const results = await Promise.all(
         monitor.userChannelPermissions.map((perm) =>
           hasChannelPermissions(message.channelId, message.authorId, [perm])
-        )
+        ),
       );
       if (results.includes(false)) return;
     }
@@ -57,7 +57,7 @@ bot.eventHandlers.messageCreate = async function (message) {
       !(await hasGuildPermissions(
         message.guildId,
         message.authorId,
-        monitor.userServerPermissions
+        monitor.userServerPermissions,
       ))
     ) {
       return;
@@ -68,7 +68,7 @@ bot.eventHandlers.messageCreate = async function (message) {
       monitor.botChannelPermissions &&
       !(await botHasChannelPermissions(
         message.channelId,
-        monitor.botChannelPermissions
+        monitor.botChannelPermissions,
       ))
     ) {
       return;
@@ -79,7 +79,7 @@ bot.eventHandlers.messageCreate = async function (message) {
       monitor.botServerPermissions &&
       !(await botHasGuildPermissions(
         message.guildId,
-        monitor.botServerPermissions
+        monitor.botServerPermissions,
       ))
     ) {
       return;

@@ -8,9 +8,11 @@ export function registerTasks() {
     bot.runningTasks.initialTimeouts.push(
       setTimeout(async () => {
         console.log(
-          `${bgBlue(`[${getTime()}]`)} => [TASK: ${bgYellow(
-            black(task.name)
-          )}] Started.`
+          `${bgBlue(`[${getTime()}]`)} => [TASK: ${
+            bgYellow(
+              black(task.name),
+            )
+          }] Started.`,
         );
         try {
           await task.execute();
@@ -22,18 +24,20 @@ export function registerTasks() {
           setInterval(async () => {
             if (!bot.fullyReady) return;
             console.log(
-              `${bgBlue(`[${getTime()}]`)} => [TASK: ${bgYellow(
-                black(task.name)
-              )}] Started.`
+              `${bgBlue(`[${getTime()}]`)} => [TASK: ${
+                bgYellow(
+                  black(task.name),
+                )
+              }] Started.`,
             );
             try {
               await task.execute();
             } catch (error) {
               console.log(error);
             }
-          }, task.interval)
+          }, task.interval),
         );
-      }, Date.now() % task.interval)
+      }, Date.now() % task.interval),
     );
   }
 }
