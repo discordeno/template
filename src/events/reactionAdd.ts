@@ -1,5 +1,6 @@
-import { bot, snowflakeToBigint } from "../../deps.ts";
+import { snowflakeToBigint } from "../../deps.ts";
 import { processReactionCollectors } from "../utils/collectors.ts";
+import { bot } from "../../cache.ts";
 
 bot.eventHandlers.reactionAdd = function (data, message) {
   // Process reaction collectors.
@@ -7,7 +8,7 @@ bot.eventHandlers.reactionAdd = function (data, message) {
     processReactionCollectors(
       message,
       data.emoji,
-      snowflakeToBigint(data.userId),
+      snowflakeToBigint(data.userId)
     );
   }
 };

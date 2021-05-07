@@ -1,5 +1,6 @@
 import { Milliseconds } from "../utils/constants/time.ts";
-import { bot, botId, cache, cacheHandlers } from "../../deps.ts";
+import { botId, cache, cacheHandlers } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 const MESSAGE_LIFETIME = Milliseconds.MINUTE * 10;
 const MEMBER_LIFETIME = Milliseconds.MINUTE * 30;

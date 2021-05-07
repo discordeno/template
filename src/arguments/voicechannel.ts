@@ -1,8 +1,9 @@
-import { bot, cache, ChannelTypes, snowflakeToBigint } from "../../deps.ts";
+import { cache, ChannelTypes, snowflakeToBigint } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("voicechannel", {
   name: "voicechannel",
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     const [id] = parameters;
     if (!id) return;
 
@@ -13,12 +14,18 @@ bot.arguments.set("voicechannel", {
       ? id.substring(2, id.length - 1)
       : id.toLowerCase();
 
-    const channel = cache.channels.get(snowflakeToBigint(channelIdOrName)) ||
-      cache.channels.find((channel) =>
-        channel.name === channelIdOrName && channel.guildId === guild.id
+    const channel =
+      cache.channels.get(snowflakeToBigint(channelIdOrName)) ||
+      cache.channels.find(
+        (channel) =>
+          channel.name === channelIdOrName && channel.guildId === guild.id
       );
 
-    if (channel?.type !== ChannelTypes.GuildVoice) return;
+    if (
+      channel?.type !== ChannelTypes.GuildVoice &&
+      channel?.type !== ChannelTypes.GuildStageVoice
+    )
+      return;
 
     return channel;
   },

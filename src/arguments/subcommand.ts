@@ -1,14 +1,14 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("subcommand", {
   name: "subcommand",
-  execute: async function (argument, parameters, _message, command) {
+  execute: function (argument, parameters, _message, command) {
     const [subcommandName] = parameters;
 
     const sub = command.subcommands?.find(
       (sub) =>
         sub.name === subcommandName ||
-        Boolean(sub.aliases?.includes(subcommandName)),
+        Boolean(sub.aliases?.includes(subcommandName))
     );
     if (sub) return sub;
 

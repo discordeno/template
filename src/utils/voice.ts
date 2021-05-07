@@ -1,12 +1,14 @@
-import { bot, cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
+import { cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
+import { bot } from "../../cache.ts";
+
 /** Convert milliseconds to MM:SS */
 export function getMusicLength(milliseconds: number) {
   return milliseconds > 3600000
-    ? (new Date(milliseconds).toISOString().substr(11, 8))
-    : (new Date(milliseconds).toISOString().substr(14, 5));
+    ? new Date(milliseconds).toISOString().substr(11, 8)
+    : new Date(milliseconds).toISOString().substr(14, 5);
 }
 
-async function execQueue(message: DiscordenoMessage, player: Player) {
+function execQueue(message: DiscordenoMessage, player: Player) {
   if (!message.guildId) return;
 
   const queue = bot.musicQueues.get(message.guildId);
@@ -27,32 +29,29 @@ async function execQueue(message: DiscordenoMessage, player: Player) {
     } else {
       await bot.lavadenoManager.destroy(message.guildId.toString());
       bot.musicQueues.delete(message.guildId);
-      await message.send(
-        `Queue is now empty! Leaving the voice channel.`,
-      );
+      await message.send(`Queue is now empty! Leaving the voice channel.`);
     }
   });
 }
 
 export async function addSoundToQueue(
   message: DiscordenoMessage,
-  track: Track,
+  track: Track
 ) {
   if (!message.guildId) return;
 
-  const player = bot.lavadenoManager.players.get(
-    message.guildId.toString(),
-  );
+  const player = bot.lavadenoManager.players.get(message.guildId.toString());
   if (bot.musicQueues.has(message.guildId)) {
     bot.musicQueues.get(message.guildId)?.push(track);
     await message.reply(
-      `Added ${track.info.title} to the queue! Position in queue: ${bot
-        .musicQueues.get(message.guildId)!.length - 1}`,
+      `Added ${track.info.title} to the queue! Position in queue: ${
+        bot.musicQueues.get(message.guildId)!.length - 1
+      }`
     );
   } else {
     bot.musicQueues.set(message.guildId!, [track]);
     await message.reply(
-      `Added ${track.info.title} to Now playing - ${track.info.title}.`,
+      `Added ${track.info.title} to Now playing - ${track.info.title}.`
     );
   }
   if (player && !player.playing) {
@@ -63,19 +62,19 @@ export async function addSoundToQueue(
 export async function addPlaylistToQueue(
   message: DiscordenoMessage,
   playlistName: string,
-  tracks: Track[],
+  tracks: Track[]
 ) {
   const player = bot.lavadenoManager.players.get(message.guildId.toString());
   if (bot.musicQueues.has(message.guildId)) {
     bot.musicQueues.set(
       message.guildId,
-      bot.musicQueues.get(message.guildId)!.concat(tracks),
+      bot.musicQueues.get(message.guildId)!.concat(tracks)
     );
   } else {
     bot.musicQueues.set(message.guildId, tracks);
   }
   await message.reply(
-    `Added ${tracks.length} songs from the playlist: ${playlistName} to the queue!`,
+    `Added ${tracks.length} songs from the playlist: ${playlistName} to the queue!`
   );
   if (player && !player.playing) {
     await execQueue(message, player);
@@ -90,14 +89,14 @@ export function validURL(str: string) {
       "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
       "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
       "(\\#[-a-z\\d_]*)?$",
-    "i",
+    "i"
   ); // fragment locator
   return !!pattern.test(str);
 }
 
 export async function checkIfUserInMusicChannel(
   message: DiscordenoMessage,
-  player: Player,
+  player: Player
 ): Promise<boolean> {
   if (!message.guildId || !message.channelId) {
     if (!player) {
@@ -111,11 +110,11 @@ export async function checkIfUserInMusicChannel(
   }
   if (
     player.channel !==
-      cache.guilds.get(message.guildId)?.voiceStates.get(message.authorId)
-        ?.channelId
+    cache.guilds.get(message.guildId)?.voiceStates.get(message.authorId)
+      ?.channelId
   ) {
     await message.reply(
-      `You need to been in the same voice channel than the bot!`,
+      `You need to been in the same voice channel than the bot!`
     );
     return false;
   }

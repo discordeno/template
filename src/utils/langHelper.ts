@@ -1,5 +1,6 @@
-import { bot, snowflakeToBigint } from "../../deps.ts";
+import { snowflakeToBigint } from "../../deps.ts";
 import { db } from "../database/database.ts";
+import { bot } from "../../cache.ts";
 
 export async function loadLanguages() {
   const guilds = await db.guilds.getAll(true).catch(console.error);

@@ -4,7 +4,7 @@ import { createCommand } from "../../utils/helpers.ts";
 createCommand({
   name: "loop",
   guildOnly: true,
-  async execute(message) {
+  execute(message) {
     if (bot.loopingMusics.has(message.guildId)) {
       bot.loopingMusics.delete(message.guildId);
     } else {
@@ -16,7 +16,7 @@ createCommand({
         bot.loopingMusics.has(message.guildId)
           ? "now be looped 🔁"
           : `no longed be looped`
-      }.`,
+      }.`
     );
   },
 });

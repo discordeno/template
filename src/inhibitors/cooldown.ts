@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 import { humanizeMilliseconds } from "../utils/helpers.ts";
 
 const membersInCooldown = new Map<string, Cooldown>();
@@ -18,11 +18,9 @@ bot.inhibitors.set("cooldown", function (message, command) {
       const now = Date.now();
       if (cooldown.timestamp > now) {
         message.reply(
-          `You must wait **${
-            humanizeMilliseconds(
-              cooldown.timestamp - now,
-            )
-          }** before using this command again.`,
+          `You must wait **${humanizeMilliseconds(
+            cooldown.timestamp - now
+          )}** before using this command again.`
         );
         return true;
       } else {

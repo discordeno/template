@@ -1,12 +1,10 @@
-import { getMissingGuildPermissions } from "https://raw.githubusercontent.com/discordeno/discordeno/main/src/util/permissions.ts";
 import {
-  bot,
-  botHasChannelPermissions,
-  botHasGuildPermissions,
   DiscordenoMessage,
   getMissingChannelPermissions,
   PermissionStrings,
+  getMissingGuildPermissions,
 } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 /** This function can be overriden to handle when a command has a mission permission. */
 function missingCommandPermission(
@@ -16,20 +14,21 @@ function missingCommandPermission(
     | "framework/core:USER_SERVER_PERM"
     | "framework/core:USER_CHANNEL_PERM"
     | "framework/core:BOT_SERVER_PERM"
-    | "framework/core:BOT_CHANNEL_PERM",
+    | "framework/core:BOT_CHANNEL_PERM"
 ) {
   const perms = missingPermissions.join(", ");
-  const response = type === "framework/core:BOT_CHANNEL_PERM"
-    ? `I am missing the following permissions in this channel: **${perms}**`
-    : type === "framework/core:BOT_SERVER_PERM"
-    ? `I am missing the following permissions in this server from my roles: **${perms}**`
-    : type === "framework/core:USER_CHANNEL_PERM"
-    ? `You are missing the following permissions in this channel: **${perms}**`
-    : `You are missing the following permissions in this server from your roles: **${perms}**`;
+  const response =
+    type === "framework/core:BOT_CHANNEL_PERM"
+      ? `I am missing the following permissions in this channel: **${perms}**`
+      : type === "framework/core:BOT_SERVER_PERM"
+      ? `I am missing the following permissions in this server from my roles: **${perms}**`
+      : type === "framework/core:USER_CHANNEL_PERM"
+      ? `You are missing the following permissions in this channel: **${perms}**`
+      : `You are missing the following permissions in this server from your roles: **${perms}**`;
 
   if (
-    missingPermissions.find((perm) =>
-      perm === "SEND_MESSAGES" || perm === "VIEW_CHANNEL"
+    missingPermissions.find(
+      (perm) => perm === "SEND_MESSAGES" || perm === "VIEW_CHANNEL"
     )
   ) {
     return;
@@ -55,14 +54,14 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingChannelPermissions(
       message.channelId,
       message.authorId,
-      command.userChannelPermissions,
+      command.userChannelPermissions
     );
 
     if (missingPermissions.length) {
       missingCommandPermission(
         message,
         missingPermissions,
-        "framework/core:USER_CHANNEL_PERM",
+        "framework/core:USER_CHANNEL_PERM"
       );
       return true;
     }
@@ -75,14 +74,14 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingGuildPermissions(
       message.guildId,
       message.authorId,
-      command.userServerPermissions,
+      command.userServerPermissions
     );
 
     if (missingPermissions.length) {
       missingCommandPermission(
         message,
         missingPermissions,
-        "framework/core:USER_SERVER_PERM",
+        "framework/core:USER_SERVER_PERM"
       );
       return true;
     }
@@ -93,14 +92,14 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingChannelPermissions(
       message.channelId,
       message.authorId,
-      command.botChannelPermissions,
+      command.botChannelPermissions
     );
 
     if (missingPermissions.length) {
       missingCommandPermission(
         message,
         missingPermissions,
-        "framework/core:BOT_CHANNEL_PERM",
+        "framework/core:BOT_CHANNEL_PERM"
       );
       return true;
     }
@@ -111,14 +110,14 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingGuildPermissions(
       message.guildId,
       message.authorId,
-      command.botServerPermissions,
+      command.botServerPermissions
     );
 
     if (missingPermissions.length) {
       missingCommandPermission(
         message,
         missingPermissions,
-        "framework/core:BOT_CHANNEL_PERM",
+        "framework/core:BOT_CHANNEL_PERM"
       );
       return true;
     }

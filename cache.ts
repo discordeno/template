@@ -1,5 +1,3 @@
-// TODO: change import
-import { sendShardMessage } from "https://raw.githubusercontent.com/discordeno/discordeno/main/src/ws/send_shard_message.ts";
 import { configs } from "./configs.ts";
 import {
   botId,
@@ -7,6 +5,7 @@ import {
   DiscordenoMessage,
   Manager,
   Track,
+  ws,
 } from "./deps.ts";
 import {
   ButtonCollector,
@@ -24,6 +23,7 @@ export const bot = {
   dispatchedGuildIDs: new Set<bigint>(),
   dispatchedChannelIDs: new Set<bigint>(),
   arguments: new Collection<string, Argument>(),
+  // deno-lint-ignore no-explicit-any
   commands: new Collection<string, Command<any>>(),
   eventHandlers: {} as CustomEvents,
   guildPrefixes: new Collection<bigint, string>(),
@@ -35,6 +35,7 @@ export const bot = {
     string,
     (
       message: DiscordenoMessage,
+      // deno-lint-ignore no-explicit-any
       command: Command<any>
     ) => Promise<boolean> | boolean
   >(),
@@ -43,6 +44,7 @@ export const bot = {
     PermissionLevels,
     (
       message: DiscordenoMessage,
+      // deno-lint-ignore no-explicit-any
       command: Command<any>
     ) => Promise<boolean> | boolean
   >(),
@@ -54,7 +56,7 @@ export const bot = {
   lavadenoManager: new Manager(configs.nodes, {
     userId: botId.toString(),
     send(id, payload) {
-      sendShardMessage(Number(id), payload);
+      ws.sendShardMessage(Number(id), payload);
     },
   }),
 };

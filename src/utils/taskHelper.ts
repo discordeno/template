@@ -1,35 +1,40 @@
-import { bgBlue, bgYellow, black, bot, Collection } from "../../deps.ts";
+import { bgBlue, bgYellow, black, Collection } from "../../deps.ts";
 import { Task } from "./../types/tasks.ts";
 import { getTime } from "./helpers.ts";
+import { bot } from "../../cache.ts";
 
 export function registerTasks() {
   for (const task of bot.tasks.values()) {
-    bot.runningTasks.initialTimeouts.push(setTimeout(async () => {
-      console.log(
-        `${bgBlue(`[${getTime()}]`)} => [TASK: ${
-          bgYellow(black(task.name))
-        }] Started.`,
-      );
-      try {
-        await task.execute();
-      } catch (error) {
-        console.log(error);
-      }
-
-      bot.runningTasks.initialTimeouts.push(setInterval(async () => {
-        if (!bot.fullyReady) return;
+    bot.runningTasks.initialTimeouts.push(
+      setTimeout(async () => {
         console.log(
-          `${bgBlue(`[${getTime()}]`)} => [TASK: ${
-            bgYellow(black(task.name))
-          }] Started.`,
+          `${bgBlue(`[${getTime()}]`)} => [TASK: ${bgYellow(
+            black(task.name)
+          )}] Started.`
         );
         try {
           await task.execute();
         } catch (error) {
           console.log(error);
         }
-      }, task.interval));
-    }, Date.now() % task.interval));
+
+        bot.runningTasks.initialTimeouts.push(
+          setInterval(async () => {
+            if (!bot.fullyReady) return;
+            console.log(
+              `${bgBlue(`[${getTime()}]`)} => [TASK: ${bgYellow(
+                black(task.name)
+              )}] Started.`
+            );
+            try {
+              await task.execute();
+            } catch (error) {
+              console.log(error);
+            }
+          }, task.interval)
+        );
+      }, Date.now() % task.interval)
+    );
   }
 }
 

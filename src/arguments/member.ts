@@ -1,4 +1,5 @@
-import { bot, cache, fetchMembers, snowflakeToBigint } from "../../deps.ts";
+import { cache, fetchMembers, snowflakeToBigint } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("member", {
   name: "member",
@@ -19,7 +20,7 @@ bot.arguments.set("member", {
     const cached = cache.members.find(
       (member) =>
         member.guilds.has(message.guildId) &&
-        member.tag.toLowerCase().startsWith(userId.toLowerCase()),
+        member.tag.toLowerCase().startsWith(userId.toLowerCase())
     );
     if (cached) return cached;
 

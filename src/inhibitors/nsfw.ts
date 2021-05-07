@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.inhibitors.set("nsfw", function (message, command) {
   // If this command does not need nsfw the inhibitor returns false so the command can run

@@ -1,4 +1,4 @@
-import { bot } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import {
   createCommand,
@@ -12,9 +12,9 @@ const allowedLanguages = [
   { id: "en_US", flag: ":flag_us:", name: "English" },
   { id: "cs_CZ", flag: ":flag_cz:", name: "Czech" },
 ];
-const listOfLanguages = allowedLanguages.map((lang) =>
-  `${lang.flag} - \`${lang.name}\``
-).join("\n");
+const listOfLanguages = allowedLanguages
+  .map((lang) => `${lang.flag} - \`${lang.name}\``)
+  .join("\n");
 
 createCommand({
   name: "language",
@@ -30,13 +30,13 @@ createCommand({
   permissionLevels: [PermissionLevels.MEMBER],
   execute: function (message) {
     const currentLanguageId = getCurrentLanguage(message.guildId);
-    const currentLanguage = allowedLanguages.find((item) =>
-      item.id === currentLanguageId
-    ) || allowedLanguages[0];
+    const currentLanguage =
+      allowedLanguages.find((item) => item.id === currentLanguageId) ||
+      allowedLanguages[0];
     const embed = new Embed()
       .setTitle("Language Information")
       .setDescription(
-        `**Current Language**: ${currentLanguage.flag} - \`${currentLanguage.name}\``,
+        `**Current Language**: ${currentLanguage.flag} - \`${currentLanguage.name}\``
       )
       .setTimestamp();
 
@@ -63,14 +63,14 @@ createSubcommand("language", {
   execute: async function (message, args) {
     //Old
     const oldLanguageId = getCurrentLanguage(message.guildId);
-    const oldLanguage = allowedLanguages.find((item) =>
-      item.id === oldLanguageId
-    ) || allowedLanguages[0];
+    const oldLanguage =
+      allowedLanguages.find((item) => item.id === oldLanguageId) ||
+      allowedLanguages[0];
 
     //New
     const newLanguageName = args.language;
-    const newLanguage = allowedLanguages.find((item) =>
-      item.name === newLanguageName
+    const newLanguage = allowedLanguages.find(
+      (item) => item.name === newLanguageName
     );
 
     //Handle
@@ -78,16 +78,17 @@ createSubcommand("language", {
       const embed = new Embed()
         .setTitle("Error")
         .setDescription(
-          "Check list of languages by running command `language set`.",
+          "Check list of languages by running command `language set`."
         )
         .addField("Error", `\`${args.language}\` is not a valid language.`);
 
       message.send({ embed });
     } else {
       bot.guildLanguages.set(message.guildId, newLanguage.id);
-      await db.guilds.update(message.guildId.toString(), {
-        language: newLanguage.id,
-      })
+      await db.guilds
+        .update(message.guildId.toString(), {
+          language: newLanguage.id,
+        })
         .catch(console.log);
 
       const embed = new Embed()

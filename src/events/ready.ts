@@ -1,5 +1,4 @@
 import {
-  bot,
   cache,
   DiscordActivityTypes,
   editBotStatus,
@@ -11,6 +10,7 @@ import { getTime } from "../utils/helpers.ts";
 import { translate } from "../utils/i18next.ts";
 import { registerTasks } from "./../utils/taskHelper.ts";
 import { sweepInactiveGuildsCache } from "./dispatch_requirements.ts";
+import { bot } from "../../cache.ts";
 
 bot.eventHandlers.ready = async function () {
   editBotStatus({

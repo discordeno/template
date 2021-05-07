@@ -1,8 +1,9 @@
-import { bot, cache, snowflakeToBigint } from "../../deps.ts";
+import { cache, snowflakeToBigint } from "../../deps.ts";
+import { bot } from "../../cache.ts";
 
 bot.arguments.set("...roles", {
   name: "...roles",
-  execute: async function (_argument, parameters, message) {
+  execute: function (_argument, parameters, message) {
     if (!parameters.length) return;
 
     const guild = cache.guilds.get(message.guildId);
@@ -14,7 +15,8 @@ bot.arguments.set("...roles", {
         : word;
 
       const name = word.toLowerCase();
-      const role = guild.roles.get(snowflakeToBigint(roleId)) ||
+      const role =
+        guild.roles.get(snowflakeToBigint(roleId)) ||
         guild.roles.find((r) => r.name.toLowerCase() === name);
       if (role) return role;
     });

@@ -1,5 +1,5 @@
+import { bot } from "../../cache.ts";
 import {
-  bot,
   botId,
   cache,
   delay,

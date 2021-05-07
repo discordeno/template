@@ -1,4 +1,5 @@
 import { configs } from "../../configs.ts";
+import { bot } from "../../cache.ts";
 import {
   bgBlack,
   bgBlue,
@@ -6,7 +7,6 @@ import {
   bgMagenta,
   bgYellow,
   black,
-  bot,
   botId,
   cache,
   deleteMessages,
@@ -41,38 +41,34 @@ export function logCommand(
   message: DiscordenoMessage,
   guildName: string,
   type: "Failure" | "Success" | "Trigger" | "Slowmode" | "Missing" | "Inhibit",
-  commandName: string,
+  commandName: string
 ) {
-  const command = `[COMMAND: ${bgYellow(black(commandName || "Unknown"))} - ${
-    bgBlack(
-      ["Failure", "Slowmode", "Missing"].includes(type)
-        ? red(type)
-        : type === "Success"
-        ? green(type)
-        : white(type),
-    )
-  }]`;
+  const command = `[COMMAND: ${bgYellow(
+    black(commandName || "Unknown")
+  )} - ${bgBlack(
+    ["Failure", "Slowmode", "Missing"].includes(type)
+      ? red(type)
+      : type === "Success"
+      ? green(type)
+      : white(type)
+  )}]`;
 
-  const user = bgGreen(
-    black(
-      `${message.tag}(${message.authorId})`,
-    ),
-  );
+  const user = bgGreen(black(`${message.tag}(${message.authorId})`));
   const guild = bgMagenta(
-    black(`${guildName}${message.guildId ? `(${message.guildId})` : ""}`),
+    black(`${guildName}${message.guildId ? `(${message.guildId})` : ""}`)
   );
 
   console.log(
-    `${
-      bgBlue(`[${getTime()}]`)
-    } => ${command} by ${user} in ${guild} with MessageID: ${message.id}`,
+    `${bgBlue(
+      `[${getTime()}]`
+    )} => ${command} by ${user} in ${guild} with MessageID: ${message.id}`
   );
 } /** Parses all the arguments for the command based on the message sent by the user. */
 
 async function parseArguments(
   message: DiscordenoMessage,
   command: Command<any>,
-  parameters: string[],
+  parameters: string[]
 ) {
   const args: { [key: string]: unknown } = {};
   if (!command.arguments) return args;
@@ -94,8 +90,13 @@ async function parseArguments(
       // This will use up all args so immediately exist the loop.
       if (
         argument.type &&
-        ["subcommands", "...strings", "...roles", "...emojis", "...snowflakes"]
-          .includes(argument.type)
+        [
+          "subcommands",
+          "...strings",
+          "...roles",
+          "...emojis",
+          "...snowflakes",
+        ].includes(argument.type)
       ) {
         break;
       }
@@ -119,28 +120,33 @@ async function parseArguments(
         .reply(
           translate(message.guildId, "strings:MISSING_REQUIRED_ARG", {
             name: argument.name,
-            type: argument.type === "subcommand"
-              ? command.subcommands?.map((sub) => sub.name).join(", ") ||
-                "subcommand"
-              : argument.type,
-          }),
+            type:
+              argument.type === "subcommand"
+                ? command.subcommands?.map((sub) => sub.name).join(", ") ||
+                  "subcommand"
+                : argument.type,
+          })
         )
         .catch(console.log);
       if (question) {
-        const response = await needMessage(message.authorId, message.channelId)
-          .catch(console.log);
+        const response = await needMessage(
+          message.authorId,
+          message.channelId
+        ).catch(console.log);
         if (response) {
           const responseArg = await resolver.execute(
             argument,
             [response.content],
             message,
-            command,
+            command
           );
           if (responseArg) {
             args[argument.name] = responseArg;
             params.shift();
-            await deleteMessages(message.channelId, [question.id, response.id])
-              .catch(console.log);
+            await deleteMessages(message.channelId, [
+              question.id,
+              response.id,
+            ]).catch(console.log);
             continue;
           }
         }
@@ -160,12 +166,10 @@ async function parseArguments(
 /** Runs the inhibitors to see if a command is allowed to run. */
 async function commandAllowed(
   message: DiscordenoMessage,
-  command: Command<any>,
+  command: Command<any>
 ) {
   const inhibitorResults = await Promise.all(
-    [...bot.inhibitors.values()].map((inhibitor) =>
-      inhibitor(message, command)
-    ),
+    [...bot.inhibitors.values()].map((inhibitor) => inhibitor(message, command))
   );
 
   if (inhibitorResults.includes(true)) {
@@ -180,7 +184,7 @@ async function executeCommand(
   message: DiscordenoMessage,
   command: Command<any>,
   parameters: string[],
-  guild?: Guild,
+  guild?: Guild
 ) {
   try {
     // bot.slowmode.set(message.author.id, message.timestamp);
@@ -245,9 +249,9 @@ bot.monitors.set("commandHandler", {
     } else if (!message.content.startsWith(prefix)) return;
 
     // Get the first word of the message without the prefix so it is just command name. `!ping testing` becomes `ping`
-    const [commandName, ...parameters] = message.content.substring(
-      prefix.length,
-    ).split(" ");
+    const [commandName, ...parameters] = message.content
+      .substring(prefix.length)
+      .split(" ");
 
     // Check if this is a valid command
     const command = parseCommand(commandName);

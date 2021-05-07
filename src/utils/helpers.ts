@@ -1,5 +1,5 @@
+import { bot } from "../../cache.ts";
 import {
-  bot,
   cache,
   Collection,
   deleteMessage,
@@ -84,9 +84,9 @@ export function stringToMilliseconds(text: string) {
 }
 
 export function createCommand<T extends readonly ArgumentDefinition[]>(
-  command: Command<T>,
+  command: Command<T>
 ) {
-  command.botChannelPermissions = [
+  (command.botChannelPermissions = [
     "ADD_REACTIONS",
     "USE_EXTERNAL_EMOJIS",
     "READ_MESSAGE_HISTORY",
@@ -94,13 +94,14 @@ export function createCommand<T extends readonly ArgumentDefinition[]>(
     "SEND_MESSAGES",
     "EMBED_LINKS",
     ...(command.botChannelPermissions ?? []),
-  ], bot.commands.set(command.name, command);
+  ]),
+    bot.commands.set(command.name, command);
 }
 
 export function createSubcommand<T extends readonly ArgumentDefinition[]>(
   commandName: string,
   subcommand: Command<T>,
-  retries = 0,
+  retries = 0
 ) {
   const names = commandName.split("-");
 
@@ -116,7 +117,7 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
         if (retries === 20) break;
         setTimeout(
           () => createSubcommand(commandName, subcommand, retries++),
-          Milliseconds.SECOND * 10,
+          Milliseconds.SECOND * 10
         );
         return;
       }
@@ -129,14 +130,14 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
     // If 10 minutes have passed something must have been wrong
     if (retries === 20) {
       return console.log(
-        `Subcommand ${subcommand} unable to be created for ${commandName}`,
+        `Subcommand ${subcommand} unable to be created for ${commandName}`
       );
     }
 
     // Try again in 10 seconds in case this command file just has not been loaded yet.
     setTimeout(
       () => createSubcommand(commandName, subcommand, retries++),
-      Milliseconds.SECOND * 10,
+      Milliseconds.SECOND * 10
     );
     return;
   }
@@ -201,7 +202,7 @@ export function sendEmbed(channelId: bigint, embed: Embed, content?: string) {
 export function editEmbed(
   message: DiscordenoMessage,
   embed: Embed,
-  content?: string,
+  content?: string
 ) {
   return editMessage(message, { content, embed });
 }
@@ -225,16 +226,12 @@ export async function importDirectory(path: string) {
     if (file.isFile) {
       if (!currentPath.endsWith(".ts")) continue;
       paths.push(
-        `import "${
-          Deno.mainModule.substring(
-            0,
-            Deno.mainModule.lastIndexOf("/"),
-          )
-        }/${
-          currentPath.substring(
-            currentPath.indexOf("src/"),
-          )
-        }#${uniqueFilePathCounter}";`,
+        `import "${Deno.mainModule.substring(
+          0,
+          Deno.mainModule.lastIndexOf("/")
+        )}/${currentPath.substring(
+          currentPath.indexOf("src/")
+        )}#${uniqueFilePathCounter}";`
       );
       continue;
     }
@@ -249,15 +246,13 @@ export async function importDirectory(path: string) {
 export async function fileLoader() {
   await Deno.writeTextFile(
     "fileloader.ts",
-    paths.join("\n").replaceAll("\\", "/"),
+    paths.join("\n").replaceAll("\\", "/")
   );
   await import(
-    `${
-      Deno.mainModule.substring(
-        0,
-        Deno.mainModule.lastIndexOf("/"),
-      )
-    }/fileloader.ts#${uniqueFilePathCounter}`
+    `${Deno.mainModule.substring(
+      0,
+      Deno.mainModule.lastIndexOf("/")
+    )}/fileloader.ts#${uniqueFilePathCounter}`
   );
   paths = [];
 }
@@ -280,8 +275,11 @@ export function getTime() {
 }
 
 export function getCurrentLanguage(guildId: bigint) {
-  return bot.guildLanguages.get(guildId) ||
-    cache.guilds.get(guildId)?.preferredLocale || "en_US";
+  return (
+    bot.guildLanguages.get(guildId) ||
+    cache.guilds.get(guildId)?.preferredLocale ||
+    "en_US"
+  );
 }
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
@@ -296,7 +294,7 @@ export async function createEmbedsPagination(
       setPage: (newPage: number) => void,
       currentPage: number,
       pageCount: number,
-      deletePagination: () => void,
+      deletePagination: () => void
     ) => Promise<unknown>;
   } = {
     // deno-lint-ignore require-await
@@ -304,11 +302,11 @@ export async function createEmbedsPagination(
     "↗️": async (setPage) => {
       const question = await sendMessage(
         channelId,
-        "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+        "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
       );
       const answer = await needMessage(authorId, channelId);
       await deleteMessages(channelId, [question.id, answer.id]).catch(
-        console.log,
+        console.log
       );
 
       const newPageNumber = Math.ceil(Number(answer.content));
@@ -329,7 +327,7 @@ export async function createEmbedsPagination(
     // deno-lint-ignore require-await
     "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) =>
       deletePagination(),
-  },
+  }
 ) {
   if (embeds.length === 0) return;
 
@@ -340,9 +338,9 @@ export async function createEmbedsPagination(
 
   if (embeds.length <= 1) return;
 
-  await embedMessage.addReactions(Object.keys(reactions), true).catch(
-    console.log,
-  );
+  await embedMessage
+    .addReactions(Object.keys(reactions), true)
+    .catch(console.log);
 
   let isEnded = false;
 
@@ -355,12 +353,9 @@ export async function createEmbedsPagination(
     if (!reaction) return;
 
     if (embedMessage.guildId) {
-      await removeReaction(
-        embedMessage.channelId,
-        embedMessage.id,
-        reaction,
-        { userId: authorId },
-      ).catch(console.log);
+      await removeReaction(embedMessage.channelId, embedMessage.id, reaction, {
+        userId: authorId,
+      }).catch(console.log);
     }
 
     if (reactions[reaction]) {
@@ -373,14 +368,15 @@ export async function createEmbedsPagination(
         async () => {
           isEnded = true;
           await embedMessage.delete().catch(console.log);
-        },
+        }
       );
     }
 
     if (
-      isEnded || !embedMessage ||
+      isEnded ||
+      !embedMessage ||
       !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
-        console.log,
+        console.log
       ))
     ) {
       return;
@@ -395,7 +391,7 @@ export async function createEmbedsButtonsPagination(
   authorId: bigint,
   embeds: Embed[],
   defaultPage = 1,
-  buttonTimeout = Milliseconds.SECOND * 30,
+  buttonTimeout = Milliseconds.SECOND * 30
 ) {
   if (embeds.length === 0) return;
 
@@ -482,22 +478,23 @@ export async function createEmbedsButtonsPagination(
           collectedButton.interaction.token,
           {
             type: 6,
-          },
+          }
         );
 
         const question = await sendMessage(
           channelId,
-          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
         );
         const answer = await needMessage(authorId, channelId);
         await deleteMessages(channelId, [question.id, answer.id]).catch(
-          console.log,
+          console.log
         );
 
         const newPageNumber = Math.ceil(Number(answer.content));
 
         if (
-          isNaN(newPageNumber) || newPageNumber < 1 ||
+          isNaN(newPageNumber) ||
+          newPageNumber < 1 ||
           newPageNumber > embeds.length
         ) {
           await sendMessage(channelId, "This is not a valid number!");
@@ -511,11 +508,9 @@ export async function createEmbedsButtonsPagination(
           collectedButton.interaction.token,
           {
             messageId: embedMessage.id,
-            embeds: [
-              embeds[currentPage - 1],
-            ],
+            embeds: [embeds[currentPage - 1]],
             components: createComponents(),
-          },
+          }
         );
 
         continue;
@@ -529,22 +524,19 @@ export async function createEmbedsButtonsPagination(
     }
 
     if (
-      isEnded || !embedMessage ||
+      isEnded ||
+      !embedMessage ||
       !(await sendInteractionResponse(
         snowflakeToBigint(collectedButton.interaction.id),
         collectedButton.interaction.token,
         {
           type: 7,
           data: {
-            embeds: [
-              embeds[currentPage - 1],
-            ], // @ts-ignore
+            embeds: [embeds[currentPage - 1]], // @ts-ignore
             components: createComponents(),
           },
-        },
-      ).catch(
-        console.log,
-      ))
+        }
+      ).catch(console.log))
     ) {
       return;
     }
