@@ -1,7 +1,6 @@
 import { bot } from "../../cache.ts";
 
 bot.inhibitors.set("onlyIn", function (message, command) {
-  console.log(message);
   // If the command is guildOnly and does not have a guild, inhibit the command
   if (command.guildOnly && !message.guildId) return true;
   // If the command is dmOnly and there is a guild, inhibit the command
