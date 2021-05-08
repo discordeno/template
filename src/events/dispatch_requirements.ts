@@ -20,11 +20,11 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   if (data.t && ["GUILD_CREATE", "GUILD_DELETE"].includes(data.t)) return;
 
   const id = snowflakeToBigint(
-    data.t && ["GUILD_UPDATE"].includes(data.t)
+    (data.t && ["GUILD_UPDATE"].includes(data.t)
       ? // deno-lint-ignore no-explicit-any
         (data.d as any)?.id
       : // deno-lint-ignore no-explicit-any
-        (data.d as any)?.guild_id,
+        (data.d as any)?.guild_id) ?? "",
   );
 
   if (!id || bot.activeGuildIDs.has(id)) return;
