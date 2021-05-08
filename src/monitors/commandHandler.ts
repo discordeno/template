@@ -12,7 +12,6 @@ import {
   deleteMessages,
   DiscordenoMessage,
   green,
-  Guild,
   red,
   white,
 } from "../../deps.ts";
@@ -194,7 +193,6 @@ async function executeCommand(
   // deno-lint-ignore no-explicit-any
   command: Command<any>,
   parameters: string[],
-  guild?: Guild,
 ) {
   try {
     // bot.slowmode.set(message.author.id, message.timestamp);
@@ -203,7 +201,12 @@ async function executeCommand(
     const args = await parseArguments(message, command, parameters);
     // Some arg that was required was missing and handled already
     if (!args) {
-      return logCommand(message, guild?.name || "DM", "Missing", command.name);
+      return logCommand(
+        message,
+        message.guild?.name || "DM",
+        "Missing",
+        command.name,
+      );
     }
 
     // If no subcommand execute the command
@@ -218,22 +221,27 @@ async function executeCommand(
       if (!(await commandAllowed(message, command))) return;
 
       // @ts-ignore - a comment to satisfy lint
-      await command.execute?.(message, args, guild);
-      return logCommand(message, guild?.name || "DM", "Success", command.name);
+      await command.execute?.(message, args);
+      return logCommand(
+        message,
+        message.guild?.name || "DM",
+        "Success",
+        command.name,
+      );
     }
 
     // A subcommand was asked for in this command
     if (
       ![subcommand.name, ...(subcommand.aliases || [])].includes(parameters[0])
     ) {
-      executeCommand(message, subcommand, parameters, guild);
+      executeCommand(message, subcommand, parameters);
     } else {
       const subParameters = parameters.slice(1);
-      executeCommand(message, subcommand, subParameters, guild);
+      executeCommand(message, subcommand, subParameters);
     }
   } catch (error) {
     console.log(error);
-    logCommand(message, guild?.name || "DM", "Failure", command.name);
+    logCommand(message, message.guild?.name || "DM", "Failure", command.name);
     handleError(message, error);
   }
 }
