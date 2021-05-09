@@ -1,6 +1,5 @@
-import { bgBlue, bgYellow, black, Collection } from "../../deps.ts";
+import { bgYellow, black, Collection } from "../../deps.ts";
 import { Task } from "./../types/tasks.ts";
-import { getTime } from "./helpers.ts";
 import { bot } from "../../cache.ts";
 import { log } from "./logger.ts";
 
@@ -24,9 +23,9 @@ export function registerTasks() {
             } catch (error) {
               log.error(error);
             }
-          }, task.interval),
+          }, task.interval)
         );
-      }, task.interval - (Date.now() % task.interval)),
+      }, task.interval - (Date.now() % task.interval))
     );
   }
 }
