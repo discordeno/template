@@ -518,7 +518,7 @@ export async function fetchMember(guildId: bigint, id: bigint | string) {
   const shard = ws.shards.get(shardId);
   // When gateway is dying
   if (shard?.queueCounter && shard.queueCounter > 110) {
-    return getMember(guildId, userId);
+    return getMember(guildId, userId).catch(() => undefined);
   }
 
   // Fetch from gateway as it is much better than wasting limited HTTP calls.
