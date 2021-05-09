@@ -40,14 +40,24 @@ createCommand({
       const memberHighestRoleId = (await highestRole(guildId, memberId))!.id;
       const authorHighestRoleId = (await highestRole(guildId, authorId))!.id;
 
-      const canBotBanMember = await higherRolePosition(guildId, botHighestRoleId, memberHighestRoleId);
-      const canAuthorBanMember = await higherRolePosition(guildId, authorHighestRoleId, memberHighestRoleId);
+      const canBotBanMember = await higherRolePosition(
+        guildId,
+        botHighestRoleId,
+        memberHighestRoleId,
+      );
+      const canAuthorBanMember = await higherRolePosition(
+        guildId,
+        authorHighestRoleId,
+        memberHighestRoleId,
+      );
 
       if (!(canBotBanMember && canAuthorBanMember)) {
         const embed = new Embed()
           .setColor("#F04747")
           .setTitle("Could not Ban")
-          .setDescription("Cannot ban member with same or higher Roleposition than Author or Bot")
+          .setDescription(
+            "Cannot ban member with same or higher Roleposition than Author or Bot",
+          )
           .setTimestamp();
         return sendEmbed(channelId, embed);
       }
