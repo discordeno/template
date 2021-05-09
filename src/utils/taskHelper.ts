@@ -37,7 +37,7 @@ export function registerTasks() {
             }
           }, task.interval),
         );
-      }, Date.now() % task.interval),
+      }, task.interval - Date.now() % task.interval),
     );
   }
 }
