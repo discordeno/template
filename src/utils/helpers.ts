@@ -10,11 +10,14 @@ import {
   editMessage,
   editWebhookMessage,
   Emoji,
+  fetchMembers,
+  getMember,
   MessageComponents,
   removeReaction,
   sendInteractionResponse,
   sendMessage,
   snowflakeToBigint,
+  ws,
 } from "../../deps.ts";
 import { ArgumentDefinition, Command } from "../types/commands.ts";
 import { needButton, needMessage, needReaction } from "./collectors.ts";
@@ -83,9 +86,7 @@ export function stringToMilliseconds(text: string) {
   return total;
 }
 
-export function createCommand<T extends readonly ArgumentDefinition[]>(
-  command: Command<T>,
-) {
+export function createCommand<T extends readonly ArgumentDefinition[]>(command: Command<T>) {
   (command.botChannelPermissions = [
     "ADD_REACTIONS",
     "USE_EXTERNAL_EMOJIS",
@@ -94,13 +95,14 @@ export function createCommand<T extends readonly ArgumentDefinition[]>(
     "SEND_MESSAGES",
     "EMBED_LINKS",
     ...(command.botChannelPermissions ?? []),
-  ]), bot.commands.set(command.name, command);
+  ]),
+    bot.commands.set(command.name, command);
 }
 
 export function createSubcommand<T extends readonly ArgumentDefinition[]>(
   commandName: string,
   subcommand: Command<T>,
-  retries = 0,
+  retries = 0
 ) {
   const names = commandName.split("-");
 
@@ -108,16 +110,11 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
 
   if (names.length > 1) {
     for (const name of names) {
-      const validCommand = command
-        ? command.subcommands?.get(name)
-        : bot.commands.get(name);
+      const validCommand = command ? command.subcommands?.get(name) : bot.commands.get(name);
 
       if (!validCommand) {
         if (retries === 20) break;
-        setTimeout(
-          () => createSubcommand(commandName, subcommand, retries++),
-          Milliseconds.SECOND * 10,
-        );
+        setTimeout(() => createSubcommand(commandName, subcommand, retries++), Milliseconds.SECOND * 10);
         return;
       }
 
@@ -128,16 +125,11 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
   if (!command) {
     // If 10 minutes have passed something must have been wrong
     if (retries === 20) {
-      return console.log(
-        `Subcommand ${subcommand} unable to be created for ${commandName}`,
-      );
+      return console.log(`Subcommand ${subcommand} unable to be created for ${commandName}`);
     }
 
     // Try again in 10 seconds in case this command file just has not been loaded yet.
-    setTimeout(
-      () => createSubcommand(commandName, subcommand, retries++),
-      Milliseconds.SECOND * 10,
-    );
+    setTimeout(() => createSubcommand(commandName, subcommand, retries++), Milliseconds.SECOND * 10);
     return;
   }
 
@@ -198,11 +190,7 @@ export function sendEmbed(channelId: bigint, embed: Embed, content?: string) {
 }
 
 /** Use this function to edit an embed with ease. */
-export function editEmbed(
-  message: DiscordenoMessage,
-  embed: Embed,
-  content?: string,
-) {
+export function editEmbed(message: DiscordenoMessage, embed: Embed, content?: string) {
   return editMessage(message, { content, embed });
 }
 
@@ -225,16 +213,9 @@ export async function importDirectory(path: string) {
     if (file.isFile) {
       if (!currentPath.endsWith(".ts")) continue;
       paths.push(
-        `import "${
-          Deno.mainModule.substring(
-            0,
-            Deno.mainModule.lastIndexOf("/"),
-          )
-        }/${
-          currentPath.substring(
-            currentPath.indexOf("src/"),
-          )
-        }#${uniqueFilePathCounter}";`,
+        `import "${Deno.mainModule.substring(0, Deno.mainModule.lastIndexOf("/"))}/${currentPath.substring(
+          currentPath.indexOf("src/")
+        )}#${uniqueFilePathCounter}";`
       );
       continue;
     }
@@ -247,17 +228,9 @@ export async function importDirectory(path: string) {
 
 /** Imports all everything in fileloader.ts */
 export async function fileLoader() {
-  await Deno.writeTextFile(
-    "fileloader.ts",
-    paths.join("\n").replaceAll("\\", "/"),
-  );
+  await Deno.writeTextFile("fileloader.ts", paths.join("\n").replaceAll("\\", "/"));
   await import(
-    `${
-      Deno.mainModule.substring(
-        0,
-        Deno.mainModule.lastIndexOf("/"),
-      )
-    }/fileloader.ts#${uniqueFilePathCounter}`
+    `${Deno.mainModule.substring(0, Deno.mainModule.lastIndexOf("/"))}/fileloader.ts#${uniqueFilePathCounter}`
   );
   paths = [];
 }
@@ -274,17 +247,11 @@ export function getTime() {
     hour = hour - 12;
   }
 
-  return `${hour >= 10 ? hour : `0${hour}`}:${
-    minute >= 10 ? minute : `0${minute}`
-  } ${amOrPm}`;
+  return `${hour >= 10 ? hour : `0${hour}`}:${minute >= 10 ? minute : `0${minute}`} ${amOrPm}`;
 }
 
 export function getCurrentLanguage(guildId: bigint) {
-  return (
-    bot.guildLanguages.get(guildId) ||
-    cache.guilds.get(guildId)?.preferredLocale ||
-    "en_US"
-  );
+  return bot.guildLanguages.get(guildId) || cache.guilds.get(guildId)?.preferredLocale || "en_US";
 }
 
 /** This function allows to create a pagination using embeds and reactions Requires GUILD_MESSAGE_REACTIONS intent **/
@@ -299,7 +266,7 @@ export async function createEmbedsPagination(
       setPage: (newPage: number) => void,
       currentPage: number,
       pageCount: number,
-      deletePagination: () => void,
+      deletePagination: () => void
     ) => Promise<unknown>;
   } = {
     // deno-lint-ignore require-await
@@ -307,12 +274,10 @@ export async function createEmbedsPagination(
     "↗️": async (setPage) => {
       const question = await sendMessage(
         channelId,
-        "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+        "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
       );
       const answer = await needMessage(authorId, channelId);
-      await deleteMessages(channelId, [question.id, answer.id]).catch(
-        console.log,
-      );
+      await deleteMessages(channelId, [question.id, answer.id]).catch(console.log);
 
       const newPageNumber = Math.ceil(Number(answer.content));
 
@@ -327,12 +292,10 @@ export async function createEmbedsPagination(
       setPage(newPageNumber);
     },
     // deno-lint-ignore require-await
-    "▶️": async (setPage, currentPage, pageCount) =>
-      setPage(Math.min(currentPage + 1, pageCount)),
+    "▶️": async (setPage, currentPage, pageCount) => setPage(Math.min(currentPage + 1, pageCount)),
     // deno-lint-ignore require-await
-    "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) =>
-      deletePagination(),
-  },
+    "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) => deletePagination(),
+  }
 ) {
   if (embeds.length === 0) return;
 
@@ -343,9 +306,7 @@ export async function createEmbedsPagination(
 
   if (embeds.length <= 1) return;
 
-  await embedMessage
-    .addReactions(Object.keys(reactions), true)
-    .catch(console.log);
+  await embedMessage.addReactions(Object.keys(reactions), true).catch(console.log);
 
   let isEnded = false;
 
@@ -373,17 +334,11 @@ export async function createEmbedsPagination(
         async () => {
           isEnded = true;
           await embedMessage.delete().catch(console.log);
-        },
+        }
       );
     }
 
-    if (
-      isEnded ||
-      !embedMessage ||
-      !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(
-        console.log,
-      ))
-    ) {
+    if (isEnded || !embedMessage || !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(console.log))) {
       return;
     }
   }
@@ -396,7 +351,7 @@ export async function createEmbedsButtonsPagination(
   authorId: bigint,
   embeds: Embed[],
   defaultPage = 1,
-  buttonTimeout = Milliseconds.SECOND * 30,
+  buttonTimeout = Milliseconds.SECOND * 30
 ) {
   if (embeds.length === 0) return;
 
@@ -464,10 +419,7 @@ export async function createEmbedsButtonsPagination(
 
     console.log(collectedButton);
 
-    if (
-      !collectedButton ||
-      !collectedButton.customId.startsWith(messageId.toString())
-    ) {
+    if (!collectedButton || !collectedButton.customId.startsWith(messageId.toString())) {
       return;
     }
 
@@ -484,25 +436,19 @@ export async function createEmbedsButtonsPagination(
           collectedButton.interaction.token,
           {
             type: 6,
-          },
+          }
         );
 
         const question = await sendMessage(
           channelId,
-          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt.",
+          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
         );
         const answer = await needMessage(authorId, channelId);
-        await deleteMessages(channelId, [question.id, answer.id]).catch(
-          console.log,
-        );
+        await deleteMessages(channelId, [question.id, answer.id]).catch(console.log);
 
         const newPageNumber = Math.ceil(Number(answer.content));
 
-        if (
-          isNaN(newPageNumber) ||
-          newPageNumber < 1 ||
-          newPageNumber > embeds.length
-        ) {
+        if (isNaN(newPageNumber) || newPageNumber < 1 || newPageNumber > embeds.length) {
           await sendMessage(channelId, "This is not a valid number!");
           continue;
         }
@@ -516,7 +462,7 @@ export async function createEmbedsButtonsPagination(
             messageId: embedMessage.id,
             embeds: [embeds[currentPage - 1]],
             components: createComponents(),
-          },
+          }
         );
 
         continue;
@@ -541,7 +487,7 @@ export async function createEmbedsButtonsPagination(
             embeds: [embeds[currentPage - 1]],
             components: createComponents(),
           },
-        },
+        }
       ).catch(console.log))
     ) {
       return;
@@ -550,7 +496,40 @@ export async function createEmbedsButtonsPagination(
 }
 
 export function emojiUnicode(emoji: Emoji) {
-  return emoji.animated || emoji.id
-    ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>`
-    : emoji.name || "";
+  return emoji.animated || emoji.id ? `<${emoji.animated ? "a" : ""}:${emoji.name}:${emoji.id}>` : emoji.name || "";
+}
+
+export async function fetchMember(guildId: bigint, id: bigint | string) {
+  const userId =
+    typeof id === "string"
+      ? id.startsWith("<@")
+        ? BigInt(id.substring(id.startsWith("<@!") ? 3 : 2, id.length - 1))
+        : BigInt(id)
+      : id;
+
+  const guild = cache.guilds.get(guildId);
+  if (!guild) return;
+
+  const cachedMember = cache.members.get(userId);
+  if (cachedMember) return cachedMember;
+
+  const shardId = calculateShardId(guildId);
+
+  const shard = ws.shards.get(shardId);
+  // When gateway is dying
+  if (shard?.queueCounter && shard.queueCounter > 110) {
+    return getMember(guildId, userId);
+  }
+
+  // Fetch from gateway as it is much better than wasting limited HTTP calls.
+  const member = await fetchMembers(guildId, shardId, {
+    userIds: [userId],
+    limit: 1,
+  }).catch(() => undefined);
+
+  return member?.first();
+}
+
+export function calculateShardId(guildId: bigint) {
+  return Number((guildId >> 22n) % BigInt(ws.maxShards - 1));
 }
