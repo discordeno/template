@@ -23,6 +23,7 @@ import { ArgumentDefinition, Command } from "../types/commands.ts";
 import { needButton, needMessage, needReaction } from "./collectors.ts";
 import { Milliseconds } from "./constants/time.ts";
 import { Embed } from "./Embed.ts";
+import { log } from "./logger.ts";
 
 /** This function should be used when you want to convert milliseconds to a human readable format like 1d5h. */
 export function humanizeMilliseconds(milliseconds: number) {
@@ -125,7 +126,7 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
   if (!command) {
     // If 10 minutes have passed something must have been wrong
     if (retries === 20) {
-      return console.log(`Subcommand ${subcommand} unable to be created for ${commandName}`);
+      return log.warn(`Subcommand ${subcommand} unable to be created for ${commandName}`);
     }
 
     // Try again in 10 seconds in case this command file just has not been loaded yet.
@@ -137,7 +138,7 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
     command.subcommands = new Collection();
   }
 
-  // console.log("Creating subcommand", command.name, subcommand.name);
+  // log.debug("Creating subcommand", command.name, subcommand.name);
   command.subcommands.set(subcommand.name, subcommand);
 }
 
@@ -164,7 +165,7 @@ export function createSubcommand<T extends readonly ArgumentDefinition[]>(
 //   if (!command) {
 //     // If 10 minutes have passed something must have been wrong
 //     if (retries === 600) {
-//       return console.error(
+//       return log.error(
 //         `Subcommand ${subcommand} unable to be created for ${commandName}`,
 //       );
 //     }
@@ -204,7 +205,7 @@ export async function importDirectory(path: string) {
   const files = Deno.readDirSync(Deno.realPathSync(path));
   const folder = path.substring(path.indexOf("/src/") + 5);
 
-  if (!folder.includes("/")) console.log(`Loading ${folder}...`);
+  if (!folder.includes("/")) log.info(`Loading ${folder}...`);
 
   for (const file of files) {
     if (!file.name) continue;
@@ -277,7 +278,7 @@ export async function createEmbedsPagination(
         "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
       );
       const answer = await needMessage(authorId, channelId);
-      await deleteMessages(channelId, [question.id, answer.id]).catch(console.log);
+      await deleteMessages(channelId, [question.id, answer.id]).catch(log.error);
 
       const newPageNumber = Math.ceil(Number(answer.content));
 
@@ -306,7 +307,7 @@ export async function createEmbedsPagination(
 
   if (embeds.length <= 1) return;
 
-  await embedMessage.addReactions(Object.keys(reactions), true).catch(console.log);
+  await embedMessage.addReactions(Object.keys(reactions), true).catch(log.error);
 
   let isEnded = false;
 
@@ -321,7 +322,7 @@ export async function createEmbedsPagination(
     if (embedMessage.guildId) {
       await removeReaction(embedMessage.channelId, embedMessage.id, reaction, {
         userId: authorId,
-      }).catch(console.log);
+      }).catch(log.error);
     }
 
     if (reactions[reaction]) {
@@ -333,12 +334,12 @@ export async function createEmbedsPagination(
         embeds.length,
         async () => {
           isEnded = true;
-          await embedMessage.delete().catch(console.log);
+          await embedMessage.delete().catch(log.error);
         }
       );
     }
 
-    if (isEnded || !embedMessage || !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(console.log))) {
+    if (isEnded || !embedMessage || !(await editEmbed(embedMessage, embeds[currentPage - 1]).catch(log.error))) {
       return;
     }
   }
@@ -444,7 +445,7 @@ export async function createEmbedsButtonsPagination(
           "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
         );
         const answer = await needMessage(authorId, channelId);
-        await deleteMessages(channelId, [question.id, answer.id]).catch(console.log);
+        await deleteMessages(channelId, [question.id, answer.id]).catch(log.error);
 
         const newPageNumber = Math.ceil(Number(answer.content));
 
@@ -488,7 +489,7 @@ export async function createEmbedsButtonsPagination(
             components: createComponents(),
           },
         }
-      ).catch(console.log))
+      ).catch(log.error))
     ) {
       return;
     }

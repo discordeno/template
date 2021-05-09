@@ -1,6 +1,7 @@
 import { cache, snowflakeToBigint } from "../../deps.ts";
 import { bot } from "../../cache.ts";
 import { fetchMember } from "../utils/helpers.ts";
+import { log } from "../utils/logger.ts";
 
 bot.arguments.set("member", {
   name: "member",
@@ -25,7 +26,7 @@ bot.arguments.set("member", {
 
     if (!Number(userId)) return;
 
-    console.log("Fetching a member with Id from gateway", userId);
+    log.debug("Fetching a member with Id from gateway", userId);
 
     const member = await fetchMember(guild.id, userId);
 

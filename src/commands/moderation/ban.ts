@@ -1,4 +1,5 @@
 import { botId, higherRolePosition, highestRole } from "../../../deps.ts";
+import { log } from "../../utils/logger.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -39,24 +40,14 @@ createCommand({
       const memberHighestRoleId = (await highestRole(guildId, memberId))!.id;
       const authorHighestRoleId = (await highestRole(guildId, authorId))!.id;
 
-      const canBotBanMember = await higherRolePosition(
-        guildId,
-        botHighestRoleId,
-        memberHighestRoleId,
-      );
-      const canAuthorBanMember = await higherRolePosition(
-        guildId,
-        authorHighestRoleId,
-        memberHighestRoleId,
-      );
+      const canBotBanMember = await higherRolePosition(guildId, botHighestRoleId, memberHighestRoleId);
+      const canAuthorBanMember = await higherRolePosition(guildId, authorHighestRoleId, memberHighestRoleId);
 
       if (!(canBotBanMember && canAuthorBanMember)) {
         const embed = new Embed()
           .setColor("#F04747")
           .setTitle("Could not Ban")
-          .setDescription(
-            "Cannot ban member with same or higher Roleposition than Author or Bot",
-          )
+          .setDescription("Cannot ban member with same or higher Roleposition than Author or Bot")
           .setTimestamp();
         return sendEmbed(channelId, embed);
       }
@@ -70,17 +61,15 @@ createCommand({
           .setTimestamp();
         await args.member.sendDM({ embed });
       } catch {
-        console.error(
-          `Could not notify member ${args.member.tag} for ban via DM`,
-        );
+        log.error(`Could not notify member ${args.member.tag} for ban via DM`);
       }
 
-      const banned = await args.member.ban(guildId, {
-        reason: args.reason,
-        deleteMessageDays: args.days as BanDeleteMessageDays,
-      }).catch(
-        (console.error),
-      );
+      const banned = await args.member
+        .ban(guildId, {
+          reason: args.reason,
+          deleteMessageDays: args.days as BanDeleteMessageDays,
+        })
+        .catch(log.error);
       if (!banned) return;
 
       const embed = new Embed()
