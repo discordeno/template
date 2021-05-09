@@ -85,7 +85,6 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
     );
   }
 
-  console.log({ ...rawGuild, roles: undefined, emojis: undefined });
   const guild = await structures.createDiscordenoGuild(rawGuild, shardID);
 
   // Add to cache
