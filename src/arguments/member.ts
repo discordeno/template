@@ -12,13 +12,17 @@ bot.arguments.set("member", {
     const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
-    const userId = id.startsWith("<@") ? id.substring(id.startsWith("<@!") ? 3 : 2, id.length - 1) : id;
+    const userId = id.startsWith("<@")
+      ? id.substring(id.startsWith("<@!") ? 3 : 2, id.length - 1)
+      : id;
 
     const cachedMember = cache.members.get(snowflakeToBigint(userId));
     if (cachedMember?.guilds.has(message.guildId)) return cachedMember;
 
     const cached = cache.members.find(
-      (member) => member.guilds.has(message.guildId) && member.tag.toLowerCase().startsWith(userId.toLowerCase())
+      (member) =>
+        member.guilds.has(message.guildId) &&
+        member.tag.toLowerCase().startsWith(userId.toLowerCase()),
     );
     if (cached) return cached;
 

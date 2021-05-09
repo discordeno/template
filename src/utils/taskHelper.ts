@@ -24,9 +24,9 @@ export function registerTasks() {
             } catch (error) {
               log.error(error);
             }
-          }, task.interval)
+          }, task.interval),
         );
-      }, task.interval - (Date.now() % task.interval))
+      }, task.interval - (Date.now() % task.interval)),
     );
   }
 }
