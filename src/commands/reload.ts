@@ -1,11 +1,7 @@
 import { updateEventHandlers } from "../../deps.ts";
-import {
-  createCommand,
-  fileLoader,
-  importDirectory,
-} from "../utils/helpers.ts";
+import { createCommand, fileLoader, importDirectory } from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
-import { clearTasks, registerTasks } from "../utils/taskHelper.ts";
+import { clearTasks, registerTasks } from "../utils/task_helper.ts";
 import { reloadLang } from "../utils/i18next.ts";
 import { bot } from "../../cache.ts";
 
@@ -28,15 +24,7 @@ createCommand({
     {
       name: "folder",
       type: "string",
-      literals: [
-        "arguments",
-        "commands",
-        "events",
-        "inhibitors",
-        "monitors",
-        "tasks",
-        "languages",
-      ],
+      literals: ["arguments", "commands", "events", "inhibitors", "monitors", "tasks", "languages"],
       required: false,
     },
   ] as const,
@@ -45,9 +33,7 @@ createCommand({
     if (args.folder) {
       const path = folderPaths.get(args.folder);
       if (!path) {
-        return message.reply(
-          "The folder you provided did not have a path available.",
-        );
+        return message.reply("The folder you provided did not have a path available.");
       }
 
       if (args.folder === "tasks") {
@@ -70,11 +56,7 @@ createCommand({
 
     // Reloads the main folders:
     clearTasks();
-    await Promise.all(
-      [...folderPaths.values()].map((path) =>
-        importDirectory(Deno.realPathSync(path))
-      ),
-    );
+    await Promise.all([...folderPaths.values()].map((path) => importDirectory(Deno.realPathSync(path))));
     await fileLoader();
     registerTasks();
     // Reload the languages

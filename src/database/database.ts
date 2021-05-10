@@ -1,6 +1,6 @@
 import { Sabr, SabrTable } from "../../deps.ts";
 import { ClientSchema, GuildSchema, UserSchema } from "./schemas.ts";
-import { loadLanguages } from "./../utils/langHelper.ts";
+import { loadLanguages } from "./../utils/lang_helper.ts";
 
 // Create the database class
 const sabr = new Sabr();
