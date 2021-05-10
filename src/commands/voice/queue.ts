@@ -16,8 +16,8 @@ createCommand({
 
     const embed = new Embed()
       .setAuthor(
-        "Isekai Music",
-        "https://cdn.discordapp.com/avatars/833417537449754657/097a32a4f7bb5821f5383c4ddeb69aa8.png?size=256",
+        `${message.tag}`,
+        message.member?.avatarURL,
       )
       .setTitle("Music Queue")
       .setDescription(
