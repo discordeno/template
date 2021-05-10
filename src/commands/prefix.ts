@@ -1,7 +1,7 @@
 import { bot } from "../../cache.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import { createCommand, createSubcommand } from "../utils/helpers.ts";
-import { parsePrefix } from "../monitors/commandHandler.ts";
+import { parsePrefix } from "../monitors/command_handler.ts";
 import { Embed } from "../utils/Embed.ts";
 import { db } from "../database/database.ts";
 
@@ -52,10 +52,7 @@ createSubcommand("prefix", {
 
     const embed = new Embed()
       .setTitle("Success, prefix was changed")
-      .setDescription([
-        `**Old Prefix**: \`${oldPrefix}\``,
-        `**New Prefix**: \`${args.prefix}\``,
-      ])
+      .setDescription([`**Old Prefix**: \`${oldPrefix}\``, `**New Prefix**: \`${args.prefix}\``])
       .setTimestamp();
 
     return message.send({ embed });
