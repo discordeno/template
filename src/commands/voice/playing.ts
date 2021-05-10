@@ -17,7 +17,7 @@ createCommand({
 
     const embed = new Embed()
       .setAuthor(
-        `${message.guild?.bot?.tag}`,
+        `${message.tag}`,
         message.guild?.bot?.avatarURL,
       )
       .setTitle(
