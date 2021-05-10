@@ -18,7 +18,7 @@ createCommand({
     const embed = new Embed()
       .setAuthor(
         `${message.tag}`,
-        message.guild?.bot?.avatarURL,
+        message.member?.avatarURL,
       )
       .setTitle(
         player.playing && queue
