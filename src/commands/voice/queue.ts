@@ -16,8 +16,8 @@ createCommand({
 
     const embed = new Embed()
       .setAuthor(
-        `${message.guild?.bot?.tag}`,
-        message.guild?.bot?.avatarURL,
+        `${message.tag}`,
+        message.member?.avatarURL,
       )
       .setTitle("Music Queue")
       .setDescription(
