@@ -6,6 +6,7 @@ import {
   snowflakeToBigint,
 } from "../../deps.ts";
 import { createCommand } from "../utils/helpers.ts";
+import { log } from "../utils/logger.ts";
 
 createCommand({
   name: `avatar`,
@@ -61,7 +62,7 @@ createCommand({
               ],
             },
           },
-        ).catch(console.error);
+        ).catch(log.error);
       }
 
       if (!member) return;
@@ -85,7 +86,7 @@ createCommand({
             ],
           },
         },
-      ).catch(console.error);
+      ).catch(log.error);
     },
   },
   execute: (message) => {

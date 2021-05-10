@@ -7,14 +7,15 @@ import {
 } from "../utils/helpers.ts";
 import { Embed } from "../utils/Embed.ts";
 import { db } from "../database/database.ts";
+import { log } from "../utils/logger.ts";
 
 const allowedLanguages = [
   { id: "en_US", flag: ":flag_us:", name: "English" },
   { id: "cs_CZ", flag: ":flag_cz:", name: "Czech" },
 ];
-const listOfLanguages = allowedLanguages
-  .map((lang) => `${lang.flag} - \`${lang.name}\``)
-  .join("\n");
+const listOfLanguages = allowedLanguages.map((lang) =>
+  `${lang.flag} - \`${lang.name}\``
+).join("\n");
 
 createCommand({
   name: "language",
@@ -32,8 +33,7 @@ createCommand({
     const currentLanguageId = getCurrentLanguage(message.guildId);
     const currentLanguage = allowedLanguages.find((item) =>
       item.id === currentLanguageId
-    ) ||
-      allowedLanguages[0];
+    ) || allowedLanguages[0];
     const embed = new Embed()
       .setTitle("Language Information")
       .setDescription(
@@ -53,8 +53,7 @@ createSubcommand("language", {
       type: "string",
       required: true,
       missing: function (message) {
-        const embed = new Embed()
-          .setTitle("Available Languages")
+        const embed = new Embed().setTitle("Available Languages")
           .setDescription(listOfLanguages);
         message.send({ embed });
       },
@@ -66,13 +65,12 @@ createSubcommand("language", {
     const oldLanguageId = getCurrentLanguage(message.guildId);
     const oldLanguage = allowedLanguages.find((item) =>
       item.id === oldLanguageId
-    ) ||
-      allowedLanguages[0];
+    ) || allowedLanguages[0];
 
     //New
     const newLanguageName = args.language;
-    const newLanguage = allowedLanguages.find(
-      (item) => item.name === newLanguageName,
+    const newLanguage = allowedLanguages.find((item) =>
+      item.name === newLanguageName
     );
 
     //Handle
@@ -91,7 +89,7 @@ createSubcommand("language", {
         .update(message.guildId.toString(), {
           language: newLanguage.id,
         })
-        .catch(console.log);
+        .catch(log.error);
 
       const embed = new Embed()
         .setTitle("Success")

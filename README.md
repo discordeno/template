@@ -1,6 +1,6 @@
 # Discordeno Bot Template
 
-![Log Image](https://i.imgur.com/LHu1DL7.png)
+![Log Image](https://i.imgur.com/09skKfz.png)
 
 This repo is meant as a template which you can use to create a Discord bot very
 easily using the [Discordeno library](https://github.com/discordeno/discordeno).

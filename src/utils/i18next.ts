@@ -3,6 +3,7 @@ import Backend from "https://deno.land/x/i18next_fs_backend@v1.1.1/index.js";
 import { configs } from "../../configs.ts";
 import { cache, sendWebhook, snowflakeToBigint } from "../../deps.ts";
 import { bot } from "../../cache.ts";
+import { log } from "./logger.ts";
 
 /** This function helps translate the string to the specific guilds needs. */
 export function translate(guildId: bigint, key: string, options?: unknown) {
@@ -68,7 +69,7 @@ export async function loadLanguages() {
       ) {
         const response =
           `Missing translation key: ${lng}/${ns}:${key}. Instead using: ${fallbackValue}`;
-        console.warn(response);
+        log.warn(response);
 
         if (!configs.webhooks.missingTranslation.id) return;
 
@@ -78,7 +79,7 @@ export async function loadLanguages() {
           // deno-lint-ignore ban-ts-comment
           // @ts-ignore
           { content: response },
-        ).catch(console.error);
+        ).catch(log.error);
       },
       preload: languageFolder
         .map((file) => (file.isDirectory ? file.name : undefined))

@@ -1,11 +1,11 @@
 import { bot } from "./cache.ts";
 import { configs } from "./configs.ts";
 import { startBot } from "./deps.ts";
-import { fileLoader, getTime, importDirectory } from "./src/utils/helpers.ts";
+import { fileLoader, importDirectory } from "./src/utils/helpers.ts";
 import { loadLanguages } from "./src/utils/i18next.ts";
+import { log } from "./src/utils/logger.ts";
 
-console.log(
-  getTime(),
+log.info(
   "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
 );
 

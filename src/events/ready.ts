@@ -7,11 +7,11 @@ import {
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 import { Milliseconds } from "../utils/constants/time.ts";
-import { getTime } from "../utils/helpers.ts";
 import { translate } from "../utils/i18next.ts";
 import { registerTasks } from "./../utils/task_helper.ts";
 import { sweepInactiveGuildsCache } from "./dispatch_requirements.ts";
 import { bot } from "../../cache.ts";
+import { log } from "../utils/logger.ts";
 
 bot.eventHandlers.ready = async function () {
   editBotStatus({
@@ -25,15 +25,12 @@ bot.eventHandlers.ready = async function () {
     ],
   });
 
-  console.log(getTime(), `Loaded ${bot.arguments.size} Argument(s)`);
-  console.log(getTime(), `Loaded ${bot.commands.size} Command(s)`);
-  console.log(
-    getTime(),
-    `Loaded ${Object.keys(bot.eventHandlers).length} Event(s)`,
-  );
-  console.log(getTime(), `Loaded ${bot.inhibitors.size} Inhibitor(s)`);
-  console.log(getTime(), `Loaded ${bot.monitors.size} Monitor(s)`);
-  console.log(getTime(), `Loaded ${bot.tasks.size} Task(s)`);
+  log.info(`Loaded ${bot.arguments.size} Argument(s)`);
+  log.info(`Loaded ${bot.commands.size} Command(s)`);
+  log.info(`Loaded ${Object.keys(bot.eventHandlers).length} Event(s)`);
+  log.info(`Loaded ${bot.inhibitors.size} Inhibitor(s)`);
+  log.info(`Loaded ${bot.monitors.size} Monitor(s)`);
+  log.info(`Loaded ${bot.tasks.size} Task(s)`);
 
   // Special task which should only run every hour AFTER STARTUP
   setInterval(sweepInactiveGuildsCache, Milliseconds.HOUR);
@@ -44,12 +41,9 @@ bot.eventHandlers.ready = async function () {
 
   bot.fullyReady = true;
 
-  console.log(
-    getTime(),
-    `[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`,
-  );
+  log.info(`[READY] Bot is online and ready in ${cache.guilds.size} guild(s)!`);
 
-  console.log(getTime(), `Preparing Slash Commands...`);
+  log.info(`Preparing Slash Commands...`);
 
   const globalCommands = [];
   // deno-lint-ignore no-explicit-any
@@ -65,11 +59,10 @@ bot.eventHandlers.ready = async function () {
 
   // GLOBAL COMMANDS CAN TAKE 1 HOUR TO UPDATE IN DISCORD
   if (globalCommands.length) {
-    console.log(
-      getTime(),
+    log.info(
       `Updating Global Slash Commands... Any changes will take up to 1 hour to update on discord.`,
     );
-    await upsertSlashCommands(globalCommands).catch(console.log);
+    await upsertSlashCommands(globalCommands).catch(log.info);
   }
 
   // GUILD COMMANDS WILL UPDATE INSTANTLY
@@ -111,13 +104,10 @@ bot.eventHandlers.ready = async function () {
           };
         }),
         guild.id,
-      ).catch(console.log);
-      console.log(
-        getTime(),
-        `Updated Guild ${guild.name} (${guild.id}) Slash Commands...`,
-      );
+      ).catch(log.info);
+      log.info(`Updated Guild ${guild.name} (${guild.id}) Slash Commands...`);
     }),
   );
 
-  console.log(getTime(), `[READY] Slash Commands loaded successfully!`);
+  log.info(`[READY] Slash Commands loaded successfully!`);
 };

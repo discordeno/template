@@ -10,6 +10,7 @@ import {
   snowflakeToBigint,
   structures,
 } from "../../deps.ts";
+import { log } from "../utils/logger.ts";
 
 const processing = new Set<bigint>();
 
@@ -36,7 +37,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   }
 
   if (processing.has(id)) {
-    console.log(
+    log.info(
       `[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`,
     );
 
@@ -48,7 +49,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
 
     if (!processing.has(id)) return;
 
-    return console.log(
+    return log.info(
       `[DISPATCH] Already processed guild was not successfully fetched:  ${id} in ${data.t} event`,
     );
   }
@@ -56,31 +57,31 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   processing.add(id);
 
   // New guild id has appeared, fetch all relevant data
-  console.log(`[DISPATCH] New Guild ID has appeared: ${id} in ${data.t} event`);
+  log.info(`[DISPATCH] New Guild ID has appeared: ${id} in ${data.t} event`);
 
   const rawGuild = (await getGuild(id, {
     counts: true,
     addToCache: false,
-  }).catch(console.log)) as Guild | undefined;
+  }).catch(log.info)) as Guild | undefined;
 
   if (!rawGuild) {
     processing.delete(id);
-    return console.log(`[DISPATCH] Guild ID ${id} failed to fetch.`);
+    return log.info(`[DISPATCH] Guild ID ${id} failed to fetch.`);
   }
 
-  console.log(`[DISPATCH] Guild ID ${id} has been found. ${rawGuild.name}`);
+  log.info(`[DISPATCH] Guild ID ${id} has been found. ${rawGuild.name}`);
 
   const [channels, botMember] = await Promise.all([
     getChannels(id, false),
     getMember(id, botId, { force: true }),
   ]).catch((error) => {
-    console.log(error);
+    log.info(error);
     return [];
   });
 
   if (!botMember || !channels) {
     processing.delete(id);
-    return console.log(
+    return log.info(
       `[DISPATCH] Guild ID ${id} Name: ${rawGuild.name} failed. Unable to get botMember or channels`,
     );
   }
@@ -97,9 +98,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
 
   processing.delete(id);
 
-  console.log(
-    `[DISPATCH] Guild ID ${id} Name: ${guild.name} completely loaded.`,
-  );
+  log.info(`[DISPATCH] Guild ID ${id} Name: ${guild.name} completely loaded.`);
 };
 
 // Events that have

@@ -2,6 +2,7 @@ import { Milliseconds } from "../utils/constants/time.ts";
 import { botId, cache } from "../../deps.ts";
 import { configs } from "../../configs.ts";
 import { bot } from "../../cache.ts";
+import { log } from "../utils/logger.ts";
 
 bot.tasks.set(`botlists`, {
   name: `botlists`,
@@ -11,9 +12,10 @@ bot.tasks.set(`botlists`, {
     // Only run when the bot is fully ready. In case guilds are still loading dont want to send wrong stats.
     if (!cache.isReady) return;
 
-    const totalUsers = cache.guilds
-      .map((g) => g.memberCount)
-      .reduce((a, b) => a + b, 0);
+    const totalUsers = cache.guilds.map((g) => g.memberCount).reduce(
+      (a, b) => a + b,
+      0,
+    );
     const totalGuilds = cache.guilds.size;
 
     // Make the variable here to get the guild count accurately
@@ -84,12 +86,12 @@ bot.tasks.set(`botlists`, {
         body: JSON.stringify(list.data),
       })
         .then(() => {
-          console.log(
+          log.info(
             `Update Bot Lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`,
           );
         })
         .catch((err) => {
-          console.error({ location: "botlists file", err });
+          log.error({ location: "botlists file", err });
         });
     }
   },

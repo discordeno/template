@@ -1,4 +1,5 @@
 import { botId, higherRolePosition, highestRole } from "../../../deps.ts";
+import { log } from "../../utils/logger.ts";
 import { Embed } from "./../../utils/Embed.ts";
 import { createCommand, sendEmbed } from "./../../utils/helpers.ts";
 
@@ -70,17 +71,15 @@ createCommand({
           .setTimestamp();
         await args.member.sendDM({ embed });
       } catch {
-        console.error(
-          `Could not notify member ${args.member.tag} for ban via DM`,
-        );
+        log.error(`Could not notify member ${args.member.tag} for ban via DM`);
       }
 
-      const banned = await args.member.ban(guildId, {
-        reason: args.reason,
-        deleteMessageDays: args.days as BanDeleteMessageDays,
-      }).catch(
-        (console.error),
-      );
+      const banned = await args.member
+        .ban(guildId, {
+          reason: args.reason,
+          deleteMessageDays: args.days as BanDeleteMessageDays,
+        })
+        .catch(log.error);
       if (!banned) return;
 
       const embed = new Embed()
