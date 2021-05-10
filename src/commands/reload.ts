@@ -5,7 +5,7 @@ import {
   importDirectory,
 } from "../utils/helpers.ts";
 import { PermissionLevels } from "../types/commands.ts";
-import { clearTasks, registerTasks } from "../utils/taskHelper.ts";
+import { clearTasks, registerTasks } from "../utils/task_helper.ts";
 import { reloadLang } from "../utils/i18next.ts";
 import { bot } from "../../cache.ts";
 

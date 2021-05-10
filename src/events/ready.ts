@@ -8,7 +8,7 @@ import { Command } from "../types/commands.ts";
 import { Milliseconds } from "../utils/constants/time.ts";
 import { getTime } from "../utils/helpers.ts";
 import { translate } from "../utils/i18next.ts";
-import { registerTasks } from "./../utils/taskHelper.ts";
+import { registerTasks } from "./../utils/task_helper.ts";
 import { sweepInactiveGuildsCache } from "./dispatch_requirements.ts";
 import { bot } from "../../cache.ts";
 

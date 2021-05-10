@@ -1,7 +1,7 @@
 import { bot } from "../../cache.ts";
 import { PermissionLevels } from "../types/commands.ts";
 import { createCommand, createSubcommand } from "../utils/helpers.ts";
-import { parsePrefix } from "../monitors/commandHandler.ts";
+import { parsePrefix } from "../monitors/command_handler.ts";
 import { Embed } from "../utils/Embed.ts";
 import { db } from "../database/database.ts";
 
