@@ -1,4 +1,5 @@
 import {
+  botId,
   cache,
   DiscordActivityTypes,
   editBotStatus,
@@ -7,7 +8,7 @@ import {
 import { Command } from "../types/commands.ts";
 import { Milliseconds } from "../utils/constants/time.ts";
 import { translate } from "../utils/i18next.ts";
-import { registerTasks } from "./../utils/taskHelper.ts";
+import { registerTasks } from "./../utils/task_helper.ts";
 import { sweepInactiveGuildsCache } from "./dispatch_requirements.ts";
 import { bot } from "../../cache.ts";
 import { log } from "../utils/logger.ts";
@@ -36,7 +37,7 @@ bot.eventHandlers.ready = async function () {
 
   registerTasks();
 
-  await bot.lavadenoManager.init();
+  await bot.lavadenoManager.init(botId.toString());
 
   bot.fullyReady = true;
 

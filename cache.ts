@@ -1,9 +1,11 @@
 import { configs } from "./configs.ts";
 import {
   botId,
+  cache,
   Collection,
   DiscordenoMessage,
   Manager,
+  snowflakeToBigint,
   Track,
   ws,
 } from "./deps.ts";
@@ -54,9 +56,11 @@ export const bot = {
   musicQueues: new Collection<bigint, Track[]>(),
   loopingMusics: new Collection<bigint, boolean>(),
   lavadenoManager: new Manager(configs.nodes, {
-    userId: botId.toString(),
     send(id, payload) {
-      ws.sendShardMessage(Number(id), payload);
+      const shardId = cache.guilds.get(snowflakeToBigint(id))?.shardId;
+      if (shardId === undefined) return;
+
+      ws.sendShardMessage(shardId, payload);
     },
   }),
 };
