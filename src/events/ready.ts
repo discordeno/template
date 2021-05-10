@@ -1,4 +1,5 @@
 import {
+  botId,
   cache,
   DiscordActivityTypes,
   editBotStatus,
@@ -39,7 +40,7 @@ bot.eventHandlers.ready = async function () {
 
   registerTasks();
 
-  await bot.lavadenoManager.init();
+  await bot.lavadenoManager.init(botId.toString());
 
   bot.fullyReady = true;
 
