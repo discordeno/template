@@ -13,9 +13,9 @@ createCommand({
   execute(message) {
     const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
-    if (!player) return message.reply("No player in this guild.");
+    if (!player || typeof player === undefined) return message.reply("No player in this guild.");
     
-    return message.reply(`Current volume is ${player?.volume}.`);
+    return message.reply(`Current volume is ${player.volume}.`);
   },
 });
 
@@ -36,6 +36,6 @@ createSubcommand("volume", {
 
     player.setVolume(args.value);
 
-    return message.reply(`Player volume successfully set to ${player?.volume}.`);
+    return message.reply(`Player volume successfully set to ${player.volume}.`);
   }
 });
