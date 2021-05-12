@@ -25,14 +25,14 @@ createSubcommand("volume", {
   aliases: ["s", "change"],
   permissionLevels: [PermissionLevels.MODERATOR],
   arguments: [
-    { name: "value", type: "number", minimum: -Infinity, required: true }
+    { name: "value", type: "number", minimum: 0, required: true }
   ] as const,
   guildOnly: true,
   execute: (message, args) => {
     const player = bot.lavadenoManager.players.get(message.guildId.toString());
     if (!player) return message.reply("No player in this guild.");
 
-    if (args.value > 100 || args.value < 1) return message.reply("Please provide valid volume from 1 to 100.");
+    if (args.value > 1000 || args.value < 1) return message.reply("Please provide valid volume from 1 to 1000.");
 
     player.setVolume(args.value);
 
