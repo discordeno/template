@@ -1,25 +1,41 @@
+import { PermissionLevels } from './../../types/commands.ts';
 import { bot } from "../../../cache.ts";
-import { createCommand } from "../../utils/helpers.ts";
+import { createCommand, createSubcommand } from "../../utils/helpers.ts";
 
 createCommand({
   name: "volume",
-  description: "Sets or shows the current volume.",
-  aliases: ["vol"],
+  description: "See the current volume.",
+  aliases: ["vol", "v"],
   arguments: [
-      { name: "volume", type: "number", minimum: -Infinity, required: false }
+    { name: "subcommand", type: "subcommand", required: false }
   ],
   guildOnly: true,
-  execute(message, args) {
+  execute(message) {
     const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
     if (!player) return message.reply("No player in this guild.");
-
-    if (!args.volume) return message.reply(`Current volume is ${player?.volume}`);
-
-    if (args.volume > 100 || args.volume < 1) return message.reply("Please select volume from 100 to 1");
     
-    player.setVolume(args.volume)
-
-    return message.reply(`The volume has been set to ${player?.volume}`);
+    return message.reply(`Current volume is ${player?.volume}.`);
   },
+});
+
+createSubcommand("volume", {
+  name: "set",
+  description: "Set the volume of the player.",
+  aliases: ["s", "change"],
+  permissionLevels: [PermissionLevels.MODERATOR],
+  arguments: [
+    { name: "value", type: "number", minimum: -Infinity, required: true }
+  ] as const,
+  guildOnly: true,
+  execute: (message, args) => {
+    const player = bot.lavadenoManager.players.get(message.guildId.toString());
+    if (!player) return message.reply("No player in this guild.");
+
+    if (args.value > 100 || args.value < 1) return message.reply("Please provide valid volume from 1 to 100.");
+
+    player.setVolume(args.value);
+
+    return message.reply(`Player volume successfully set to ${player?.volume}.`);
+  }
 });
