@@ -104,7 +104,7 @@ bot.eventHandlers.ready = async function () {
           };
         }),
         guild.id,
-      ).catch(log.info);
+      ).catch(log.warn);
       log.info(`Updated Guild ${guild.name} (${guild.id}) Slash Commands...`);
     }),
   );
