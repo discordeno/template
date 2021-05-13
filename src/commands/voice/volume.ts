@@ -13,7 +13,7 @@ createCommand({
   execute(message) {
     const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
-    if (!player || typeof player === undefined) return message.reply("No player in this guild.");
+    if (!player) return message.reply("No player in this guild.");
     
     return message.reply(`Current volume is ${player.volume}.`);
   },
