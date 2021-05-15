@@ -16,8 +16,10 @@ bot.arguments.set("member", {
       ? id.substring(id.startsWith("<@!") ? 3 : 2, id.length - 1)
       : id;
 
-    const cachedMember = cache.members.get(snowflakeToBigint(userId));
-    if (cachedMember?.guilds.has(message.guildId)) return cachedMember;
+    if (/^[\d+]{17,}$/.test(userId)) {
+      const cachedMember = cache.members.get(snowflakeToBigint(userId));
+      if (cachedMember?.guilds.has(message.guildId)) return cachedMember;
+    }
 
     const cached = cache.members.find(
       (member) =>
@@ -26,9 +28,7 @@ bot.arguments.set("member", {
     );
     if (cached) return cached;
 
-    if (userId.length < 17) return;
-
-    if (!Number(userId)) return;
+    if (!/^[\d+]{17,}$/.test(userId)) return;
 
     log.debug("Fetching a member with Id from gateway", userId);
 
