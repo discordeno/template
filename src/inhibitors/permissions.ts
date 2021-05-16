@@ -1,4 +1,5 @@
 import {
+  botId,
   DiscordenoMessage,
   getMissingChannelPermissions,
   getMissingGuildPermissions,
@@ -90,7 +91,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
   if (command.botChannelPermissions?.length) {
     const missingPermissions = await getMissingChannelPermissions(
       message.channelId,
-      message.authorId,
+      botId,
       command.botChannelPermissions,
     );
 
@@ -108,7 +109,7 @@ bot.inhibitors.set("permissions", async function (message, command) {
   if (command.botServerPermissions?.length) {
     const missingPermissions = await getMissingGuildPermissions(
       message.guildId,
-      message.authorId,
+      botId,
       command.botServerPermissions,
     );
 
