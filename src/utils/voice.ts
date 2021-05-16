@@ -1,5 +1,5 @@
-import { cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
 import { bot } from "../../cache.ts";
+import { cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
 
 /** Convert milliseconds to MM:SS */
 export function getMusicLength(milliseconds: number) {
@@ -83,11 +83,11 @@ export async function addPlaylistToQueue(
 export function validURL(str: string) {
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
+    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+    "(\\#[-a-z\\d_]*)?$",
     "i",
   ); // fragment locator
   return !!pattern.test(str);
@@ -109,8 +109,8 @@ export async function checkIfUserInMusicChannel(
   }
   if (
     player.channel !==
-      cache.guilds.get(message.guildId)?.voiceStates.get(message.authorId)
-        ?.channelId
+    cache.guilds.get(message.guildId)?.voiceStates.get(message.authorId)
+      ?.channelId?.toString()
   ) {
     await message.reply(
       `You need to been in the same voice channel than the bot!`,
