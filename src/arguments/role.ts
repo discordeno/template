@@ -11,19 +11,22 @@ bot.arguments.set("role", {
     const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
-    const roleId = id.startsWith("<@&") ? id.substring(3, id.length - 1) : id;
+    const roleIdOrName = id.startsWith("<@&")
+      ? id.substring(3, id.length - 1)
+      : id.toLowerCase();
 
-    const name = id.toLowerCase();
-    const role = guild.roles.get(snowflakeToBigint(roleId)) ||
-      guild.roles.find((r) => r.name.toLowerCase() === name);
+    const role = /^[\d+]{17,}$/.test(roleIdOrName)
+      ? guild.roles.get(snowflakeToBigint(roleIdOrName))
+      : guild.roles.find((r) => r.name.toLowerCase() === roleIdOrName);
     if (role) return role;
 
     // No role was found, let's list roles for better user experience.
     const possibleRoles = guild.roles.filter((r) =>
-      r.name.toLowerCase().startsWith(name)
+      r.name.toLowerCase().startsWith(roleIdOrName)
     );
     if (!possibleRoles.size) return;
 
+    // TODO: add translations for this response & also make it look better
     await message.reply(
       [
         translate(message.guildId, "strings:NEED_VALID_ROLE", { name: id }),
