@@ -10,13 +10,13 @@ bot.arguments.set("...roles", {
     if (!guild) return;
 
     return parameters.map((word) => {
-      const roleId = word.startsWith("<@&")
+      const roleIdOrName = word.startsWith("<@&")
         ? word.substring(3, word.length - 1)
-        : word;
+        : word.toLowerCase();
 
-      const name = word.toLowerCase();
-      const role = guild.roles.get(snowflakeToBigint(roleId)) ||
-        guild.roles.find((r) => r.name.toLowerCase() === name);
+      const role = /^[\d+]{17,}$/.test(roleIdOrName)
+        ? guild.roles.get(snowflakeToBigint(roleIdOrName))
+        : guild.roles.find((r) => r.name.toLowerCase() === roleIdOrName);
       if (role) return role;
     });
   },
