@@ -6,14 +6,10 @@ bot.arguments.set("subcommand", {
     const [subcommandName] = parameters;
 
     const sub = command.subcommands?.find(
-      (sub) =>
-        sub.name === subcommandName ||
-        Boolean(sub.aliases?.includes(subcommandName)),
+      (sub) => sub.name === subcommandName || Boolean(sub.aliases?.includes(subcommandName))
     );
     if (sub) return sub;
 
-    return typeof argument.defaultValue === "string"
-      ? command.subcommands?.get(argument.defaultValue)
-      : undefined;
+    return typeof argument.defaultValue === "string" ? command.subcommands?.get(argument.defaultValue) : undefined;
   },
 });

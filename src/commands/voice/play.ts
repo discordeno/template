@@ -1,10 +1,6 @@
 import { bot } from "../../../cache.ts";
 import { createCommand } from "../../utils/helpers.ts";
-import {
-  addPlaylistToQueue,
-  addSoundToQueue,
-  validURL,
-} from "../../utils/voice.ts";
+import { addPlaylistToQueue, addSoundToQueue, validURL } from "../../utils/voice.ts";
 
 createCommand({
   name: "play",
@@ -12,9 +8,7 @@ createCommand({
   guildOnly: true,
   arguments: [{ type: "...strings", name: "query", required: true }],
   async execute(message, args) {
-    const player = bot.lavadenoManager.players.get(
-      message.guildId.toString(),
-    );
+    const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
     if (!player || !player.connected) {
       const voiceState = message.guild?.voiceStates.get(message.authorId);
@@ -27,9 +21,7 @@ createCommand({
           selfDeaf: true,
         });
       } else {
-        const newPlayer = bot.lavadenoManager.create(
-          message.guildId.toString(),
-        );
+        const newPlayer = bot.lavadenoManager.create(message.guildId.toString());
         newPlayer.connect(voiceState.channelId.toString(), {
           selfDeaf: true,
         });
@@ -38,9 +30,7 @@ createCommand({
       await message.reply(`Successfully joined the channel!`);
     }
 
-    const trackSearch = validURL(args.query)
-      ? args.query
-      : `ytsearch:${args.query}`;
+    const trackSearch = validURL(args.query) ? args.query : `ytsearch:${args.query}`;
     const result = await bot.lavadenoManager.search(trackSearch);
 
     switch (result.loadType) {
@@ -49,11 +39,7 @@ createCommand({
         return addSoundToQueue(message, result.tracks[0]);
       }
       case "PLAYLIST_LOADED": {
-        return addPlaylistToQueue(
-          message,
-          result.playlistInfo!.name,
-          result.tracks,
-        );
+        return addPlaylistToQueue(message, result.playlistInfo!.name, result.tracks);
       }
       default:
         return message.reply(`Could not find any song with that name!`);

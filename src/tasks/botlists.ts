@@ -12,10 +12,7 @@ bot.tasks.set(`botlists`, {
     // Only run when the bot is fully ready. In case guilds are still loading dont want to send wrong stats.
     if (!cache.isReady) return;
 
-    const totalUsers = cache.guilds.map((g) => g.memberCount).reduce(
-      (a, b) => a + b,
-      0,
-    );
+    const totalUsers = cache.guilds.map((g) => g.memberCount).reduce((a, b) => a + b, 0);
     const totalGuilds = cache.guilds.size;
 
     // Make the variable here to get the guild count accurately
@@ -86,9 +83,7 @@ bot.tasks.set(`botlists`, {
         body: JSON.stringify(list.data),
       })
         .then(() => {
-          log.info(
-            `Update Bot Lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`,
-          );
+          log.info(`Update Bot Lists: [${list.name}] ${totalGuilds} Guilds | ${totalUsers} Users`);
         })
         .catch((err) => {
           log.error({ location: "botlists file", err });

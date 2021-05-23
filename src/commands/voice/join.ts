@@ -8,9 +8,7 @@ createCommand({
     const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
     if (player?.connected) {
-      return message.reply(
-        `The bot is already connected to a channel in this guild!`,
-      );
+      return message.reply(`The bot is already connected to a channel in this guild!`);
     }
 
     const voiceState = message.guild?.voiceStates.get(message.authorId);

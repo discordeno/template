@@ -11,8 +11,6 @@ bot.arguments.set("command", {
     if (command) return command;
 
     // Check if its an alias
-    return bot.commands.find((cmd) =>
-      Boolean(cmd.aliases?.includes(commandName))
-    );
+    return bot.commands.find((cmd) => Boolean(cmd.aliases?.includes(commandName)));
   },
 });

@@ -12,11 +12,7 @@ createCommand({
     }
 
     return message.reply(
-      `The current music will ${
-        bot.loopingMusics.has(message.guildId)
-          ? "now be looped 🔁"
-          : `no longed be looped`
-      }.`,
+      `The current music will ${bot.loopingMusics.has(message.guildId) ? "now be looped 🔁" : `no longed be looped`}.`
     );
   },
 });

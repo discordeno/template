@@ -13,8 +13,7 @@ bot.arguments.set("nestedcommand", {
         ? // IF A COMMAND WAS FOUND WE SEARCH FOR ITS SUBCOMMANDS
           command.subcommands?.get(word)
         : // ELSE FIND THE VALID COMMAND OR COMMAND BY ITS ALIAS
-          bot.commands.get(word) ||
-          bot.commands.find((cmd) => Boolean(cmd.aliases?.includes(word)));
+          bot.commands.get(word) || bot.commands.find((cmd) => Boolean(cmd.aliases?.includes(word)));
       if (!isCommand) continue;
 
       command = isCommand;

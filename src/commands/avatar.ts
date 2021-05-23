@@ -27,73 +27,57 @@ createCommand({
     async execute(data, member) {
       const arg = data.data?.options?.[0];
 
-      if (
-        arg?.type === DiscordApplicationCommandOptionTypes.User && arg?.value
-      ) {
+      if (arg?.type === DiscordApplicationCommandOptionTypes.User && arg?.value) {
         const targetUser = data.data?.resolved?.users?.[arg.value as string];
         if (!targetUser) return;
 
-        const url = avatarURL(
-          snowflakeToBigint(targetUser.id),
-          snowflakeToBigint(targetUser.discriminator),
-          {
-            avatar: targetUser.avatar ?? undefined,
-            size: 2048,
-          },
-        );
+        const url = avatarURL(snowflakeToBigint(targetUser.id), snowflakeToBigint(targetUser.discriminator), {
+          avatar: targetUser.avatar ?? undefined,
+          size: 2048,
+        });
 
-        return await sendInteractionResponse(
-          snowflakeToBigint(data.id),
-          data.token,
-          {
-            private: false,
-            type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
-            data: {
-              embeds: [
-                {
-                  author: {
-                    name: `${targetUser.username}#${targetUser?.discriminator}`,
-                    iconUrl: url,
-                  },
-                  image: {
-                    url,
-                  },
-                },
-              ],
-            },
-          },
-        ).catch(log.error);
-      }
-
-      if (!member) return;
-
-      return await sendInteractionResponse(
-        snowflakeToBigint(data.id),
-        data.token,
-        {
+        return await sendInteractionResponse(snowflakeToBigint(data.id), data.token, {
+          private: false,
           type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
           data: {
             embeds: [
               {
                 author: {
-                  name: member.tag,
-                  iconUrl: member.avatarURL,
+                  name: `${targetUser.username}#${targetUser?.discriminator}`,
+                  iconUrl: url,
                 },
                 image: {
-                  url: member.makeAvatarURL({ size: 2048 }),
+                  url,
                 },
               },
             ],
           },
+        }).catch(log.error);
+      }
+
+      if (!member) return;
+
+      return await sendInteractionResponse(snowflakeToBigint(data.id), data.token, {
+        type: DiscordInteractionResponseTypes.ChannelMessageWithSource,
+        data: {
+          embeds: [
+            {
+              author: {
+                name: member.tag,
+                iconUrl: member.avatarURL,
+              },
+              image: {
+                url: member.makeAvatarURL({ size: 2048 }),
+              },
+            },
+          ],
         },
-      ).catch(log.error);
+      }).catch(log.error);
     },
   },
   execute: (message) => {
     const mentioned = message.mentions?.[0];
-    const member = message.guild?.members.get(
-      mentioned?.id ? snowflakeToBigint(mentioned.id) : message.authorId,
-    );
+    const member = message.guild?.members.get(mentioned?.id ? snowflakeToBigint(mentioned.id) : message.authorId);
     if (!member) return;
 
     return message.reply({

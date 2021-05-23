@@ -34,47 +34,32 @@ function execQueue(message: DiscordenoMessage, player: Player) {
   });
 }
 
-export async function addSoundToQueue(
-  message: DiscordenoMessage,
-  track: Track,
-) {
+export async function addSoundToQueue(message: DiscordenoMessage, track: Track) {
   if (!message.guildId) return;
 
   const player = bot.lavadenoManager.players.get(message.guildId.toString());
   if (bot.musicQueues.has(message.guildId)) {
     bot.musicQueues.get(message.guildId)?.push(track);
     await message.reply(
-      `Added ${track.info.title} to the queue! Position in queue: ${bot
-        .musicQueues.get(message.guildId)!.length - 1}`,
+      `Added ${track.info.title} to the queue! Position in queue: ${bot.musicQueues.get(message.guildId)!.length - 1}`
     );
   } else {
     bot.musicQueues.set(message.guildId!, [track]);
-    await message.reply(
-      `Added ${track.info.title} to Now playing - ${track.info.title}.`,
-    );
+    await message.reply(`Added ${track.info.title} to Now playing - ${track.info.title}.`);
   }
   if (player && !player.playing) {
     await execQueue(message, player);
   }
 }
 
-export async function addPlaylistToQueue(
-  message: DiscordenoMessage,
-  playlistName: string,
-  tracks: Track[],
-) {
+export async function addPlaylistToQueue(message: DiscordenoMessage, playlistName: string, tracks: Track[]) {
   const player = bot.lavadenoManager.players.get(message.guildId.toString());
   if (bot.musicQueues.has(message.guildId)) {
-    bot.musicQueues.set(
-      message.guildId,
-      bot.musicQueues.get(message.guildId)!.concat(tracks),
-    );
+    bot.musicQueues.set(message.guildId, bot.musicQueues.get(message.guildId)!.concat(tracks));
   } else {
     bot.musicQueues.set(message.guildId, tracks);
   }
-  await message.reply(
-    `Added ${tracks.length} songs from the playlist: ${playlistName} to the queue!`,
-  );
+  await message.reply(`Added ${tracks.length} songs from the playlist: ${playlistName} to the queue!`);
   if (player && !player.playing) {
     await execQueue(message, player);
   }
@@ -83,20 +68,17 @@ export async function addPlaylistToQueue(
 export function validURL(str: string) {
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
-    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-    "(\\#[-a-z\\d_]*)?$",
-    "i",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
+    "i"
   ); // fragment locator
   return !!pattern.test(str);
 }
 
-export async function checkIfUserInMusicChannel(
-  message: DiscordenoMessage,
-  player: Player,
-): Promise<boolean> {
+export async function checkIfUserInMusicChannel(message: DiscordenoMessage, player: Player): Promise<boolean> {
   if (!message.guildId || !message.channelId) {
     if (!player) {
       await message.reply(`The bot is not in any channel!`);
@@ -104,8 +86,10 @@ export async function checkIfUserInMusicChannel(
     }
   }
   const voiceStates = cache.guilds.get(message.guildId)?.voiceStates;
-  if (!voiceStates?.has(message.authorId) || player.channel !==
-    voiceStates?.get(message.authorId)?.channelId?.toString()) {
+  if (
+    !voiceStates?.has(message.authorId) ||
+    player.channel !== voiceStates?.get(message.authorId)?.channelId?.toString()
+  ) {
     await message.reply(`You need to be in the same voice channel as the bot!`);
     return false;
   }

@@ -19,12 +19,8 @@ createCommand({
       defaultValue: "No reason given",
     },
   ] as const,
-  userServerPermissions: [
-    "KICK_MEMBERS",
-  ],
-  botServerPermissions: [
-    "KICK_MEMBERS",
-  ],
+  userServerPermissions: ["KICK_MEMBERS"],
+  botServerPermissions: ["KICK_MEMBERS"],
   execute: async (message, args) => {
     try {
       await args.member.kick(message.guildId, args.reason);
