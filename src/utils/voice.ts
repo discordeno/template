@@ -103,18 +103,10 @@ export async function checkIfUserInMusicChannel(
       return false;
     }
   }
-  if (!cache.guilds.get(message.guildId)?.voiceStates.has(message.authorId)) {
-    await message.reply(`You need to been in a voice channel!`);
-    return false;
-  }
-  if (
-    player.channel !==
-    cache.guilds.get(message.guildId)?.voiceStates.get(message.authorId)
-      ?.channelId?.toString()
-  ) {
-    await message.reply(
-      `You need to been in the same voice channel than the bot!`,
-    );
+  const voiceStates = cache.guilds.get(message.guildId)?.voiceStates;
+  if (!voiceStates?.has(message.authorId) || player.channel !==
+    voiceStates?.get(message.authorId)?.channelId?.toString()) {
+    await message.reply(`You need to be in the same voice channel as the bot!`);
     return false;
   }
   return true;
