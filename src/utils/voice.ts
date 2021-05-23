@@ -3,7 +3,7 @@ import { cache, DiscordenoMessage, Player, Track } from "../../deps.ts";
 
 /** Convert milliseconds to MM:SS */
 export function getMusicLength(milliseconds: number) {
-  return milliseconds > 3600000
+  return milliseconds >= 3600000
     ? new Date(milliseconds).toISOString().substr(11, 8)
     : new Date(milliseconds).toISOString().substr(14, 5);
 }
