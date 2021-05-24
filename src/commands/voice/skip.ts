@@ -7,21 +7,15 @@ createCommand({
   aliases: ["next", "s"],
   guildOnly: true,
   async execute(message) {
-    const player = bot.lavadenoManager.players.get(
-      message.guildId.toString(),
-    );
+    const player = bot.lavadenoManager.players.get(message.guildId.toString());
     const queue = bot.musicQueues.get(message.guildId);
 
     if (!player || !queue) {
-      return message.reply(
-        `The bot is not playing right now`,
-      );
+      return message.reply(`The bot is not playing right now`);
     }
 
     if (!(await checkIfUserInMusicChannel(message, player))) {
-      return message.reply(
-        "You must be in a voice channel in order to execute this command",
-      );
+      return message.reply("You must be in a voice channel in order to execute this command");
     }
 
     await player.stop();

@@ -15,10 +15,7 @@ createCommand({
     }
 
     const embed = new Embed()
-      .setAuthor(
-        `${message.guild?.botMember?.nick || message.guild?.bot?.tag} Stats`,
-        message.guild?.bot?.avatarURL,
-      )
+      .setAuthor(`${message.guild?.botMember?.nick || message.guild?.bot?.tag} Stats`, message.guild?.bot?.avatarURL)
       .setColor("random")
       .addField("Guilds:", cache.guilds.size.toLocaleString(), true)
       .addField("Total Members:", totalMemberCount.toLocaleString(), true)

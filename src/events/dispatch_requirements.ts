@@ -25,7 +25,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
       ? // deno-lint-ignore no-explicit-any
         (data.d as any)?.id
       : // deno-lint-ignore no-explicit-any
-        (data.d as any)?.guild_id) ?? "",
+        (data.d as any)?.guild_id) ?? ""
   );
 
   if (!id || bot.activeGuildIDs.has(id)) return;
@@ -37,9 +37,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
   }
 
   if (processing.has(id)) {
-    log.info(
-      `[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`,
-    );
+    log.info(`[DISPATCH] New Guild ID already being processed: ${id} in ${data.t} event`);
 
     let runs = 0;
     do {
@@ -49,9 +47,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
 
     if (!processing.has(id)) return;
 
-    return log.info(
-      `[DISPATCH] Already processed guild was not successfully fetched:  ${id} in ${data.t} event`,
-    );
+    return log.info(`[DISPATCH] Already processed guild was not successfully fetched:  ${id} in ${data.t} event`);
   }
 
   processing.add(id);
@@ -81,9 +77,7 @@ bot.eventHandlers.dispatchRequirements = async function (data, shardID) {
 
   if (!botMember || !channels) {
     processing.delete(id);
-    return log.info(
-      `[DISPATCH] Guild ID ${id} Name: ${rawGuild.name} failed. Unable to get botMember or channels`,
-    );
+    return log.info(`[DISPATCH] Guild ID ${id} Name: ${rawGuild.name} failed. Unable to get botMember or channels`);
   }
 
   const guild = await structures.createDiscordenoGuild(rawGuild, shardID);

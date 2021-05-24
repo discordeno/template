@@ -1,8 +1,4 @@
-import {
-  DiscordenoMember,
-  DiscordenoMessage,
-  Interaction,
-} from "../../deps.ts";
+import { DiscordenoMember, DiscordenoMessage, Interaction } from "../../deps.ts";
 
 export interface BaseCollectorOptions {
   /** The amount of messages to collect before resolving. Defaults to 1 */
@@ -22,11 +18,7 @@ export interface MessageCollectorOptions extends BaseCollectorOptions {
 
 export interface ReactionCollectorOptions extends BaseCollectorOptions {
   /** Function that will filter messages to determine whether to collect this message. Defaults to making sure the message is sent by the same member. */
-  filter?: (
-    userId: bigint,
-    reaction: string,
-    message: DiscordenoMessage | { id: string },
-  ) => boolean;
+  filter?: (userId: bigint, reaction: string, message: DiscordenoMessage | { id: string }) => boolean;
 }
 
 export interface BaseCollectorCreateOptions {
@@ -51,17 +43,11 @@ export interface CollectReactionsOptions extends BaseCollectorCreateOptions {
   /** The message Id where this is listening to */
   messageId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
-  filter: (
-    userId: bigint,
-    reaction: string,
-    message: DiscordenoMessage | { id: string },
-  ) => boolean;
+  filter: (userId: bigint, reaction: string, message: DiscordenoMessage | { id: string }) => boolean;
 }
 
 export interface MessageCollector extends CollectMessagesOptions {
-  resolve: (
-    value: DiscordenoMessage[] | PromiseLike<DiscordenoMessage[]>,
-  ) => void;
+  resolve: (value: DiscordenoMessage[] | PromiseLike<DiscordenoMessage[]>) => void;
   // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the messages are stored if the amount to collect is more than 1. */
@@ -80,16 +66,11 @@ export interface CollectButtonOptions extends BaseCollectorCreateOptions {
   /** The message Id where this is listening to */
   messageId: bigint;
   /** Function that will filter messages to determine whether to collect this message */
-  filter: (
-    message: DiscordenoMessage,
-    member?: DiscordenoMember,
-  ) => boolean;
+  filter: (message: DiscordenoMessage, member?: DiscordenoMember) => boolean;
 }
 
 export interface ButtonCollector extends CollectButtonOptions {
-  resolve: (
-    value: ButtonCollectorReturn[] | PromiseLike<ButtonCollectorReturn[]>,
-  ) => void;
+  resolve: (value: ButtonCollectorReturn[] | PromiseLike<ButtonCollectorReturn[]>) => void;
   // deno-lint-ignore no-explicit-any
   reject: (reason?: any) => void;
   /** Where the buttons are stored if the amount to collect is more than 1. */
@@ -98,10 +79,7 @@ export interface ButtonCollector extends CollectButtonOptions {
 
 export interface ButtonCollectorOptions extends BaseCollectorOptions {
   /** Function that will filter messages to determine whether to collect this message. Defaults to making sure the message is sent by the same member. */
-  filter?: (
-    message: DiscordenoMessage,
-    member?: DiscordenoMember,
-  ) => boolean;
+  filter?: (message: DiscordenoMessage, member?: DiscordenoMember) => boolean;
 }
 
 export interface ButtonCollectorReturn {

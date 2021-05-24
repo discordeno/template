@@ -11,9 +11,7 @@ bot.arguments.set("role", {
     const guild = cache.guilds.get(message.guildId);
     if (!guild) return;
 
-    const roleIdOrName = id.startsWith("<@&")
-      ? id.substring(3, id.length - 1)
-      : id.toLowerCase();
+    const roleIdOrName = id.startsWith("<@&") ? id.substring(3, id.length - 1) : id.toLowerCase();
 
     const role = /^[\d+]{17,}$/.test(roleIdOrName)
       ? guild.roles.get(snowflakeToBigint(roleIdOrName))
@@ -21,9 +19,7 @@ bot.arguments.set("role", {
     if (role) return role;
 
     // No role was found, let's list roles for better user experience.
-    const possibleRoles = guild.roles.filter((r) =>
-      r.name.toLowerCase().startsWith(roleIdOrName)
-    );
+    const possibleRoles = guild.roles.filter((r) => r.name.toLowerCase().startsWith(roleIdOrName));
     if (!possibleRoles.size) return;
 
     // TODO: add translations for this response & also make it look better
@@ -33,7 +29,7 @@ bot.arguments.set("role", {
         translate(message.guildId, "strings:POSSIBLE_ROLES"),
         "",
         possibleRoles.map((r) => `**${r.name}** ${r.id}`).join("\n"),
-      ].join("\n"),
+      ].join("\n")
     );
   },
 });

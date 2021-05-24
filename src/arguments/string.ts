@@ -7,9 +7,7 @@ bot.arguments.set("string", {
 
     const valid =
       // If the argument required literals and some string was provided by user
-      argument.literals?.length && text
-        ? argument.literals.includes(text.toLowerCase()) ? text : undefined
-        : text;
+      argument.literals?.length && text ? (argument.literals.includes(text.toLowerCase()) ? text : undefined) : text;
 
     if (valid) {
       return argument.lowercase ? valid.toLowerCase() : valid;

@@ -52,10 +52,7 @@ createSubcommand("prefix", {
 
     const embed = new Embed()
       .setTitle("Success, prefix was changed")
-      .setDescription([
-        `**Old Prefix**: \`${oldPrefix}\``,
-        `**New Prefix**: \`${args.prefix}\``,
-      ])
+      .setDescription([`**Old Prefix**: \`${oldPrefix}\``, `**New Prefix**: \`${args.prefix}\``])
       .setTimestamp();
 
     return message.send({ embed });

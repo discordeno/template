@@ -1,10 +1,4 @@
-import {
-  botId,
-  cache,
-  DiscordActivityTypes,
-  editBotStatus,
-  upsertSlashCommands,
-} from "../../deps.ts";
+import { botId, cache, DiscordActivityTypes, editBotStatus, upsertSlashCommands } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 import { Milliseconds } from "../utils/constants/time.ts";
 import { translate } from "../utils/i18next.ts";
@@ -59,9 +53,7 @@ bot.eventHandlers.ready = async function () {
 
   // GLOBAL COMMANDS CAN TAKE 1 HOUR TO UPDATE IN DISCORD
   if (globalCommands.length) {
-    log.info(
-      `Updating Global Slash Commands... Any changes will take up to 1 hour to update on discord.`,
-    );
+    log.info(`Updating Global Slash Commands... Any changes will take up to 1 hour to update on discord.`);
     await upsertSlashCommands(globalCommands).catch(log.info);
   }
 
@@ -81,16 +73,12 @@ bot.eventHandlers.ready = async function () {
 
           // ADVANCED VERSION WILL ALLOW TRANSLATION
           const name = translate(guild.id, `commands/${cmd.name}:SLASH_NAME`);
-          const description = translate(
-            guild.id,
-            `commands/${cmd.name}:SLASH_DESCRIPTION`,
-          );
+          const description = translate(guild.id, `commands/${cmd.name}:SLASH_DESCRIPTION`);
 
           return {
             name: name === "SLASH_NAME" ? cmd.name : name,
-            description: description === "SLASH_DESCRIPTION"
-              ? cmd.description || "No description available."
-              : description,
+            description:
+              description === "SLASH_DESCRIPTION" ? cmd.description || "No description available." : description,
             options: cmd.slash?.options?.map((option) => {
               const optionName = translate(guild.id, option.name);
               const optionDescription = translate(guild.id, option.description);
@@ -103,10 +91,10 @@ bot.eventHandlers.ready = async function () {
             }),
           };
         }),
-        guild.id,
+        guild.id
       ).catch(log.warn);
       log.info(`Updated Guild ${guild.name} (${guild.id}) Slash Commands...`);
-    }),
+    })
   );
 
   log.info(`[READY] Slash Commands loaded successfully!`);

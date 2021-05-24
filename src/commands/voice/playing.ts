@@ -16,24 +16,15 @@ createCommand({
     }
 
     const embed = new Embed()
-      .setAuthor(
-        `${message.tag}`,
-        message.member?.avatarURL,
-      )
+      .setAuthor(`${message.tag}`, message.member?.avatarURL)
       .setTitle(
-        player.playing && queue
-          ? `Now Playing - ${queue[0].info.title}`
-          : `Not playing anything`,
-        player.playing && queue ? queue[0].info.uri : "",
+        player.playing && queue ? `Now Playing - ${queue[0].info.title}` : `Not playing anything`,
+        player.playing && queue ? queue[0].info.uri : ""
       )
       .setDescription(
         player.playing && queue
-          ? `**Progress:** ${getMusicLength(player.position)}/${
-            getMusicLength(
-              queue[0].info.length,
-            )
-          }`
-          : `You're not playing any music, add a music using im!play (music)`,
+          ? `**Progress:** ${getMusicLength(player.position)}/${getMusicLength(queue[0].info.length)}`
+          : `You're not playing any music, add a music using im!play (music)`
       )
       .setTimestamp(player.timestamp);
 

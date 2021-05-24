@@ -15,22 +15,19 @@ function missingCommandPermission(
     | "framework/core:USER_SERVER_PERM"
     | "framework/core:USER_CHANNEL_PERM"
     | "framework/core:BOT_SERVER_PERM"
-    | "framework/core:BOT_CHANNEL_PERM",
+    | "framework/core:BOT_CHANNEL_PERM"
 ) {
   const perms = missingPermissions.join(", ");
-  const response = type === "framework/core:BOT_CHANNEL_PERM"
-    ? `I am missing the following permissions in this channel: **${perms}**`
-    : type === "framework/core:BOT_SERVER_PERM"
-    ? `I am missing the following permissions in this server from my roles: **${perms}**`
-    : type === "framework/core:USER_CHANNEL_PERM"
-    ? `You are missing the following permissions in this channel: **${perms}**`
-    : `You are missing the following permissions in this server from your roles: **${perms}**`;
+  const response =
+    type === "framework/core:BOT_CHANNEL_PERM"
+      ? `I am missing the following permissions in this channel: **${perms}**`
+      : type === "framework/core:BOT_SERVER_PERM"
+      ? `I am missing the following permissions in this server from my roles: **${perms}**`
+      : type === "framework/core:USER_CHANNEL_PERM"
+      ? `You are missing the following permissions in this channel: **${perms}**`
+      : `You are missing the following permissions in this server from your roles: **${perms}**`;
 
-  if (
-    missingPermissions.find(
-      (perm) => perm === "SEND_MESSAGES" || perm === "VIEW_CHANNEL",
-    )
-  ) {
+  if (missingPermissions.find((perm) => perm === "SEND_MESSAGES" || perm === "VIEW_CHANNEL")) {
     return;
   }
   message.reply(response);
@@ -54,15 +51,11 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingChannelPermissions(
       message.channelId,
       message.authorId,
-      command.userChannelPermissions,
+      command.userChannelPermissions
     );
 
     if (missingPermissions.length) {
-      missingCommandPermission(
-        message,
-        missingPermissions,
-        "framework/core:USER_CHANNEL_PERM",
-      );
+      missingCommandPermission(message, missingPermissions, "framework/core:USER_CHANNEL_PERM");
       return true;
     }
   }
@@ -74,15 +67,11 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingGuildPermissions(
       message.guildId,
       message.authorId,
-      command.userServerPermissions,
+      command.userServerPermissions
     );
 
     if (missingPermissions.length) {
-      missingCommandPermission(
-        message,
-        missingPermissions,
-        "framework/core:USER_SERVER_PERM",
-      );
+      missingCommandPermission(message, missingPermissions, "framework/core:USER_SERVER_PERM");
       return true;
     }
   }
@@ -92,33 +81,21 @@ bot.inhibitors.set("permissions", async function (message, command) {
     const missingPermissions = await getMissingChannelPermissions(
       message.channelId,
       botId,
-      command.botChannelPermissions,
+      command.botChannelPermissions
     );
 
     if (missingPermissions.length) {
-      missingCommandPermission(
-        message,
-        missingPermissions,
-        "framework/core:BOT_CHANNEL_PERM",
-      );
+      missingCommandPermission(message, missingPermissions, "framework/core:BOT_CHANNEL_PERM");
       return true;
     }
   }
 
   // Check if the bot has the necessary permissions to run this command
   if (command.botServerPermissions?.length) {
-    const missingPermissions = await getMissingGuildPermissions(
-      message.guildId,
-      botId,
-      command.botServerPermissions,
-    );
+    const missingPermissions = await getMissingGuildPermissions(message.guildId, botId, command.botServerPermissions);
 
     if (missingPermissions.length) {
-      missingCommandPermission(
-        message,
-        missingPermissions,
-        "framework/core:BOT_CHANNEL_PERM",
-      );
+      missingCommandPermission(message, missingPermissions, "framework/core:BOT_CHANNEL_PERM");
       return true;
     }
   }

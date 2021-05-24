@@ -6,9 +6,7 @@ createCommand({
   aliases: ["leave"],
   guildOnly: true,
   async execute(message) {
-    const player = bot.lavadenoManager.players.get(
-      message.guildId.toString(),
-    );
+    const player = bot.lavadenoManager.players.get(message.guildId.toString());
 
     if (!player) {
       return message.reply(`The bot is not in any channel!`);

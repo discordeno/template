@@ -18,11 +18,7 @@ bot.inhibitors.set("cooldown", function (message, command) {
       const now = Date.now();
       if (cooldown.timestamp > now) {
         message.reply(
-          `You must wait **${
-            humanizeMilliseconds(
-              cooldown.timestamp - now,
-            )
-          }** before using this command again.`,
+          `You must wait **${humanizeMilliseconds(cooldown.timestamp - now)}** before using this command again.`
         );
         return true;
       } else {
