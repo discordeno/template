@@ -481,7 +481,7 @@ export async function createEmbedsButtonsPagination(
         type: 7,
         data: {
           embeds: [embeds[currentPage - 1]],
-          components: await createComponents(),
+          components: createComponents(),
         },
       }
     ).catch(log.error);
