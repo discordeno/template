@@ -470,7 +470,7 @@ export async function createEmbedsButtonsPagination(
       currentPage = 0;
     }
 
-    if (currentPage > embeds.length - 1) {
+    if (currentPage > embeds.length) {
       currentPage = embeds.length - 1;
     }
 
