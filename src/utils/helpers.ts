@@ -406,15 +406,8 @@ export async function createEmbedsButtonsPagination(
 
   if (embeds.length <= 1) return;
 
-  let isEnded = false;
-
-  while (!isEnded) {
-    if (!embedMessage) {
-      isEnded = true;
-      break;
-    }
-
-    const collectedButton = await needButton(authorId, embedMessage.channelId, {
+  while (true) {
+    const collectedButton = await needButton(authorId, messageId, {
       duration: buttonTimeout,
     });
 
@@ -470,27 +463,28 @@ export async function createEmbedsButtonsPagination(
         break;
       case "Delete":
         deleteMessage(channelId, embedMessage.id);
-        isEnded = true;
-        break;
+        return;
+    }
+    
+    if (currentPage < 0) {
+      currentPage = 0;
     }
 
-    if (
-      isEnded ||
-      !embedMessage ||
-      !(await sendInteractionResponse(
+    if (currentPage > embeds.length - 1) {
+      currentPage = embeds.length - 1;
+    }
+
+    await sendInteractionResponse(
         snowflakeToBigint(collectedButton.interaction.id),
         collectedButton.interaction.token,
         {
           type: 7,
           data: {
             embeds: [embeds[currentPage - 1]],
-            components: createComponents(),
+            components: await createComponents(),
           },
         }
-      ).catch(log.error))
-    ) {
-      return;
-    }
+    ).catch(log.error)
   }
 }
 
