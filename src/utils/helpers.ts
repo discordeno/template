@@ -17,7 +17,7 @@ import {
   sendInteractionResponse,
   sendMessage,
   snowflakeToBigint,
-  ws
+  ws,
 } from "../../deps.ts";
 import { ArgumentDefinition, Command } from "../types/commands.ts";
 import { needButton, needMessage, needReaction } from "./collectors.ts";
@@ -270,33 +270,33 @@ export async function createEmbedsPagination(
       deletePagination: () => void
     ) => Promise<unknown>;
   } = {
-      // deno-lint-ignore require-await
-      "◀️": async (setPage, currentPage) => setPage(Math.max(currentPage - 1, 1)),
-      "↗️": async (setPage) => {
-        const question = await sendMessage(
-          channelId,
-          "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
-        );
-        const answer = await needMessage(authorId, channelId);
-        await deleteMessages(channelId, [question.id, answer.id]).catch(log.error);
+    // deno-lint-ignore require-await
+    "◀️": async (setPage, currentPage) => setPage(Math.max(currentPage - 1, 1)),
+    "↗️": async (setPage) => {
+      const question = await sendMessage(
+        channelId,
+        "To what page would you like to jump? Say `cancel` or `0` to cancel the prompt."
+      );
+      const answer = await needMessage(authorId, channelId);
+      await deleteMessages(channelId, [question.id, answer.id]).catch(log.error);
 
-        const newPageNumber = Math.ceil(Number(answer.content));
+      const newPageNumber = Math.ceil(Number(answer.content));
 
-        if (isNaN(newPageNumber)) {
-          return await sendMessage(channelId, "This is not a valid number!");
-        }
+      if (isNaN(newPageNumber)) {
+        return await sendMessage(channelId, "This is not a valid number!");
+      }
 
-        if (newPageNumber < 1 || newPageNumber > embeds.length) {
-          return await sendMessage(channelId, `This is not a valid page!`);
-        }
+      if (newPageNumber < 1 || newPageNumber > embeds.length) {
+        return await sendMessage(channelId, `This is not a valid page!`);
+      }
 
-        setPage(newPageNumber);
-      },
-      // deno-lint-ignore require-await
-      "▶️": async (setPage, currentPage, pageCount) => setPage(Math.min(currentPage + 1, pageCount)),
-      // deno-lint-ignore require-await
-      "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) => deletePagination(),
-    }
+      setPage(newPageNumber);
+    },
+    // deno-lint-ignore require-await
+    "▶️": async (setPage, currentPage, pageCount) => setPage(Math.min(currentPage + 1, pageCount)),
+    // deno-lint-ignore require-await
+    "🗑️": async (_setPage, _currentPage, _pageCount, deletePagination) => deletePagination(),
+  }
 ) {
   if (embeds.length === 0) return;
 
@@ -465,7 +465,7 @@ export async function createEmbedsButtonsPagination(
         deleteMessage(channelId, embedMessage.id);
         return;
     }
-    
+
     if (currentPage < 0) {
       currentPage = 0;
     }
@@ -475,16 +475,16 @@ export async function createEmbedsButtonsPagination(
     }
 
     await sendInteractionResponse(
-        snowflakeToBigint(collectedButton.interaction.id),
-        collectedButton.interaction.token,
-        {
-          type: 7,
-          data: {
-            embeds: [embeds[currentPage - 1]],
-            components: await createComponents(),
-          },
-        }
-    ).catch(log.error)
+      snowflakeToBigint(collectedButton.interaction.id),
+      collectedButton.interaction.token,
+      {
+        type: 7,
+        data: {
+          embeds: [embeds[currentPage - 1]],
+          components: await createComponents(),
+        },
+      }
+    ).catch(log.error);
   }
 }
 
