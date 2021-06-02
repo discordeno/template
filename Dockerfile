@@ -1,5 +1,5 @@
-# Start from a base image which includes Deno (https://github.com/hayd/deno-docker)
-FROM hayd/deno:latest
+# Start from a base Deno image
+FROM denoland/deno:alpine
 
 # Create and move into /bot directory
 WORKDIR /bot
