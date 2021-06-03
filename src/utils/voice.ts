@@ -18,6 +18,12 @@ function execQueue(message: DiscordenoMessage, player: Player) {
 
   player.play(queue[0]);
 
+  // Handle if bot gets kicked from the voice channel
+  player.once("closed", async () => {
+    await bot.lavadenoManager.destroy(message.guildId.toString());
+    await message.send("I have been disconnected from the channel.");
+  });
+
   player.once("end", async () => {
     if (!bot.loopingMusics.has(message.guildId)) {
       bot.musicQueues.get(message.guildId)?.shift();
@@ -68,11 +74,11 @@ export async function addPlaylistToQueue(message: DiscordenoMessage, playlistNam
 export function validURL(str: string) {
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
+    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+    "(\\#[-a-z\\d_]*)?$",
     "i"
   ); // fragment locator
   return !!pattern.test(str);
