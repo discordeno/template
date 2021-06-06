@@ -1,5 +1,5 @@
-import { configs } from "../../configs.ts";
 import { bot } from "../../cache.ts";
+import { configs } from "../../configs.ts";
 import {
   bgBlack,
   bgGreen,
@@ -12,7 +12,7 @@ import {
   DiscordenoMessage,
   green,
   red,
-  white,
+  white
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 import { needMessage } from "../utils/collectors.ts";
@@ -26,6 +26,7 @@ export function parsePrefix(guildId: bigint | undefined) {
 }
 
 export function parseCommand(commandName: string) {
+  commandName = commandName.toLowerCase();
   const command = bot.commands.get(commandName);
   if (command) return command;
 
@@ -168,7 +169,7 @@ async function executeCommand(
     const [argument] = command.arguments || [];
     const subcommand = argument
       ? // deno-lint-ignore no-explicit-any
-        (args[argument.name] as Command<any>)
+      (args[argument.name] as Command<any>)
       : undefined;
 
     if (!argument || argument.type !== "subcommand" || !subcommand) {
