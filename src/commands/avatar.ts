@@ -31,7 +31,7 @@ createCommand({
         const targetUser = data.data?.resolved?.users?.[arg.value as string];
         if (!targetUser) return;
 
-        const url = avatarURL(snowflakeToBigint(targetUser.id), snowflakeToBigint(targetUser.discriminator), {
+        const url = avatarURL(snowflakeToBigint(targetUser.id), Number(targetUser.discriminator), {
           avatar: targetUser.avatar ?? undefined,
           size: 2048,
         });

@@ -12,7 +12,7 @@ import {
   DiscordenoMessage,
   green,
   red,
-  white
+  white,
 } from "../../deps.ts";
 import { Command } from "../types/commands.ts";
 import { needMessage } from "../utils/collectors.ts";
@@ -169,7 +169,7 @@ async function executeCommand(
     const [argument] = command.arguments || [];
     const subcommand = argument
       ? // deno-lint-ignore no-explicit-any
-      (args[argument.name] as Command<any>)
+        (args[argument.name] as Command<any>)
       : undefined;
 
     if (!argument || argument.type !== "subcommand" || !subcommand) {

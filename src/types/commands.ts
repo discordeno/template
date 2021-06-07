@@ -8,6 +8,7 @@ import {
   DiscordenoRole,
   Interaction,
   Permission,
+  SlashCommandInteraction,
 } from "../../deps.ts";
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
@@ -328,5 +329,5 @@ export interface DiscordenoSlashCommand {
   advanced?: boolean;
   /** The slash command options for this command. */
   options?: ApplicationCommandOption[];
-  execute: (data: Omit<Interaction, "member">, member?: DiscordenoMember) => unknown;
+  execute: (data: Omit<SlashCommandInteraction, "member">, member?: DiscordenoMember) => unknown;
 }

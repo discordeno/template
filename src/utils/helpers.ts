@@ -192,7 +192,7 @@ export function sendEmbed(channelId: bigint, embed: Embed, content?: string) {
 
 /** Use this function to edit an embed with ease. */
 export function editEmbed(message: DiscordenoMessage, embed: Embed, content?: string) {
-  return editMessage(message, { content, embed });
+  return editMessage(message.channelId, message.id, { content, embed });
 }
 
 // Very important to make sure files are reloaded properly

@@ -1,10 +1,10 @@
 import { bot } from "../../cache.ts";
 import {
   botId,
+  ComponentInteraction,
   DiscordenoMember,
   DiscordenoMessage,
   Emoji,
-  Interaction,
   snowflakeToBigint,
   structures,
 } from "../../deps.ts";
@@ -167,7 +167,7 @@ export function collectButtons(options: CollectButtonOptions): Promise<ButtonCol
   });
 }
 
-export async function processButtonCollectors(data: Omit<Interaction, "member">, member?: DiscordenoMember) {
+export async function processButtonCollectors(data: Omit<ComponentInteraction, "member">, member?: DiscordenoMember) {
   // All buttons will require a message
   if (!data.message) return;
 
