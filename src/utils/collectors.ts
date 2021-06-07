@@ -5,7 +5,6 @@ import {
   DiscordenoMember,
   DiscordenoMessage,
   Emoji,
-  Interaction,
   snowflakeToBigint,
   structures,
 } from "../../deps.ts";
