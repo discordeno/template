@@ -12,7 +12,7 @@ bot.eventHandlers.interactionCreate = function (data, member) {
   }
 
   // A BUTTON WAS CLICKED
-  if (data.type === DiscordInteractionTypes.Button) {
+  if (data.type === DiscordInteractionTypes.MessageComponent) {
     processButtonCollectors(data, member);
   }
 };
