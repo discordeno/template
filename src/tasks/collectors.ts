@@ -28,5 +28,15 @@ bot.tasks.set(`collectors`, {
       // Reject the promise so code can continue in commands.
       return collector.reject();
     });
+
+    bot.buttonCollectors.forEach((collector, key) => {
+      // This collector has not finished yet.
+      if (collector.createdAt + collector.duration > now) return;
+
+      // Remove the collector
+      bot.buttonCollectors.delete(key);
+      // Reject the promise so code can continue in commands.
+      return collector.reject();
+    });
   },
 });
