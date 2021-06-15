@@ -58,8 +58,6 @@ export async function loadLanguages() {
         await sendWebhook(
           snowflakeToBigint(configs.webhooks.missingTranslation.id),
           configs.webhooks.missingTranslation.token,
-          // deno-lint-ignore ban-ts-comment
-          // @ts-ignore
           { content: response }
         ).catch(log.error);
       },
