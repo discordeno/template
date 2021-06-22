@@ -15,7 +15,7 @@ export class Components extends Array<ActionRow> {
 
     this.push({
       type: 1,
-      components: ([] as unknown) as ActionRow["components"],
+      components: [] as unknown as ActionRow["components"],
     });
     return this;
   }
