@@ -1,14 +1,9 @@
-import {
-  ActionRow,
-  ButtonStyles,
-  DiscordMessageComponentTypes,
-} from "../../deps.ts";
+import { ActionRow, ButtonStyles, DiscordMessageComponentTypes } from "../../deps.ts";
 
 const snowflakeRegex = /[0-9]{17,19}/;
 
-export class Components
-  extends Array<{ type: 1; components: ActionRow["components"] }> {
-  constructor(...args: { type: 1; components: ActionRow["components"] }[]) {
+export class Components extends Array<ActionRow> {
+  constructor(...args: ActionRow[]) {
     super(...args);
 
     return this;
@@ -29,7 +24,7 @@ export class Components
     label: string,
     style: keyof typeof ButtonStyles,
     idOrLink: string,
-    options?: { emoji?: string | bigint; disabled?: boolean },
+    options?: { emoji?: string | bigint; disabled?: boolean }
   ) {
     // No Action Row has been created so do it
     if (!this.length) this.addActionRow();
