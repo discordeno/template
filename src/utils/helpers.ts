@@ -531,7 +531,7 @@ export function calculateShardId(guildId: bigint) {
 
 /**
  * Creates a discord timestamp formatted string
- * @param date date to be used
+ * @param date unix timestamp or date to be used
  * @param format format of the timestamp
  * @returns { string }
  * **Formats**:
