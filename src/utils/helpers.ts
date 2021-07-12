@@ -570,9 +570,6 @@ export function dateToDiscordTimestamp(
     case "r":
       realFormat = "R";
       break;
-    default:
-      realFormat = undefined;
-      break;
   }
 
   const value = date instanceof Date ? Math.floor(date.getTime() / 1000) : date;
