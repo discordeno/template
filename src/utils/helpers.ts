@@ -543,7 +543,10 @@ export function calculateShardId(guildId: bigint) {
  * **ldt** - Tuesday, 20 April 2021 16:20
  * **r** - 	2 months ago
  */
-export function dateToDiscordTimestamp(date: Date, format: "st" | "lt" | "sd" | "ld" | "sdt" | "ldt" | "r"): string {
+export function dateToDiscordTimestamp(
+  date: Date | number,
+  format?: "st" | "lt" | "sd" | "ld" | "sdt" | "ldt" | "r"
+): string {
   let realFormat;
   switch (format) {
     case "st":
@@ -567,6 +570,12 @@ export function dateToDiscordTimestamp(date: Date, format: "st" | "lt" | "sd" | 
     case "r":
       realFormat = "R";
       break;
+    default:
+      realFormat = undefined;
+      break;
   }
-  return `<t:${Math.floor(date.getTime() / 1000)}:${realFormat}>`;
+
+  const value = date instanceof Date ? Math.floor(date.getTime() / 1000) : date;
+
+  return `<t:${value}${realFormat ? `:${realFormat}` : ""}>`;
 }
