@@ -529,11 +529,23 @@ export function calculateShardId(guildId: bigint) {
   return Number((guildId >> 22n) % BigInt(ws.maxShards - 1));
 }
 
+export const DISCORD_TIME_FORMATS = {
+  "Short Time": "t",
+  "Long Time": "T",
+  "Short Date": "d",
+  "Long Date": "D",
+  "Short Date/Time": "f*",
+  "Long Date/Time": "F",
+  "Relative Time": "R",
+};
+
+export type DISCORD_TIME_TYPES = keyof typeof DISCORD_TIME_FORMATS;
+
 /**
- * Creates a discord timestamp formatted string
- * @param date unix timestamp or date to be used
- * @param format format of the timestamp
- * @returns { string }
+ * Creates a discord timestamp formatted string.
+ *
+ * `Date` can be unix timestamp (`number`) or `Date`
+ *
  * **Formats**:
  * **st** - 16:20
  * **lt** - 16:20:30
@@ -543,36 +555,9 @@ export function calculateShardId(guildId: bigint) {
  * **ldt** - Tuesday, 20 April 2021 16:20
  * **r** - 	2 months ago
  */
-export function dateToDiscordTimestamp(
-  date: Date | number,
-  format?: "st" | "lt" | "sd" | "ld" | "sdt" | "ldt" | "r"
-): string {
-  let realFormat;
-  switch (format) {
-    case "st":
-      realFormat = "t";
-      break;
-    case "lt":
-      realFormat = "T";
-      break;
-    case "sd":
-      realFormat = "d";
-      break;
-    case "ld":
-      realFormat = "D";
-      break;
-    case "sdt":
-      realFormat = "f";
-      break;
-    case "ldt":
-      realFormat = "F";
-      break;
-    case "r":
-      realFormat = "R";
-      break;
-  }
 
+export function dateToDiscordTimestamp(date: Date | number, format?: DISCORD_TIME_TYPES): string {
   const value = date instanceof Date ? Math.floor(date.getTime() / 1000) : date;
 
-  return `<t:${value}${realFormat ? `:${realFormat}` : ""}>`;
+  return `<t:${value}${format ? `:${DISCORD_TIME_FORMATS[format]}` : ""}>`;
 }
