@@ -560,7 +560,7 @@ export type DISCORD_TIME_TYPES = keyof typeof DISCORD_TIME_FORMATS;
  *
  * **Long Date/Time** - Tuesday, 20 April 2021 16:20
  *
- * **Relative Time** - 	2 months ago
+ * **Relative Time** - 2 months ago
  */
 
 export function dateToDiscordTimestamp(date: Date | number, format?: DISCORD_TIME_TYPES): string {
