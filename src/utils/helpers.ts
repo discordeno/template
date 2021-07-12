@@ -528,3 +528,45 @@ export function calculateShardId(guildId: bigint) {
 
   return Number((guildId >> 22n) % BigInt(ws.maxShards - 1));
 }
+
+/**
+ * Creates a discord timestamp formatted string
+ * @param date date to be used
+ * @param format format of the timestamp
+ * @returns { string }
+ * **Formats**:
+ * **st** - 16:20
+ * **lt** - 16:20:30
+ * **sd** - 20/04/2021
+ * **ld** - 20 April 2021
+ * **sdt** - 20 April 2021 16:20
+ * **ldt** - Tuesday, 20 April 2021 16:20
+ * **r** - 	2 months ago
+ */
+export function dateToDiscordTimestamp(date: Date, format: "st" | "lt" | "sd" | "ld" | "sdt" | "ldt" | "r"): string {
+  let realFormat;
+  switch (format) {
+    case "st":
+      realFormat = "t";
+      break;
+    case "lt":
+      realFormat = "T";
+      break;
+    case "sd":
+      realFormat = "d";
+      break;
+    case "ld":
+      realFormat = "D";
+      break;
+    case "sdt":
+      realFormat = "f";
+      break;
+    case "ldt":
+      realFormat = "F";
+      break;
+    case "r":
+      realFormat = "R";
+      break;
+  }
+  return `<t:${Math.floor(date.getTime() / 1000)}:${realFormat}>`;
+}
