@@ -547,13 +547,20 @@ export type DISCORD_TIME_TYPES = keyof typeof DISCORD_TIME_FORMATS;
  * `Date` can be unix timestamp (`number`) or `Date`
  *
  * **Formats**:
- * **st** - 16:20
- * **lt** - 16:20:30
- * **sd** - 20/04/2021
- * **ld** - 20 April 2021
- * **sdt** - 20 April 2021 16:20
- * **ldt** - Tuesday, 20 April 2021 16:20
- * **r** - 	2 months ago
+ *
+ * **Short Time** - 16:20
+ *
+ * **Long Time** - 16:20:30
+ *
+ * **Short Date** - 20/04/2021
+ *
+ * **Long Date** - 20 April 2021
+ *
+ * **Short Date/Time** - 20 April 2021 16:20
+ *
+ * **Long Date/Time** - Tuesday, 20 April 2021 16:20
+ *
+ * **Relative Time** - 	2 months ago
  */
 
 export function dateToDiscordTimestamp(date: Date | number, format?: DISCORD_TIME_TYPES): string {
