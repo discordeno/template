@@ -528,3 +528,43 @@ export function calculateShardId(guildId: bigint) {
 
   return Number((guildId >> 22n) % BigInt(ws.maxShards - 1));
 }
+
+export const DISCORD_TIME_FORMATS = {
+  "Short Time": "t",
+  "Long Time": "T",
+  "Short Date": "d",
+  "Long Date": "D",
+  "Short Date/Time": "f*",
+  "Long Date/Time": "F",
+  "Relative Time": "R",
+};
+
+export type DISCORD_TIME_TYPES = keyof typeof DISCORD_TIME_FORMATS;
+
+/**
+ * Creates a discord timestamp formatted string.
+ *
+ * `Date` can be unix timestamp (`number`) or `Date`
+ *
+ * **Formats**:
+ *
+ * **Short Time** - 16:20
+ *
+ * **Long Time** - 16:20:30
+ *
+ * **Short Date** - 20/04/2021
+ *
+ * **Long Date** - 20 April 2021
+ *
+ * **Short Date/Time** - 20 April 2021 16:20
+ *
+ * **Long Date/Time** - Tuesday, 20 April 2021 16:20
+ *
+ * **Relative Time** - 2 months ago
+ */
+
+export function dateToDiscordTimestamp(date: Date | number, format?: DISCORD_TIME_TYPES): string {
+  const value = date instanceof Date ? Math.floor(date.getTime() / 1000) : date;
+
+  return `<t:${value}${format ? `:${DISCORD_TIME_FORMATS[format]}` : ""}>`;
+}
