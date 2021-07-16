@@ -23,7 +23,7 @@ bot.arguments.set("guildtextchannel", {
       ? cache.channels.get(snowflakeToBigint(channelIdOrName))
       : cache.channels.find((channel) => channel.name === channelIdOrName && channel.guildId === guild.id);
 
-    if (!channel?.type || !textChannelTypes.includes(channel.type)) {
+    if (channel?.type === undefined || !textChannelTypes.includes(channel.type)) {
       return;
     }
 
