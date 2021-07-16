@@ -29,11 +29,11 @@ export const configs = {
   userIds: {
     // You can delete the `as string[]` when you add atleast 1 id in them.
     // The user ids for the support team
-    botSupporters: [] as string[],
+    botSupporters: [] as bigint[],
     // The user ids for the other devs on your team
-    botDevs: [] as string[],
+    botDevs: [] as bigint[],
     // The user ids who have complete 100% access to your bot
-    botOwners: [] as string[],
+    botOwners: [] as bigint[],
   },
   webhooks: {
     // the webhook to use when the bot finds a missing translation
