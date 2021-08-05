@@ -534,7 +534,7 @@ export const DISCORD_TIME_FORMATS = {
   "Long Time": "T",
   "Short Date": "d",
   "Long Date": "D",
-  "Short Date/Time": "f*",
+  "Short Date/Time": "f",
   "Long Date/Time": "F",
   "Relative Time": "R",
 };
@@ -552,7 +552,7 @@ export type DISCORD_TIME_TYPES = keyof typeof DISCORD_TIME_FORMATS;
  *
  * **Long Time** - 16:20:30
  *
- * **Short Date** - 20/04/2021
+ * **Short Date** - 20/04/2021 ( Default format )
  *
  * **Long Date** - 20 April 2021
  *
