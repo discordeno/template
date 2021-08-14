@@ -1,19 +1,6 @@
 import { configs } from "./configs.ts";
-import {
-  botId,
-  cache,
-  Collection,
-  DiscordenoMessage,
-  Manager,
-  snowflakeToBigint,
-  Track,
-  ws,
-} from "./deps.ts";
-import {
-  ButtonCollector,
-  MessageCollector,
-  ReactionCollector,
-} from "./src/types/collectors.ts";
+import { cache, Collection, DiscordenoMessage, Manager, snowflakeToBigint, Track, ws } from "./deps.ts";
+import { ButtonCollector, MessageCollector, ReactionCollector } from "./src/types/collectors.ts";
 import { Argument, Command, PermissionLevels } from "./src/types/commands.ts";
 import { CustomEvents } from "./src/types/events.ts";
 import { Monitor } from "./src/types/monitors.ts";
@@ -38,7 +25,7 @@ export const bot = {
     (
       message: DiscordenoMessage,
       // deno-lint-ignore no-explicit-any
-      command: Command<any>,
+      command: Command<any>
     ) => Promise<boolean> | boolean
   >(),
   monitors: new Collection<string, Monitor>(),
@@ -47,12 +34,11 @@ export const bot = {
     (
       message: DiscordenoMessage,
       // deno-lint-ignore no-explicit-any
-      command: Command<any>,
+      command: Command<any>
     ) => Promise<boolean> | boolean
   >(),
   tasks: new Collection<string, Task>(),
   runningTasks: { initialTimeouts: [] as number[], intervals: [] as number[] },
-  memberLastActive: new Collection<bigint, number>(),
   musicQueues: new Collection<bigint, Track[]>(),
   loopingMusics: new Collection<bigint, boolean>(),
   lavadenoManager: new Manager(configs.nodes, {
