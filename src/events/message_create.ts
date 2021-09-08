@@ -11,8 +11,6 @@ import { fetchMember } from "../utils/helpers.ts";
 
 // deno-lint-ignore require-await
 bot.eventHandlers.messageCreate = async function (message) {
-  bot.memberLastActive.set(message.authorId, message.timestamp);
-
   bot.monitors.forEach(async (monitor) => {
     // The !== false is important because when not provided we default to true
     if (monitor.ignoreBots !== false && message.isBot) return;
