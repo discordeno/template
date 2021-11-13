@@ -1,0 +1,5 @@
+{
+  "MISSING_REQUIRED_ARG": "Chybí argument **{{name}}**, který je v tomto příkazu vyžadován. Zahrň prosím příště **{{type}}**.",
+  "NEED_VALID_ROLE": "Nebyla nalezena platná role se jménem **{{name}}**.",
+  "POSSIBLE_ROLES": "Pár rolí, které by jsi mohl chtít použít, bylo nalezeno. Níže jsou vypsané jména a id těcho rolí. Zkus použit id role, kterou chceš použít."
+}
