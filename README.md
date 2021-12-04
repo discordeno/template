@@ -40,14 +40,14 @@ export const configs = {
     BOTS_FOR_DISCORD: "",
     DISCORD_BOATS: "",
     DISCORD_BOTS_GG: "",
-    DISCORD_BOTS_GROUP: "",
+    DISCORD_BOTS_GROUP: ""
   },
   // This is the server id for your bot's main server where users can get help/support
   supportServerId: "",
   // These are the role ids that will enable some functionality.
   roleIds: {
     // If you have a patreon set up you can add the patreon vip role id here.
-    patreonVIPRoleId: "",
+    patreonVIPRoleId: ""
   },
   // These are the user ids that will enable some functionality.
   userIds: {
@@ -57,15 +57,15 @@ export const configs = {
     // The user ids for the other devs on your team
     botDevs: [] as string[],
     // The user ids who have complete 100% access to your bot
-    botOwners: [] as string[],
+    botOwners: [] as string[]
   },
   webhooks: {
     // the webhook to use when the bot finds a missing translation
     missingTranslation: {
       id: "",
-      token: "",
-    },
-  },
+      token: ""
+    }
+  }
 };
 ```
 
