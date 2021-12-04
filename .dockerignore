@@ -1,4 +1,4 @@
 .git
-configs.ts
+.env
 db
 fileloader.ts
