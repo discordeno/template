@@ -6,5 +6,10 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
     "source.fixAll": true
-  }
+  },
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true
+  },
+  "discord.enabled": true,
+  "cSpell.words": ["Discordeno"]
 }
