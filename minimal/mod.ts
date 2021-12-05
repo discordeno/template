@@ -1,4 +1,4 @@
-import { fastFileLoader, createBot, startBot } from "./deps.ts";
+import { fastFileLoader, createBot, ActivityTypes, startBot } from "./deps.ts";
 import { BOT_TOKEN, BOT_ID } from "./configs.ts";
 import { logger } from "./src/utils/logger.ts";
 import { events } from "./src/events/mod.ts";
@@ -20,5 +20,16 @@ const bot = createBot({
   intents: [],
   events
 });
+
+bot.gateway.presence = {
+  status: "online",
+  activities: [
+    {
+      name: "Discordeno is Best Lib",
+      type: ActivityTypes.Game,
+      createdAt: Date.now()
+    }
+  ]
+};
 
 startBot(bot);
