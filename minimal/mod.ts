@@ -2,14 +2,13 @@ import { fastFileLoader, createBot, startBot } from "./deps.ts";
 import { BOT_TOKEN, BOT_ID } from "./configs.ts";
 import { logger } from "./src/utils/logger.ts";
 import { events } from "./src/events/mod.ts";
-// import "./fileloader.ts";
 
 const log = logger({ name: "Main" });
 
 log.info("Starting Bot, this might take a while...");
 
 const paths = ["./src/events", "./src/commands"];
-await fastFileLoader(paths).then(undefined, (err) => {
+await fastFileLoader(paths).catch((err) => {
   log.fatal(`Unable to Import ${paths}`);
   log.fatal(err);
   Deno.exit(1);
