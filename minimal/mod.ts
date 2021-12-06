@@ -15,7 +15,7 @@ await fastFileLoader(paths).catch((err) => {
   Deno.exit(1);
 });
 
-const bot = enableCachePlugin(
+export const bot = enableCachePlugin(
   createBot({
     token: BOT_TOKEN,
     botId: BOT_ID,
