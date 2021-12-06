@@ -14,7 +14,6 @@ export type subCommandGroup = {
 };
 export interface Command {
   name: string;
-  aliases?: string[];
   description: string;
   usage?: string[];
   options?: ApplicationCommandOption[];
