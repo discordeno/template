@@ -1,7 +1,8 @@
-import { fastFileLoader, createBot, ActivityTypes, startBot } from "./deps.ts";
+import { fastFileLoader, enableCachePlugin, createBot, enableCacheSweepers, ActivityTypes, startBot } from "./deps.ts";
 import { BOT_TOKEN, BOT_ID } from "./configs.ts";
 import { logger } from "./src/utils/logger.ts";
 import { events } from "./src/events/mod.ts";
+import { updateCommands } from "./src/utils/helpers.ts";
 
 const log = logger({ name: "Main" });
 
@@ -14,12 +15,16 @@ await fastFileLoader(paths).catch((err) => {
   Deno.exit(1);
 });
 
-const bot = createBot({
-  token: BOT_TOKEN,
-  botId: BOT_ID,
-  intents: [],
-  events
-});
+const bot = enableCachePlugin(
+  createBot({
+    token: BOT_TOKEN,
+    botId: BOT_ID,
+    intents: [],
+    events
+  })
+);
+
+enableCacheSweepers(bot);
 
 bot.gateway.presence = {
   status: "online",
@@ -33,3 +38,5 @@ bot.gateway.presence = {
 };
 
 startBot(bot);
+
+updateCommands(bot);
