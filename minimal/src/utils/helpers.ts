@@ -4,7 +4,8 @@ import {
   EditGlobalApplicationCommand,
   upsertApplicationCommands,
   Bot,
-  DiscordenoGuild
+  DiscordenoGuild,
+  getGuild
 } from "../../deps.ts";
 import { logger } from "./logger.ts";
 import { commands } from "../commands/mod.ts";
@@ -49,14 +50,14 @@ export async function updateCommands(bot: BotWithCache, scope?: "Guild" | "Globa
   }
 
   if (perGuildCommands.length && (scope === "Guild" || scope === undefined)) {
-    bot.guilds.forEach((guild) => {
-      upsertApplicationCommands(bot, perGuildCommands, guild.id);
+    await bot.guilds.forEach(async (guild) => {
+      await upsertApplicationCommands(bot, perGuildCommands, guild.id);
     });
   }
 }
 
 /** Update commands for a guild */
-export function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
+export async function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
   const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
 
   for (const command of commands.values()) {
@@ -73,6 +74,23 @@ export function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
   }
 
   if (perGuildCommands.length) {
-    upsertApplicationCommands(bot, perGuildCommands, guild.id);
+    await upsertApplicationCommands(bot, perGuildCommands, guild.id);
   }
+}
+
+export async function getGuildFromId(bot: BotWithCache, guildId: bigint): Promise<DiscordenoGuild> {
+  let returnValue: DiscordenoGuild = {} as DiscordenoGuild;
+
+  if (guildId !== 0n) {
+    if (bot.guilds.get(guildId)) {
+      returnValue = bot.guilds.get(guildId) as DiscordenoGuild;
+    }
+
+    await getGuild(bot, guildId).then((guild) => {
+      bot.guilds.set(guildId, guild);
+      returnValue = guild;
+    });
+  }
+
+  return returnValue;
 }
