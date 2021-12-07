@@ -94,3 +94,25 @@ export async function getGuildFromId(bot: BotWithCache, guildId: bigint): Promis
 
   return returnValue;
 }
+
+export function snowflakeToTimestamp(id: bigint) {
+  return Number(id / 4194304n + 1420070400000n);
+}
+
+export function humanizeMilliseconds(milliseconds: number) {
+  // Gets ms into seconds
+  const time = milliseconds / 1000;
+  if (time < 1) return "1s";
+
+  const days = Math.floor(time / 86400);
+  const hours = Math.floor((time % 86400) / 3600);
+  const minutes = Math.floor(((time % 86400) % 3600) / 60);
+  const seconds = Math.floor(((time % 86400) % 3600) % 60);
+
+  const dayString = days ? `${days}d ` : "";
+  const hourString = hours ? `${hours}h ` : "";
+  const minuteString = minutes ? `${minutes}m ` : "";
+  const secondString = seconds ? `${seconds}s ` : "";
+
+  return `${dayString}${hourString}${minuteString}${secondString}`;
+}

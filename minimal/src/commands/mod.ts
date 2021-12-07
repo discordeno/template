@@ -1,7 +1,6 @@
 import {
   Collection,
   Bot,
-  DiscordenoMessage,
   DiscordenoInteraction,
   ApplicationCommandOption,
   ApplicationCommandTypes
@@ -20,7 +19,7 @@ export interface Command {
   type: ApplicationCommandTypes;
   /** Defaults to `Guild` */
   scope?: "Global" | "Guild";
-  execute: (bot: Bot, message: DiscordenoMessage, interaction: DiscordenoInteraction) => unknown;
+  execute: (bot: Bot, interaction: DiscordenoInteraction) => unknown;
   subcommands?: Array<subCommandGroup | subCommand>;
 }
 
