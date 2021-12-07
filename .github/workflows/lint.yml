@@ -1,0 +1,10 @@
+name: Lint
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: denoland/setup-deno@main
+      - name: Run lint script
+        run: deno lint src/** --unstable --ignore=./src/types
