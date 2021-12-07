@@ -11,5 +11,5 @@
     "https://deno.land": true
   },
   "discord.enabled": true,
-  "cSpell.words": ["Discordeno", "Loglevels", "upsert"]
+  "cSpell.words": ["Discordeno", "Loglevels", "Slowmode", "upsert"]
 }
