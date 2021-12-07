@@ -7,4 +7,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: denoland/setup-deno@main
       - name: Run lint script
-        run: deno lint src/** --unstable --ignore=./src/types
+        run: deno lint src/** --unstable
