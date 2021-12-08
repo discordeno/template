@@ -2,6 +2,7 @@ import { createBot, fastFileLoader, startBot } from "./deps.ts";
 import { configs } from "./configs.ts";
 import { logger } from "./src/utils/logger.ts";
 import { customCache } from "./src/cache.ts";
+// import { sentenceCaseAString } from "./src/utils/helpers.ts";
 
 const log = logger({ name: "Main" });
 
@@ -15,7 +16,15 @@ const paths = [
 ];
 
 await fastFileLoader(paths, (path) => {
-  log.info(`Importing: ${path.split("/")[path.split("/").length - 1]}`);
+  log.info(
+    `Importing: ${
+      // Output a captialized version of the directory that is being imported.
+      path.split("/")[path.split("/").length - 1].toLowerCase().replace(
+        /\w\S*/g,
+        (w) => (w.replace(/^\w/, (c) => c.toUpperCase())),
+      )
+    }`,
+  );
 }, () => {
   log.info(`Finishing Imports`);
 }).then(() => {
