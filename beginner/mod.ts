@@ -18,7 +18,7 @@ const paths = [
 await fastFileLoader(paths, (path) => {
   log.info(
     `Importing: ${
-      // Output a captialized version of the directory that is being imported.
+      // Output a capitalized version of the directory that is being imported.
       path.split("/")[path.split("/").length - 1].toLowerCase().replace(
         /\w\S*/g,
         (w) => (w.replace(/^\w/, (c) => c.toUpperCase())),
