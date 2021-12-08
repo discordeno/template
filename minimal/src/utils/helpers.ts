@@ -5,10 +5,11 @@ import {
   upsertApplicationCommands,
   Bot,
   DiscordenoGuild,
-  getGuild
+  getGuild,
 } from "../../deps.ts";
 import { logger } from "./logger.ts";
 import { commands } from "../commands/mod.ts";
+import { subCommand, subCommandGroup } from "../commands/mod.ts";
 
 const log = logger({ name: "Helpers" });
 
@@ -24,14 +25,14 @@ export async function updateCommands(bot: BotWithCache, scope?: "Guild" | "Globa
           name: command.name,
           description: command.description,
           type: command.type,
-          options: command.options ? command.options : undefined
+          options: command.options ? command.options : undefined,
         });
       } else if (command.scope === "Global") {
         globalCommands.push({
           name: command.name,
           description: command.description,
           type: command.type,
-          options: command.options ? command.options : undefined
+          options: command.options ? command.options : undefined,
         });
       }
     } else {
@@ -39,7 +40,7 @@ export async function updateCommands(bot: BotWithCache, scope?: "Guild" | "Globa
         name: command.name,
         description: command.description,
         type: command.type,
-        options: command.options ? command.options : undefined
+        options: command.options ? command.options : undefined,
       });
     }
   }
@@ -67,7 +68,7 @@ export async function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
           name: command.name,
           description: command.description,
           type: command.type,
-          options: command.options ? command.options : undefined
+          options: command.options ? command.options : undefined,
         });
       }
     }
@@ -115,4 +116,12 @@ export function humanizeMilliseconds(milliseconds: number) {
   const secondString = seconds ? `${seconds}s ` : "";
 
   return `${dayString}${hourString}${minuteString}${secondString}`;
+}
+
+export function isSubCommand(data: subCommand | subCommandGroup): data is subCommand {
+  return !Reflect.has(data, "subCommands");
+}
+
+export function isSubCommandGroup(data: subCommand | subCommandGroup): data is subCommandGroup {
+  return Reflect.has(data, "subCommands");
 }
