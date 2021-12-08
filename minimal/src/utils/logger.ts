@@ -6,7 +6,7 @@ export enum Loglevels {
   Info,
   Warn,
   Error,
-  Fatal
+  Fatal,
 }
 
 const prefixes = new Map<Loglevels, string>([
@@ -14,7 +14,7 @@ const prefixes = new Map<Loglevels, string>([
   [Loglevels.Info, "INFO"],
   [Loglevels.Warn, "WARN"],
   [Loglevels.Error, "ERROR"],
-  [Loglevels.Fatal, "FATAL"]
+  [Loglevels.Fatal, "FATAL"],
 ]);
 
 const noColor: (str: string) => string = (msg) => msg;
@@ -23,12 +23,12 @@ const colorFunctions = new Map<Loglevels, (str: string) => string>([
   [Loglevels.Info, cyan],
   [Loglevels.Warn, yellow],
   [Loglevels.Error, (str: string) => red(str)],
-  [Loglevels.Fatal, (str: string) => red(bold(italic(str)))]
+  [Loglevels.Fatal, (str: string) => red(bold(italic(str)))],
 ]);
 
 export function logger({
   logLevel = Loglevels.Info,
-  name
+  name,
 }: {
   logLevel?: Loglevels;
   name?: string;
@@ -44,7 +44,7 @@ export function logger({
       `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}]`,
       color(prefixes.get(level) || "DEBUG"),
       name ? `${name} >` : ">",
-      ...args
+      ...args,
     ];
 
     switch (level) {
@@ -94,7 +94,7 @@ export function logger({
     info,
     warn,
     error,
-    fatal
+    fatal,
   };
 }
 

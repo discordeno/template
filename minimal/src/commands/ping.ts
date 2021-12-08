@@ -1,5 +1,11 @@
-import { ApplicationCommandTypes, InteractionResponseTypes } from "../../deps.ts";
-import { humanizeMilliseconds, snowflakeToTimestamp } from "../utils/helpers.ts";
+import {
+  ApplicationCommandTypes,
+  InteractionResponseTypes,
+} from "../../deps.ts";
+import {
+  humanizeMilliseconds,
+  snowflakeToTimestamp,
+} from "../utils/helpers.ts";
 import { createCommand } from "./mod.ts";
 
 createCommand({
@@ -9,11 +15,15 @@ createCommand({
   scope: "Global",
   execute: async (bot, interaction) => {
     const ping = Date.now() - snowflakeToTimestamp(interaction.id);
-    await bot.helpers.sendInteractionResponse(interaction.id, interaction.token, {
-      type: InteractionResponseTypes.ChannelMessageWithSource,
-      data: {
-        content: `🏓 Pong! Ping ${ping}ms (${humanizeMilliseconds(ping)})`
-      }
-    });
-  }
+    await bot.helpers.sendInteractionResponse(
+      interaction.id,
+      interaction.token,
+      {
+        type: InteractionResponseTypes.ChannelMessageWithSource,
+        data: {
+          content: `🏓 Pong! Ping ${ping}ms (${humanizeMilliseconds(ping)})`,
+        },
+      },
+    );
+  },
 });

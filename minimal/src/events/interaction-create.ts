@@ -1,19 +1,23 @@
 import {
+  ApplicationCommandOptionTypes,
   bgBlack,
   bgYellow,
   black,
-  white,
-  yellow,
-  green,
-  red,
   BotWithCache,
   DiscordenoGuild,
-  ApplicationCommandOptionTypes
+  green,
+  red,
+  white,
+  yellow,
 } from "../../deps.ts";
 import { events } from "./mod.ts";
 import { logger } from "../utils/logger.ts";
-import { getGuildFromId, isSubCommand, isSubCommandGroup } from "../utils/helpers.ts";
-import { commands, Command } from "../commands/mod.ts";
+import {
+  getGuildFromId,
+  isSubCommand,
+  isSubCommandGroup,
+} from "../utils/helpers.ts";
+import { Command, commands } from "../commands/mod.ts";
 
 const log = logger({ name: "Event: InteractionCreate" });
 
@@ -26,9 +30,11 @@ events.interactionCreate = async (rawBot, interaction) => {
 
     // Set guild, if there was an error getting the guild, then just say it was a DM. (What else are we going to do?)
     if (interaction.guildId) {
-      const guildOrVoid = await getGuildFromId(bot, interaction.guildId).catch((err) => {
-        log.error(err);
-      });
+      const guildOrVoid = await getGuildFromId(bot, interaction.guildId).catch(
+        (err) => {
+          log.error(err);
+        },
+      );
       if (guildOrVoid) {
         guild = guildOrVoid;
         guildName = guild.name;
@@ -36,12 +42,16 @@ events.interactionCreate = async (rawBot, interaction) => {
     }
 
     log.info(
-      `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${bgBlack(white(`Trigger`))}] by ${
-        interaction.user.username
-      }#${interaction.user.discriminator} in ${guildName}${guildName !== "Direct Message" ? ` (${guild.id})` : ``}`
+      `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${
+        bgBlack(white(`Trigger`))
+      }] by ${interaction.user.username}#${interaction.user.discriminator} in ${guildName}${
+        guildName !== "Direct Message" ? ` (${guild.id})` : ``
+      }`,
     );
 
-    let command: undefined | Command = interaction.data.name ? commands.get(interaction.data.name) : undefined;
+    let command: undefined | Command = interaction.data.name
+      ? commands.get(interaction.data.name)
+      : undefined;
     let commandName = command?.name;
 
     if (command !== undefined) {
@@ -55,7 +65,7 @@ events.interactionCreate = async (rawBot, interaction) => {
 
             // Try to find the subcommand group
             const subCommandGroup = command.subcommands?.find(
-              (command) => command.name == interaction.data?.options?.[0].name
+              (command) => command.name == interaction.data?.options?.[0].name,
             );
             if (!subCommandGroup) return;
 
@@ -63,11 +73,14 @@ events.interactionCreate = async (rawBot, interaction) => {
 
             // Get name of the command which we are looking for
             const targetCmdName =
-              interaction.data.options?.[0].options?.[0].name || interaction.data.options?.[0].options?.[0].name;
+              interaction.data.options?.[0].options?.[0].name ||
+              interaction.data.options?.[0].options?.[0].name;
             if (!targetCmdName) return;
 
             // Try to find the command
-            command = subCommandGroup.subCommands.find((c) => c.name === targetCmdName);
+            command = subCommandGroup.subCommands.find((c) =>
+              c.name === targetCmdName
+            );
 
             commandName += ` ${subCommandGroup.name} ${command?.name}`;
 
@@ -79,7 +92,9 @@ events.interactionCreate = async (rawBot, interaction) => {
             if (!command?.subcommands) return;
 
             // Try to find the command
-            const found = command.subcommands.find((command) => command.name == interaction.data?.options?.[0].name);
+            const found = command.subcommands.find((command) =>
+              command.name == interaction.data?.options?.[0].name
+            );
             if (!found) return;
 
             if (isSubCommandGroup(found)) return;
@@ -93,30 +108,32 @@ events.interactionCreate = async (rawBot, interaction) => {
           if (command) {
             command.execute(rawBot, interaction);
             log.info(
-              `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${bgBlack(green(`Success`))}] by ${
-                interaction.user.username
-              }#${interaction.user.discriminator} in ${guildName}${
+              `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${
+                bgBlack(green(`Success`))
+              }] by ${interaction.user.username}#${interaction.user.discriminator} in ${guildName}${
                 guildName !== "Direct Message" ? ` (${guild.id})` : ``
-              }`
+              }`,
             );
           } else {
             throw "";
           }
         } catch (err) {
           log.error(
-            `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${bgBlack(red(`Error`))}] by ${
-              interaction.user.username
-            }#${interaction.user.discriminator} in ${guildName}${
+            `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${
+              bgBlack(red(`Error`))
+            }] by ${interaction.user.username}#${interaction.user.discriminator} in ${guildName}${
               guildName !== "Direct Message" ? ` (${guild.id})` : ``
-            }`
+            }`,
           );
           err.length ? log.error(err) : undefined;
         }
       } else {
         log.warn(
-          `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${bgBlack(yellow(`Not Found`))}] by ${
-            interaction.user.username
-          }#${interaction.user.discriminator} in ${guildName}${guildName !== "Direct Message" ? ` (${guild.id})` : ``}`
+          `[Command: ${bgYellow(black(String(interaction.data.name)))} - ${
+            bgBlack(yellow(`Not Found`))
+          }] by ${interaction.user.username}#${interaction.user.discriminator} in ${guildName}${
+            guildName !== "Direct Message" ? ` (${guild.id})` : ``
+          }`,
         );
       }
     }

@@ -1,11 +1,11 @@
 import {
-  BotWithCache,
-  MakeRequired,
-  EditGlobalApplicationCommand,
-  upsertApplicationCommands,
   Bot,
+  BotWithCache,
   DiscordenoGuild,
+  EditGlobalApplicationCommand,
   getGuild,
+  MakeRequired,
+  upsertApplicationCommands,
 } from "../../deps.ts";
 import { logger } from "./logger.ts";
 import { commands } from "../commands/mod.ts";
@@ -14,9 +14,14 @@ import { subCommand, subCommandGroup } from "../commands/mod.ts";
 const log = logger({ name: "Helpers" });
 
 /** This function will update all commands, or the defined scope */
-export async function updateCommands(bot: BotWithCache, scope?: "Guild" | "Global") {
-  const globalCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
-  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
+export async function updateCommands(
+  bot: BotWithCache,
+  scope?: "Guild" | "Global",
+) {
+  const globalCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
+    [];
+  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
+    [];
 
   for (const command of commands.values()) {
     if (command.scope) {
@@ -46,8 +51,12 @@ export async function updateCommands(bot: BotWithCache, scope?: "Guild" | "Globa
   }
 
   if (globalCommands.length && (scope === "Global" || scope === undefined)) {
-    log.info("Updating Global Commands, this takes up to 1 hour to take effect...");
-    await bot.helpers.upsertApplicationCommands(globalCommands).catch(log.error);
+    log.info(
+      "Updating Global Commands, this takes up to 1 hour to take effect...",
+    );
+    await bot.helpers.upsertApplicationCommands(globalCommands).catch(
+      log.error,
+    );
   }
 
   if (perGuildCommands.length && (scope === "Guild" || scope === undefined)) {
@@ -59,7 +68,8 @@ export async function updateCommands(bot: BotWithCache, scope?: "Guild" | "Globa
 
 /** Update commands for a guild */
 export async function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
-  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
+  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
+    [];
 
   for (const command of commands.values()) {
     if (command.scope) {
@@ -79,7 +89,10 @@ export async function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
   }
 }
 
-export async function getGuildFromId(bot: BotWithCache, guildId: bigint): Promise<DiscordenoGuild> {
+export async function getGuildFromId(
+  bot: BotWithCache,
+  guildId: bigint,
+): Promise<DiscordenoGuild> {
   let returnValue: DiscordenoGuild = {} as DiscordenoGuild;
 
   if (guildId !== 0n) {
@@ -118,10 +131,14 @@ export function humanizeMilliseconds(milliseconds: number) {
   return `${dayString}${hourString}${minuteString}${secondString}`;
 }
 
-export function isSubCommand(data: subCommand | subCommandGroup): data is subCommand {
+export function isSubCommand(
+  data: subCommand | subCommandGroup,
+): data is subCommand {
   return !Reflect.has(data, "subCommands");
 }
 
-export function isSubCommandGroup(data: subCommand | subCommandGroup): data is subCommandGroup {
+export function isSubCommandGroup(
+  data: subCommand | subCommandGroup,
+): data is subCommandGroup {
   return Reflect.has(data, "subCommands");
 }

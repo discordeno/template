@@ -1,9 +1,9 @@
 import {
-  Collection,
-  Bot,
-  DiscordenoInteraction,
   ApplicationCommandOption,
-  ApplicationCommandTypes
+  ApplicationCommandTypes,
+  Bot,
+  Collection,
+  DiscordenoInteraction,
 } from "../../deps.ts";
 
 export type subCommand = Omit<Command, "subcommands">;

@@ -1,5 +1,12 @@
-import { fastFileLoader, enableCachePlugin, createBot, enableCacheSweepers, ActivityTypes, startBot } from "./deps.ts";
-import { BOT_TOKEN, BOT_ID } from "./configs.ts";
+import {
+  ActivityTypes,
+  createBot,
+  enableCachePlugin,
+  enableCacheSweepers,
+  fastFileLoader,
+  startBot,
+} from "./deps.ts";
+import { BOT_ID, BOT_TOKEN } from "./configs.ts";
 import { logger } from "./src/utils/logger.ts";
 import { events } from "./src/events/mod.ts";
 import { updateCommands } from "./src/utils/helpers.ts";
@@ -20,8 +27,8 @@ export const bot = enableCachePlugin(
     token: BOT_TOKEN,
     botId: BOT_ID,
     intents: [],
-    events
-  })
+    events,
+  }),
 );
 
 enableCacheSweepers(bot);
@@ -32,9 +39,9 @@ bot.gateway.presence = {
     {
       name: "Discordeno is Best Lib",
       type: ActivityTypes.Game,
-      createdAt: Date.now()
-    }
-  ]
+      createdAt: Date.now(),
+    },
+  ],
 };
 
 startBot(bot);
