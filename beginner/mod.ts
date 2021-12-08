@@ -37,7 +37,7 @@ await fastFileLoader(paths, (path) => {
 export const bot = createBot({
   token: configs.token,
   botId: configs.botId,
-  intents: ["Guilds", "GuildMessages"],
+  intents: [],
   events: customCache.events,
 });
 
