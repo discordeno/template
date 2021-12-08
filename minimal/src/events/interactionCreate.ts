@@ -12,11 +12,7 @@ import {
 } from "../../deps.ts";
 import { events } from "./mod.ts";
 import { logger } from "../utils/logger.ts";
-import {
-  getGuildFromId,
-  isSubCommand,
-  isSubCommandGroup,
-} from "../utils/helpers.ts";
+import { getGuildFromId, isSubCommand, isSubCommandGroup } from "../utils/helpers.ts";
 import { Command, commands } from "../commands/mod.ts";
 
 const log = logger({ name: "Event: InteractionCreate" });
@@ -49,9 +45,7 @@ events.interactionCreate = async (rawBot, interaction) => {
       }`,
     );
 
-    let command: undefined | Command = interaction.data.name
-      ? commands.get(interaction.data.name)
-      : undefined;
+    let command: undefined | Command = interaction.data.name ? commands.get(interaction.data.name) : undefined;
     let commandName = command?.name;
 
     if (command !== undefined) {
@@ -72,15 +66,12 @@ events.interactionCreate = async (rawBot, interaction) => {
             if (isSubCommand(subCommandGroup)) return;
 
             // Get name of the command which we are looking for
-            const targetCmdName =
-              interaction.data.options?.[0].options?.[0].name ||
+            const targetCmdName = interaction.data.options?.[0].options?.[0].name ||
               interaction.data.options?.[0].options?.[0].name;
             if (!targetCmdName) return;
 
             // Try to find the command
-            command = subCommandGroup.subCommands.find((c) =>
-              c.name === targetCmdName
-            );
+            command = subCommandGroup.subCommands.find((c) => c.name === targetCmdName);
 
             commandName += ` ${subCommandGroup.name} ${command?.name}`;
 
@@ -92,9 +83,7 @@ events.interactionCreate = async (rawBot, interaction) => {
             if (!command?.subcommands) return;
 
             // Try to find the command
-            const found = command.subcommands.find((command) =>
-              command.name == interaction.data?.options?.[0].name
-            );
+            const found = command.subcommands.find((command) => command.name == interaction.data?.options?.[0].name);
             if (!found) return;
 
             if (isSubCommandGroup(found)) return;

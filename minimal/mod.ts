@@ -1,11 +1,4 @@
-import {
-  ActivityTypes,
-  createBot,
-  enableCachePlugin,
-  enableCacheSweepers,
-  fastFileLoader,
-  startBot,
-} from "./deps.ts";
+import { ActivityTypes, createBot, enableCachePlugin, enableCacheSweepers, fastFileLoader, startBot } from "./deps.ts";
 import { BOT_ID, BOT_TOKEN } from "./configs.ts";
 import { logger } from "./src/utils/logger.ts";
 import { events } from "./src/events/mod.ts";

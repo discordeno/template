@@ -1,11 +1,5 @@
-import {
-  ApplicationCommandTypes,
-  InteractionResponseTypes,
-} from "../../deps.ts";
-import {
-  humanizeMilliseconds,
-  snowflakeToTimestamp,
-} from "../utils/helpers.ts";
+import { ApplicationCommandTypes, InteractionResponseTypes } from "../../deps.ts";
+import { humanizeMilliseconds, snowflakeToTimestamp } from "../utils/helpers.ts";
 import { createCommand } from "./mod.ts";
 
 createCommand({

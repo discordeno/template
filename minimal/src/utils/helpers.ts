@@ -18,10 +18,8 @@ export async function updateCommands(
   bot: BotWithCache,
   scope?: "Guild" | "Global",
 ) {
-  const globalCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
-    [];
-  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
-    [];
+  const globalCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
+  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
 
   for (const command of commands.values()) {
     if (command.scope) {
@@ -68,8 +66,7 @@ export async function updateCommands(
 
 /** Update commands for a guild */
 export async function updateGuildCommands(bot: Bot, guild: DiscordenoGuild) {
-  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
-    [];
+  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
 
   for (const command of commands.values()) {
     if (command.scope) {
