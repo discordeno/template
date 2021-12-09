@@ -1,8 +1,4 @@
-import {
-  ButtonData,
-  InteractionTypes,
-  MessageComponentTypes,
-} from "../../../../deps.ts";
+import { ButtonData, InteractionTypes, MessageComponentTypes } from "../../../../deps.ts";
 import { bot } from "../../mod.ts";
 import { executeSlashCommand } from "../interactions/executeSlashCommand.ts";
 

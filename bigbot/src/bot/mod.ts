@@ -8,12 +8,7 @@ import {
   REST_AUTHORIZATION_KEY,
   REST_PORT,
 } from "../../configs.ts";
-import {
-  createBot,
-  createRestManager,
-  GatewayPayload,
-  SnakeCasedPropertiesDeep,
-} from "../../deps.ts";
+import { createBot, createRestManager, GatewayPayload, SnakeCasedPropertiesDeep } from "../../deps.ts";
 import logger from "../utils/logger.ts";
 import { setupEventHandlers } from "./events/mod.ts";
 

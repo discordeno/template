@@ -1,5 +1,5 @@
-import { setInteractionCreateEvent } from './handlers/interactionCreate.ts'
+import { setInteractionCreateEvent } from "./handlers/interactionCreate.ts";
 
 export function setupEventHandlers() {
-  setInteractionCreateEvent()
+  setInteractionCreateEvent();
 }
