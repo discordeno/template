@@ -1,2 +1,2 @@
-export * from './languages.ts'
-export * from './translate.ts'
+export * from "./languages.ts";
+export * from "./translate.ts";

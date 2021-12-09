@@ -46,9 +46,7 @@ export class Embeds extends Array<Embed> {
 
   setAuthor(name: string, iconUrl?: string | DiscordenoUser, url?: string) {
     const embed = this.#getLastEmbed();
-    const finalName = this.enforceLimits
-      ? this.fitData(name, embedLimits.authorName)
-      : name;
+    const finalName = this.enforceLimits ? this.fitData(name, embedLimits.authorName) : name;
 
     if (typeof iconUrl === "string") {
       embed.author = { name: finalName, iconUrl, url };

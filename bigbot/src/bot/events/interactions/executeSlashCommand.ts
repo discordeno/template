@@ -12,7 +12,7 @@ import {
   white,
 } from "../../../../deps.ts";
 import logger from "../../../../src/utils/logger.ts";
-import { translateOptionNames,optionParser } from "../../../utils/options.ts";
+import { optionParser, translateOptionNames } from "../../../utils/options.ts";
 import { replyToInteraction } from "../../../utils/replies.ts";
 import slashLogWebhook from "../../../utils/slashWebhook.ts";
 import { loadLanguage, serverLanguages, translate } from "../../languages/translate.ts";
@@ -26,19 +26,13 @@ function logCommand(
 ) {
   const command = `[COMMAND: ${bgYellow(black(commandName || "Unknown"))} - ${
     bgBlack(
-      ["Failure", "Slowmode", "Missing"].includes(type)
-        ? red(type)
-        : type === "Success"
-        ? green(type)
-        : white(type),
+      ["Failure", "Slowmode", "Missing"].includes(type) ? red(type) : type === "Success" ? green(type) : white(type),
     )
   }]`;
 
   const user = bgGreen(
     black(
-      `${info.user.username}#${
-        info.user.discriminator.toString().padStart(4, "0")
-      }(${info.id})`,
+      `${info.user.username}#${info.user.discriminator.toString().padStart(4, "0")}(${info.id})`,
     ),
   );
   const guild = bgMagenta(

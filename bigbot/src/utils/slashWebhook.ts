@@ -1,4 +1,4 @@
-import { Bot,DiscordenoInteraction } from "../../deps.ts";
+import { Bot, DiscordenoInteraction } from "../../deps.ts";
 import Embeds from "./Embeds.ts";
 import { getUserTag } from "./helpers.ts";
 import logger from "./logger.ts";

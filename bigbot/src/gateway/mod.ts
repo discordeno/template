@@ -7,11 +7,7 @@ import {
   REST_AUTHORIZATION_KEY,
   REST_PORT,
 } from "../../configs.ts";
-import {
-  createGatewayManager,
-  createRestManager,
-  endpoints,
-} from "../../deps.ts";
+import { createGatewayManager, createRestManager, endpoints } from "../../deps.ts";
 
 // CREATE A SIMPLE MANAGER FOR REST
 const rest = createRestManager({

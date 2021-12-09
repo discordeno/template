@@ -5,7 +5,6 @@ import logger from "../../utils/logger.ts";
 import english from "./english.ts";
 import languages from "./languages.ts";
 
-
 /** This should hold the language names per guild id. <guildId, language> */
 export const serverLanguages = new Map<bigint, keyof typeof languages>();
 
@@ -17,8 +16,7 @@ export function translate<K extends translationKeys>(
 ): string {
   const language = getLanguage(guildIdOrLanguage);
   // deno-lint-ignore no-explicit-any
-  let value: string | ((...any: any[]) => string) | string[] =
-    languages[language][key];
+  let value: string | ((...any: any[]) => string) | string[] = languages[language][key];
 
   // Was not able to be translated
   if (!value) {
@@ -89,7 +87,6 @@ export async function missingTranslation(
 
 // type translationKeys = keyof typeof english | string
 export type translationKeys = keyof typeof english;
-type getArgs<K extends translationKeys> = typeof english[K] extends
-  // deno-lint-ignore no-explicit-any
-  (...any: any[]) => unknown ? Parameters<typeof english[K]>
+type getArgs<K extends translationKeys> = typeof english[K] extends // deno-lint-ignore no-explicit-any
+(...any: any[]) => unknown ? Parameters<typeof english[K]>
   : [];
