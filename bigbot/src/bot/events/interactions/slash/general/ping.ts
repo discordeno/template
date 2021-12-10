@@ -1,3 +1,4 @@
+import { snowflakeToTimestamp } from "../../../../../utils/helpers.ts";
 import { replyToInteraction } from "../../../../../utils/replies.ts";
 import { translate } from "../../../../languages/translate.ts";
 import { createCommand } from "../createCommand.ts";
@@ -14,7 +15,7 @@ const command = createCommand({
         bot,
         interaction.guildId!,
         "PING_RESPONSE_WITH_TIME",
-        Date.now() - bot.helpers.snowflakeToTimestamp(interaction.id),
+        Date.now() - snowflakeToTimestamp(interaction.id),
       ),
     );
   },
