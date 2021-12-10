@@ -8,4 +8,3 @@ export * from "https://deno.land/x/discordeno_helpers_plugin@0.0.1/mod.ts";
 export * from "https://deno.land/x/discordeno_permissions_plugin@0.0.9/mod.ts";
 // export * from "https://deno.land/x/kwik@v1.2.0/mod.ts";
 export * from "https://raw.githubusercontent.com/TriForMine/kwik/4df9d84eefee7ff299cc65e0f31adb8dbee64cde/mod.ts";
-

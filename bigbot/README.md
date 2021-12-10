@@ -75,7 +75,9 @@ Process:
 
 1. You update your command options/args or create new commands etc...
 2. Increment the `CURRENT_SLASH_COMMAND_VERSION` in `src/database/commandVersion.ts`
-  - I recommend moving this into your database so you can build a dev command or eval and update this on the fly as you wish.
+
+- I recommend moving this into your database so you can build a dev command or eval and update this on the fly as you wish.
+
 3. Now whenever a guild emits any event, this will make sure to update the guild commands if necessary. If it already has the latest commands, it will just ignore. If it was never updated or is using an outdated version, it will update it.
 
 Aside from the automated system, there is also the option of `/update guild id` to update a guild manually.
