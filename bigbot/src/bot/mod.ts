@@ -8,8 +8,16 @@ import {
   REST_AUTHORIZATION_KEY,
   REST_PORT,
 } from "../../configs.ts";
-import { createBot, createRestManager, GatewayPayload, SnakeCasedPropertiesDeep } from "../../deps.ts";
+import {
+  createBot,
+  createRestManager,
+  GatewayPayload,
+  SnakeCasedPropertiesDeep,
+} from "../../deps.ts";
 import logger from "../utils/logger.ts";
+import { updateDevCommands } from "../utils/updateSlash.ts";
+import { BotClient, setupBotClient } from "./botClient.ts";
+import { setGuildCommands } from "./events/interactions/slash/setGuildCommands.ts";
 import { setupEventHandlers } from "./events/mod.ts";
 
 export const bot = createBot({
@@ -17,10 +25,11 @@ export const bot = createBot({
   botId: BOT_ID,
   events: {},
   intents: GATEWAY_INTENTS,
-});
+}) as BotClient;
 
 setupEventHandlers();
-customizeBotInternals(bot);
+// customizeBotInternals(bot);
+setupBotClient(bot);
 
 bot.rest = createRestManager({
   token: DISCORD_TOKEN,
@@ -83,6 +92,8 @@ async function handleRequest(conn: Deno.Conn) {
       // When a guild or something isnt in cache this will fetch it before doing anything else
       if (!["READY", "GUILD_LOADED_DD"].includes(json.data.t)) {
         await bot.events.dispatchRequirements(bot, json.data, json.shardId);
+        // WE ALSO WANT TO UPDATE GUILD SLASH IF NECESSARY AT THIS POINT
+        await setGuildCommands(bot, json.data);
       }
 
       bot.handlers[json.data.t]?.(bot, json.data, json.shardId);
@@ -95,3 +106,5 @@ async function handleRequest(conn: Deno.Conn) {
     );
   }
 }
+
+

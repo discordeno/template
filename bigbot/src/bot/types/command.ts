@@ -1,7 +1,6 @@
 import {
   ApplicationCommandOptionTypes,
   ApplicationCommandTypes,
-  Bot,
   DiscordenoChannel,
   DiscordenoInteraction,
   DiscordenoMember,
@@ -10,6 +9,7 @@ import {
   Permission,
 } from "../../../deps.ts";
 import { PermissionLevelHandlers } from "../../utils/permLevels.ts";
+import { BotClient } from "../botClient.ts";
 import english from "../languages/english.ts";
 import { translationKeys } from "../languages/translate.ts";
 
@@ -274,7 +274,7 @@ export interface Command<T extends readonly ArgumentDefinition[]> {
   // options?: ApplicationCommandOption[];
   options?: T;
   execute: (
-    bot: Bot,
+    bot: BotClient,
     data: DiscordenoInteraction,
     args: ConvertArgumentDefinitionsToArgs<T>,
   ) => unknown;

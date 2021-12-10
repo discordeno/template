@@ -1,3 +1,4 @@
+import { replyToInteraction } from "../../../../../utils/replies.ts";
 import { translate } from "../../../../languages/translate.ts";
 import { createCommand } from "../createCommand.ts";
 
