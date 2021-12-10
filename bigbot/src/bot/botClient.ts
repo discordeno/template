@@ -1,4 +1,4 @@
-import { Bot,Collection } from "../../deps.ts";
+import { Bot, Collection } from "../../deps.ts";
 
 /** These are custom properties you want to add to `bot` and have accessible everywhere. */
 export interface BotClient extends Bot {
@@ -6,5 +6,5 @@ export interface BotClient extends Bot {
 }
 
 export function setupBotClient(bot: BotClient) {
-    bot.commandVersions = new Collection();
+  bot.commandVersions = new Collection();
 }
