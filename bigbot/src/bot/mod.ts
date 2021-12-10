@@ -40,6 +40,9 @@ bot.rest = createRestManager({
 if (DEVELOPMENT) {
   logger.info(`[DEV MODE] Updating slash commands for dev server.`);
   await updateDevCommands(bot);
+} else {
+  // THIS WILL UPDATE ALL YOUR GLOBAL COMMANDS ON BOOTUP
+  // await updateGlobalCommands(bot);
 }
 
 // Start listening on localhost.
