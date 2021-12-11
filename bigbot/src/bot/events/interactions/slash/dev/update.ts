@@ -27,7 +27,7 @@ const command = createCommand({
         },
       ],
     },
-  ],
+  ] as const,
   execute: async function (bot, interaction, args) {
     if (args.global) {
       await updateGlobalCommands(bot);
@@ -40,7 +40,7 @@ const command = createCommand({
 
     if (args.guild) {
       // GUILD COMMANDS
-      await updateGuildCommands(bot, args.guild.id);
+      await updateGuildCommands(bot, bot.transformers.snowflake(args.guild.id));
       return await replyToInteraction(
         bot,
         interaction,
