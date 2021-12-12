@@ -4,7 +4,6 @@ import {
   bgMagenta,
   bgYellow,
   black,
-  Bot,
   DiscordenoInteraction,
   green,
   InteractionResponseTypes,
@@ -15,6 +14,7 @@ import logger from "../../../../src/utils/logger.ts";
 import { optionParser, translateOptionNames } from "../../../utils/options.ts";
 import { replyToInteraction } from "../../../utils/replies.ts";
 import slashLogWebhook from "../../../utils/slashWebhook.ts";
+import { BotClient } from "../../botClient.ts";
 import { loadLanguage, serverLanguages, translate } from "../../languages/translate.ts";
 import { Command, ConvertArgumentDefinitionsToArgs } from "../../types/command.ts";
 import commands from "./mod.ts";
@@ -43,7 +43,7 @@ function logCommand(
 }
 
 export async function executeSlashCommand(
-  bot: Bot,
+  bot: BotClient,
   interaction: DiscordenoInteraction,
 ) {
   const data = interaction.data;

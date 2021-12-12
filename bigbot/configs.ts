@@ -1,7 +1,7 @@
 import { dotEnvConfig, GatewayIntents } from "./deps.ts";
 
 // Get the .env file that the user should have created, and load the configs.
-dotEnvConfig({ export: true });
+const env = dotEnvConfig({ export: true });
 
 // TODO: REMOVE THESE! THEY ARE BAD FOR YOU! DUH! Seriously, only keep the ones your bot needs!
 export const GATEWAY_INTENTS: (keyof typeof GatewayIntents)[] = [
@@ -21,8 +21,6 @@ export const GATEWAY_INTENTS: (keyof typeof GatewayIntents)[] = [
   "GuildWebhooks",
   "Guilds",
 ];
-
-const env = Deno.env.toObject();
 
 if (!env.DISCORD_TOKEN) {
   throw new Error("DUDE! You did not provide a Discord token!");
@@ -79,7 +77,7 @@ if (!EVENT_HANDLER_SECRET_KEY) {
   );
 }
 
-export const BOT_ID = BigInt(atob(DISCORD_TOKEN.split(".")[0]));
+export const BOT_ID = BigInt(atob(env.DISCORD_TOKEN.split(".")[0]));
 if (!BOT_ID) {
   throw new Error("Please enter the BOT ID you want to run this with.");
 }
