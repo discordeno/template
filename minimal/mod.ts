@@ -38,5 +38,3 @@ bot.gateway.presence = {
 };
 
 startBot(bot);
-
-updateCommands(bot);
