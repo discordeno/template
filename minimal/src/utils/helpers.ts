@@ -16,10 +16,12 @@ const log = logger({ name: "Helpers" });
 /** This function will update all commands, or the defined scope */
 export async function updateCommands(
   bot: BotWithCache,
-  scope?: "Guild" | "Global",
+  options?: { guilds?: bigint[]; scope?: "Guild" | "Global" }
 ) {
-  const globalCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
-  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] = [];
+  const globalCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
+    [];
+  const perGuildCommands: MakeRequired<EditGlobalApplicationCommand, "name">[] =
+    [];
 
   for (const command of commands.values()) {
     if (command.scope) {
@@ -48,18 +50,27 @@ export async function updateCommands(
     }
   }
 
-  if (globalCommands.length && (scope === "Global" || scope === undefined)) {
-    log.info(
-      "Updating Global Commands, this takes up to 1 hour to take effect...",
+  if (
+    globalCommands.length &&
+    (options?.scope === "Global" || options?.scope === undefined)
+  ) {
+    console.info(
+      "Updating Global Commands, this takes up to 1 hour to take effect..."
     );
-    await bot.helpers.upsertApplicationCommands(globalCommands).catch(
-      log.error,
-    );
+    await bot.helpers
+      .upsertApplicationCommands(globalCommands)
+      .catch(console.error);
   }
 
-  if (perGuildCommands.length && (scope === "Guild" || scope === undefined)) {
-    await bot.guilds.forEach(async (guild) => {
-      await upsertApplicationCommands(bot, perGuildCommands, guild.id);
+  if (
+    perGuildCommands.length &&
+    (options?.scope === "Guild" || options?.scope === undefined)
+  ) {
+    await (options?.guilds?.length
+      ? options.guilds
+      : bot.guilds.map((e) => e.id)
+    ).forEach(async (guild) => {
+      await bot.helpers.upsertApplicationCommands(perGuildCommands, guild);
     });
   }
 }
