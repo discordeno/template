@@ -98,4 +98,5 @@ export function logger({
   };
 }
 
-export const log = logger();
+export const log = logger({ name: "Main" });
+export default log;

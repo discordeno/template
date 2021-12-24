@@ -24,7 +24,7 @@ kwik.msgpackExtensionCodec.register({
     }
   },
   decode: (data: Uint8Array) => {
-    return BigInt(decode(data, {}));
+    return BigInt(decode(data, {}) as string);
   },
 });
 

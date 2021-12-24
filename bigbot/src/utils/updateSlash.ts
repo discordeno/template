@@ -11,7 +11,7 @@ export async function updateDevCommands(bot: Bot) {
 
   const cmds = Object.entries(commands)
     // ONLY DEV COMMANDS
-    .filter(([_name, command]) => command?.dev);
+    .filter(([_name, command]) => command.dev);
 
   if (!cmds.length) return;
 
@@ -57,7 +57,6 @@ function createOptions(
 
   for (const option of options || []) {
     const optionName = translate(bot, guildId, option.name);
-    // @ts-ignore ts stop being dumb
     const optionDescription = translate(bot, guildId, option.description);
 
     // TODO: remove this ts ignore
