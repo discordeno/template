@@ -1,6 +1,4 @@
-import {
-  startBot,
-} from "./deps.ts";
+import { startBot } from "./deps.ts";
 import log from "./src/utils/logger.ts";
 import { fileLoader, importDirectory } from "./src/utils/loader.ts";
 import { updateApplicationCommands } from "./src/utils/updateCommands.ts";
