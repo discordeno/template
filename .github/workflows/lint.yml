@@ -6,5 +6,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: denoland/setup-deno@main
-      - name: Run lint script
-        run: deno lint src/** --unstable --ignore=./src/types
+      - name: Run Formatter
+        run: deno fmt --config ./deno.json
+      - name: Commit Formatted Files
+        uses: EndBug/add-and-commit@v7
+      - name: Run Linter
+        run: deno lint ** --unstable --config ./deno.json
