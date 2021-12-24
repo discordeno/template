@@ -19,9 +19,7 @@ export async function importDirectory(path: string) {
     if (file.isFile) {
       if (!currentPath.endsWith(".ts")) continue;
       paths.push(
-        `import "${
-          Deno.mainModule.substring(0, Deno.mainModule.lastIndexOf("/"))
-        }/${
+        `import "${Deno.mainModule.substring(0, Deno.mainModule.lastIndexOf("/"))}/${
           currentPath.substring(
             currentPath.indexOf("src/"),
           )
@@ -43,9 +41,7 @@ export async function fileLoader() {
     paths.join("\n").replaceAll("\\", "/"),
   );
   await import(
-    `${
-      Deno.mainModule.substring(0, Deno.mainModule.lastIndexOf("/"))
-    }/fileloader.ts#${uniqueFilePathCounter}`
+    `${Deno.mainModule.substring(0, Deno.mainModule.lastIndexOf("/"))}/fileloader.ts#${uniqueFilePathCounter}`
   );
   paths = [];
 }
