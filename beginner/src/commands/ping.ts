@@ -1,13 +1,12 @@
 import { ApplicationCommandTypes, InteractionResponseTypes } from "../../deps.ts";
-import { Bot } from "../../mod.ts";
-import { humanizeMilliseconds, snowflakeToTimestamp } from "../utils/helpers.ts";
+import { snowflakeToTimestamp } from "../utils/helpers.ts";
 import { createCommand } from "./mod.ts";
 
 createCommand({
   name: "ping",
   description: "Ping the Bot!",
   type: ApplicationCommandTypes.ChatInput,
-  execute: async (_, interaction) => {
+  execute: async (Bot, interaction) => {
     const ping = Date.now() - snowflakeToTimestamp(interaction.id);
     await Bot.helpers.sendInteractionResponse(
       interaction.id,
@@ -15,7 +14,7 @@ createCommand({
       {
         type: InteractionResponseTypes.ChannelMessageWithSource,
         data: {
-          content: `🏓 Pong! Ping ${ping}ms (${humanizeMilliseconds(ping)})`,
+          content: `🏓 Pong! ${ping}ms`,
         },
       },
     );

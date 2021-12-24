@@ -1,4 +1,4 @@
-import { Bot } from "../../mod.ts";
+import { Bot } from "../../bot.ts";
 import log from "../utils/logger.ts";
 
 Bot.events.ready = (_, payload) => {

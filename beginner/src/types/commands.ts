@@ -1,4 +1,5 @@
-import { ApplicationCommandOption, ApplicationCommandTypes, BotWithCache, DiscordenoInteraction } from "../../deps.ts";
+import { BotClient } from "../../bot.ts";
+import { ApplicationCommandOption, ApplicationCommandTypes, DiscordenoInteraction } from "../../deps.ts";
 
 export interface Command {
   /** The name of this command. */
@@ -12,5 +13,5 @@ export interface Command {
   /** The options for this command */
   options?: ApplicationCommandOption[];
   /** This will be executed when the command is run. */
-  execute: (bot: BotWithCache, interaction: DiscordenoInteraction) => unknown;
+  execute: (bot: BotClient, interaction: DiscordenoInteraction) => unknown;
 }
