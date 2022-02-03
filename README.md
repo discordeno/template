@@ -9,3 +9,7 @@ easily using the
 [Website/Guide](https://discordeno.mod.land/)
 
 [Discord Server](https://discord.com/invite/5vBgXk3UcZ)
+
+# MOVED!
+
+This repository has been moved to https://github.com/discordeno/discordeno/tree/main/template. Every PR which gets opened in this Repository will be ignored and closed. Please open the PR in the main Repository.
